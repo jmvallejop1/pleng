@@ -1,0 +1,1288 @@
+/**
+ * EspecificaciÃ³n JavaCC para la PrÃ¡ctica 2 (Procesadores de Lenguajes)
+ * Javier Fabra - jfabra@unizar.es
+ * v1.2 - 2021/03/08
+ */
+options
+{
+  static = true;
+  //hacemos el leguaje case insenstive, ignoramos la diferencia entre mayusculas y minusculas.
+  ignore_case = true;
+}
+
+PARSER_BEGIN(MiniLengCompiler)
+package compiler;
+import java.io.*;
+import semantico.*;
+import java.util.ArrayList;
+
+
+public class MiniLengCompiler
+{
+
+  public static class RegistroExpr {
+	int valorEnt;
+	boolean valorBool;
+	char valorChar;
+	boolean esVariable = false;
+	String cadena;
+	Simbolo.Tipo_variable tipo;
+	Simbolo.Tipo_simbolo s;
+
+	//Devuelve un Registro expresion booleano 
+	public static RegistroExpr BOOL(boolean b) {
+		RegistroExpr reg = new RegistroExpr();
+		reg.tipo= Simbolo.Tipo_variable.BOOLEANO;
+		reg.valorBool = b;
+		return reg;
+	}
+	//Devuelve un Registro de tipo Entero
+	public static RegistroExpr ENTERO(String entero) {
+		RegistroExpr reg = new RegistroExpr();
+		reg.tipo= Simbolo.Tipo_variable.ENTERO;
+		reg.valorEnt = Integer.parseInt(entero);
+		return reg;
+	}
+	//Devuelve un Registro de tipo Char
+	public static RegistroExpr CHAR(String c) {
+		RegistroExpr reg = new RegistroExpr();
+		reg.tipo= Simbolo.Tipo_variable.CHAR;
+		reg.valorChar = c.charAt(0);
+		return reg;
+	}
+	
+	//Devuelve un Registro de tipo cadena
+	public static RegistroExpr CADENA(String c) {
+		RegistroExpr reg = new RegistroExpr();
+		reg.tipo= Simbolo.Tipo_variable.CADENA;
+		reg.cadena = c;
+		return reg;
+	}
+	
+//	//Devuelve un Registro de tipo desconocido
+//	public static RegistroExpr DESCONOCIDO() {
+//		RegistroExpr reg = new RegistroExpr();
+//		reg.tipo = Simbolo.Tipo_variable.DESCONOCIDO;
+//		reg.variable = true;
+//		return reg;
+//	}
+//	
+	}
+
+	
+  //Declaraciones necesarias para tablla de simbolos
+  static int nivel = 0;
+  static TablaSimbolos tabla_simbolos = new TablaSimbolos();
+  public static void main(String args []) throws ParseException
+  {
+    //Pasamos como parametro el fichero que queremos compilar
+    //Intentamos leer el fichero 
+    try {
+      	  System.out.println(args[0]);
+	      FileInputStream F = new FileInputStream(args[0]);
+	      System.setIn(F);
+	}catch (Exception e) {
+	   //Si no encuentra fichero lee de la entrada estandar
+	    System.out.println("Leyendo de la entrada estandar...");
+    }
+    
+   
+	 try {
+	   		
+	         MiniLengCompiler parser = new MiniLengCompiler(System.in);
+	   		 tabla_simbolos.inicializar_tabla();
+	   		 MiniLengCompiler.programa();
+	  }catch (TokenMgrError e) {
+      try {
+           //gestion de los errores lexicos
+	       int linea = SimpleCharStream.getBeginLine();
+	       int columna = SimpleCharStream.getBeginColumn();
+	       char c = SimpleCharStream.readChar();
+           LexicalErrorManager.printLexicalError(linea,columna,c);
+      }catch(Exception ex){}  
+	}
+  }
+}
+
+PARSER_END(MiniLengCompiler)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+| "%" : COMENTARIO
+| "%%": COMENTARIO_MULTILINEA
+}
+
+< COMENTARIO_MULTILINEA> SKIP:
+{
+  "%%": DEFAULT
+  | < ~[] >  
+}
+
+
+< COMENTARIO >SKIP: {
+	"\n":DEFAULT
+	| < ~[] >  
+}
+
+
+
+TOKEN : /* PALABRAS RESERVADAS */
+{
+  < tCLASE : "clase" >
+| < tMETODO : "metodo" >
+ | < tPROGRAMA : "programa" >
+| < tAND : "and" >
+| < tOR : "or" >
+| < tNOT : "not" >
+| < tPRINCIPIO : "principio" >
+| < tFIN : "fin" >
+| < tSI : "si" >
+| < tENT : "ent" >
+| < tSI_NO : "si_no" >
+| < tFSI : "fsi" >
+| < tMQ : "mq" >
+| < tFMQ : "fmq" >
+| < tESCRIBIR : "escribir" >
+| < tLEER : "leer" >
+| < tMOD : "mod" >
+| < tTRUE : "true" >
+| < tFALSE : "false" >
+| < tENTACAR : "entacar" >
+| < tCARAENT : "caraent" >
+| < tACCION : "accion" >
+| < tVAL : "val" >
+| < tREF : "ref" >
+
+}
+
+TOKEN : /* TIPOS DE DATOS */
+{
+  < tENTERO : "entero" >
+| < tBOOLEANO : "booleano" >
+| < tCARACTER : "caracter" >
+}
+
+
+
+TOKEN : /* OPERADORES */
+{
+  <  tIGUAL : "=" >
+| <  tFIN_SENTENCIA : ";" >
+| <  tMAYOR : ">" >
+| <  tMENOR : "<" >
+| <  tMAI : ">=" >
+| <  tMEI : "<=" >
+| <  tNI : "<>" >
+| <  tOPAS : ":=" >
+| <  tMUL : "*" >
+| <  tDIV : "div" >
+| <  tMAS : "+" >
+| <  tMENOS : "-" >
+}
+
+TOKEN : /* VALORES */
+{
+< tID : ((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) | < tLetra > >
+| 
+< tNUM : (<tCifra>)+ >
+| <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "ï¿½") "\"" >
+| <  tCADENA : "\"" (<tLetra> |<tSigno>|<tSigno>| " "|"."|","|";"|"*"|":"|"("|")"|"/"|"?")+  "\"" >
+| <  tCifra : ["0"-"9"] >
+| <  tLetra: ["a"-"z"] >
+| <tSigno: "+" | "-" >
+}
+
+/*ANALIZADOR SINTACTICO*/
+
+void programa():
+{
+  Token programa;
+}
+{
+ try {
+	 <tPROGRAMA> programa = <tID>
+	 {
+	  tabla_simbolos.introducir_programa(programa.image,0);
+	  tabla_simbolos.imprimirTabla();
+	 }";" 
+	 declaracion_variables()
+	 declaracion_acciones() 
+	 bloque_sentencias()
+ }catch (ParseException e) {
+//    System.out.println("1");
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+
+void declaracion_variables():
+{
+}
+{ try {
+    (declaracion()";")*
+  } catch (ParseException e) {
+      //TODO: idea->crear una variable booleana que indique que ha ocurrido un error
+          SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    }
+}
+
+void declaracion():
+{
+  Simbolo.Tipo_variable tipo;
+}
+{ 
+  tipo = tipo_variables() (identificadores(tipo))
+}
+
+Simbolo.Tipo_variable tipo_variables():
+{
+}
+{ try {
+  < tENTERO >	{return Simbolo.Tipo_variable.ENTERO;}
+  | < tBOOLEANO >	{return Simbolo.Tipo_variable.BOOLEANO;}
+  | < tCARACTER > {return Simbolo.Tipo_variable.CHAR;}
+} catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+void identificadores(Simbolo.Tipo_variable tipo):
+{
+  Token id1;
+  Token id2;
+}
+{
+  try {
+  	id1 = < tID >
+	  {
+	    try {
+	      	tabla_simbolos.introducir_variable(id1.image,tipo,nivel,0/*aqui tiene que ir la direccion de la variable*/);
+	  	}catch(SimboloYaDeclaradoException e2) {
+	  	  	System.out.println("Error  semantico");
+	  	}
+	  }
+
+  	(","id2 = < tID >
+  	{
+	    try {
+	      	tabla_simbolos.introducir_variable(id2.image,tipo,nivel,0/*aqui tiene que ir la direccion de la variable*/);
+	  	}catch(SimboloYaDeclaradoException e2) {
+	  	  	System.out.println("Error  semantico");
+	  	}
+	  }
+  	)*
+  
+  } catch (ParseException e) {   
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void declaracion_acciones():
+{
+}
+{
+  (declaracion_accion())*
+}
+
+
+// (cabecera_accion())";"(declaracion_variables()) (declaracion_acciones()) (bloque_sentencias())
+void declaracion_accion():
+{
+
+}
+{
+  (cabecera_accion())";"(declaracion_variables()) (declaracion_acciones()) (bloque_sentencias())
+  {
+    	
+	    tabla_simbolos.imprimirTabla();
+	    System.out.println("Voy a eliminar las variables del nivel " + nivel);
+	    tabla_simbolos.eliminar_variables(nivel);
+	    System.out.println("Voy a eliminar acciones");
+	    tabla_simbolos.ocultar_parametros(nivel);
+	    tabla_simbolos.eliminar_acciones(nivel);
+	    tabla_simbolos.eliminar_parametros_ocultos(nivel+1);
+	    nivel--;
+  }
+}
+
+void cabecera_accion():
+{
+    Token id_accion;
+    Simbolo simbolo_accion = null;
+    boolean ok;
+}
+{
+  ((<tACCION> id_accion = <tID>
+  {
+    try {
+      	//Justo despues de registrar la accion en la tabla de simbolos, incrementamos el nivel en uno.
+      	simbolo_accion = tabla_simbolos.introducir_accion(id_accion.image,nivel,0/*TODO: mirar lo de las direcciones*/);
+      	System.out.println("Voy a aumrntar el nivel " + (nivel +1));
+	    nivel++;
+	   
+	}catch(SimboloYaDeclaradoException e2) {
+	  	System.out.println("Error  semantico");
+	}
+  }
+  //le pasamos a los parametros formales el simbolo de la accion a la que pertenecen para asi poder relacionarlos.
+  ) parametros_formales(simbolo_accion))
+}
+
+void parametros_formales(Simbolo simbolo_accion):
+{
+}
+{ try {
+  	//Seguimos pasando el simbolo de la accion para poder asiciarla con los parametros
+	("("(lista_parametros(simbolo_accion))")")?
+  } catch (ParseException e) {   
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void lista_parametros(Simbolo simbolo_accion):
+{
+}
+{ try {
+  	//Seguimos propagando el simbolo de la accion para poder asociarla
+	parametros(simbolo_accion)(";"parametros(simbolo_accion))*
+  } catch (ParseException e) {
+       SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+void parametros(Simbolo simbolo_accion):
+{
+  Simbolo.Clase_parametro clase;
+  Simbolo.Tipo_variable tipo;
+  Token id1;
+  Token id2;
+  Simbolo param;
+  Simbolo param2;
+}
+{ try {
+  	//Obtenemos la clase y el timpod el parametro que queremos introducir
+	(clase = clase_parametros() tipo = tipo_variables()  id1 = < tID >
+	{
+	  try {
+	    System.out.println("Voy a introduxir un parametro" + simbolo_accion.getNombre() +" "+ id1.image);
+	    //introducimos el parametro actual en la tabla de simbolos
+	    param = tabla_simbolos.introducir_parametro(id1.image,tipo, clase, nivel, 0/*aqui va la direccion*/);
+
+	    //Introducimos el parametro a la lista de los parametros del simbolo de la accion he hemos ido propagando
+	    simbolo_accion.addParametro(param);
+	    System.out.println("Añadido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
+	    
+	    
+	    
+	  }catch(SimboloYaDeclaradoException e2) {
+	  	System.out.println("El simbolo declarado ya existe");
+	  }
+	}
+
+
+
+	(","id2 = < tID >
+	{
+	  try {
+	    param2 = tabla_simbolos.introducir_parametro(id2.image,tipo, clase, nivel, 0/*aqui va la direccion*/);
+	    simbolo_accion.addParametro(param2);
+
+	    System.out.println("Añadido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
+	    
+	  }catch(SimboloYaDeclaradoException e2) {
+	  	System.out.println("Error  semantico");
+	  }
+	}
+	)*)
+  } catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+Simbolo.Clase_parametro clase_parametros():
+{
+}
+{ try {
+	(< tVAL > {return Simbolo.Clase_parametro.VAL; }
+	| < tREF >){return Simbolo.Clase_parametro.REF; }
+  } catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void bloque_sentencias():
+{
+}
+{ try {
+	(< tPRINCIPIO > lista_sentencias() < tFIN >)
+	{
+	  //tabla_simbolos.imprimirTabla();
+	 }
+  } catch (ParseException e) {
+//    System.out.println("1");
+    
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+void lista_sentencias():
+{
+}
+{ 
+	sentencia()(sentencia())*
+}
+
+void sentencia():
+{
+  Token id;
+  Simbolo simbolo_id = new Simbolo();
+  Simbolo.Tipo_variable tpID;
+}
+{
+ (leer() ";"
+ | escribir() ";"
+ | id = < tID >
+ {
+   //System.out.println("Voy a buscar el simbolo:" + id.image +"\n @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+   //tabla_simbolos.imprimirTabla();
+   simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
+   if(simbolo_id == null) {
+     	System.out.println("Error semantico no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos");
+     	tpID = Simbolo.Tipo_variable.DESCONOCIDO;
+   }
+   else if(simbolo_id.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && simbolo_id.getParametro() == Simbolo.Clase_parametro.VAL) {
+		 System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor");
+		 //TODO: Mirar si esto tiene que ir aqui o en asignacion, y si se tiene que poner el tpId a desconocido para seguir la ejecucuion
+		 tpID = Simbolo.Tipo_variable.DESCONOCIDO;
+   }else {
+     tpID = simbolo_id.getVariable();
+   }
+ }
+ (asignacion(simbolo_id,tpID)|invocacion_accion(simbolo_id,tpID))
+ |seleccion ()
+ | mientras_que())
+}
+
+void leer():
+{
+}
+{ try {
+  <tLEER> "(" lista_asignables() ")"
+  } catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+void lista_asignables():
+{
+  Token t1 = new Token();
+  Token t2 = new Token();
+  Simbolo s1 = new Simbolo();
+  Simbolo s2 = new Simbolo();
+}
+{ try {
+  t1 = <tID>
+  {
+    //Obtenemos el simbolo con el nombre del id
+    s1 = tabla_simbolos.buscar_simbolo(t1.image);
+    if(s1 == null){
+    	System.out.println("El simbolo que se esta buscando no esta en la tabla");
+  	}else if(s1.getTipo() !=  Simbolo.Tipo_simbolo.PARAMETRO &&  s1.getTipo() != Simbolo.Tipo_simbolo.VARIABLE){
+  		System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
+  	}else if(s1.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && s1.getParametro() == Simbolo.Clase_parametro.VAL){
+  	    System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
+  	}else {
+  	  //TODO: aqui va el codigo que tiene que hacer , nos e si tiene que hacer algo mas
+  	}
+  }
+  ( "," t2 = <tID>
+  {
+	s2 = tabla_simbolos.buscar_simbolo(t2.image);
+    if(s2 == null){
+    	System.out.println("El simbolo que se esta buscando no esta en la tabla");
+  	}else if(s2.getTipo() !=  Simbolo.Tipo_simbolo.PARAMETRO &&  s2.getTipo() != Simbolo.Tipo_simbolo.VARIABLE){
+  		System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
+  	}else if(s2.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && s2.getParametro() == Simbolo.Clase_parametro.VAL){
+  	    System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
+  	}else {
+  	  //TODO: aqui va el codigo que tiene que hacer , nos e si tiene que hacer algo mas
+  	}
+  }
+
+  )*
+  } catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void escribir():
+{
+}
+{ try {
+  <tESCRIBIR> "(" lista_escribibles() ")"
+  } catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+void lista_escribibles():
+{
+  RegistroExpr r1 = new RegistroExpr();
+  RegistroExpr r2 = new RegistroExpr();
+  
+}
+{ try {
+  r1 = expresion()
+  {
+    if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
+       System.out.println("No se puede escribir un tipo desconocido");
+    }else {
+      //TODO: mirar si hay que añador algo mas
+    }
+  }
+  (","r2 = expresion()
+  {
+	   if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
+	       System.out.println("No se puede escribir un tipo desconocido");
+	   }else {
+      //TODO: mirar si hay que añador algo mas
+       }
+  }
+  )*
+  } catch (ParseException e) {
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void invocacion_accion(Simbolo id, Simbolo.Tipo_variable tpID):
+{
+  ArrayList<Simbolo > parametros_necesarios = id.getListaParametros();
+  System.out.println("Se va a invocar una accion cuyos parametros son: "+ parametros_necesarios.toString());
+}
+{ try {
+  argumentos(id,tpID,parametros_necesarios) ";"
+  } catch (ParseException e) {
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void asignacion(Simbolo id, Simbolo.Tipo_variable tpID/*Esto igual es inutil*/):
+{
+  RegistroExpr r1 = new RegistroExpr();
+  Simbolo.Tipo_variable tpExp;
+  Token t;
+}
+{ try {
+  {
+    if(id.getTipo() == Simbolo.Tipo_simbolo.ACCION){
+    	//TODO: excepciones
+    	System.out.println("No se puede asignar una expresion a una accion");
+    }
+  }
+  t = <tOPAS> r1 = expresion()
+  {
+    if(r1.tipo == Simbolo.Tipo_variable.ENTERO) {
+		System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorEnt);
+  	}else if(r1.tipo == Simbolo.Tipo_variable.CHAR) {
+  	  	System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorChar);
+  	}else if(r1.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
+  	  	System.out.println("Se va a asignar un " + r1.tipo.toString());
+  	}else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) {
+  	 	System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorBool);
+  	}else if(r1.tipo == Simbolo.Tipo_variable.CADENA) {
+  	  	System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.cadena);
+  	}
+    //Hay que mirar que los tipos sean asignables y que coincidan ambos tipos
+  	if(id.getVariable() != r1.tipo && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+  		//TODO: excepciones
+      	System.out.println("No se puede asignar porque los tipos no coinciden " + id.getVariable().toString() + " " + r1.tipo.toString());
+   	}else if( r1.tipo == Simbolo.Tipo_variable.CADENA) {
+   		//TODO: excepciones
+   		//Caso especial las cadenas solo sirven en escribirss
+      	System.out.println("No se pueden asignar las cadenas, solo para escritura");
+   	}
+	
+  }
+  ";"
+  } catch (ParseException e) {
+     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+void mientras_que():
+{
+   RegistroExpr r = new RegistroExpr();
+}
+{ try {
+  <tMQ> r = expresion()
+  {
+  	   if(r.tipo != Simbolo.Tipo_variable.BOOLEANO) {
+		//TODO: gestionar excepciones
+		System.out.println("La condicion del mientras que no es un booleano");
+    }
+  }
+  lista_sentencias() <tFMQ>
+  } catch (ParseException e) {
+   SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+void seleccion():
+{
+   RegistroExpr r = new RegistroExpr();
+  
+}
+{ try {
+  <tSI> r = expresion()
+  {
+    if(r.tipo == Simbolo.Tipo_variable.BOOLEANO && !r.esVariable){
+     	if(r.valorBool) {
+     	 	System.out.println("Este codigo siempre se va a ejecutar porque es una constante TRUE");
+     	}else {
+			System.out.println("Este codigo nunca se va a ejecutar porque es una constante FALSE");	
+     	}
+    }else if(r.tipo != Simbolo.Tipo_variable.BOOLEANO ) {
+		//TODO: gestionar excepciones
+		System.out.println("La condicion de la seleccion no es un booleano");
+    }
+  }
+  <tENT> lista_sentencias() ( <tSI_NO>  lista_sentencias() )? <tFSI>
+  } catch (ParseException e) {
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+//TODO:falta de hacer
+void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > parametros_necesarios):
+{
+  ArrayList<RegistroExpr > params;
+}
+{ try {
+ ("(" (params = lista_expresiones(id,tpID,parametros_necesarios)
+ {
+    //TODO: pruebas con distintas funciones
+   	if(params.size() != parametros_necesarios.size()) {
+   	  	//TODO: gestionar excepciones 
+		System.out.println("Los parametros patra invocar a la accion no coinciden "+ params.size() + " , " + parametros_necesarios.size());
+   	}else {
+   	  	Simbolo s = new Simbolo();
+   	  	RegistroExpr r = new RegistroExpr();
+   	  	int num_params = params.size();
+   	  	//TODO: mirar si hay que hacer alguna comprobacion mas, por ejemplo DESCONOCIDO
+   	  	for( int i = 0; i < num_params; i++) {
+			s = parametros_necesarios.get(i);
+			r = params.get(i);
+			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
+			if(s.getVariable() != r.tipo) {
+				//TODO: gestionar excepciones
+				System.out.println("Los tipos de los argumentos no coinciden");
+			}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r.esVariable) {
+			  	//TODO: gestionar excepciones
+			  	System.out.println("Se esperaba un parametro por referecncia, no por valor");
+			} 
+   	  	}
+   	}
+
+ }
+  )? ")")?
+  } catch (ParseException e) {
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+//TODO: Hacer un programa para probar esto, devuelve una lista de RegistroExpresiones
+//TODO: igual no hace falta pasar tantos parametros hasta esta funcion
+ArrayList<RegistroExpr> lista_expresiones(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > parametros_necesarios):
+{
+  ArrayList<RegistroExpr > params = new ArrayList<RegistroExpr>();
+  RegistroExpr r1 = new RegistroExpr();
+  RegistroExpr r2 = new RegistroExpr();
+  
+}
+{ try {
+  r1 = expresion()
+  {
+    params.add(r1);
+  }
+  ( "," r2 = expresion()
+  {
+    params.add(r2);
+  }
+  )*
+ {
+   return params;
+ }
+  } catch (ParseException e) {
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+
+Token operador_multiplicativo():
+{
+  Token t;
+}
+{ try {
+  ( t = <tMUL>{return t;}
+  | t = <tAND>{return t;}
+  | t = <tDIV>{return t;}
+  | t = <tMOD>{return t;}
+  )
+  } catch (ParseException e) {
+   SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+Token operador_aditivo():
+{
+  Token t;
+}
+{ try {
+  ( t = <tMAS>{return t;}
+  | t = <tMENOS>{return t;}
+  | t = <tOR>{return t;}
+  )
+  } catch (ParseException e) {
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+Token operador_relacional():
+{
+  Token t;
+}
+{ try {
+  ( t = <tMAYOR>{return t;}
+  | t = <tMENOR>{return t;}
+  | t = <tIGUAL>{return t;}
+  | t = <tMAI>{return t;}
+  | t = <tMEI>{return t;}
+  | t = <tNI>{return t;}
+   )
+  } catch (ParseException e) {
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+  }
+}
+
+//TODO: hacer que se pueda hacer mayor menor de caracteres, cadenas, etc??
+RegistroExpr expresion():
+{ 
+  RegistroExpr r1 = new RegistroExpr();
+  RegistroExpr r2 = new  RegistroExpr();
+  Token t = new Token();
+  RegistroExpr result = new RegistroExpr();
+}
+{
+  	r1 = expresion_simple()
+  	{
+  	  //System.out.println("El tipo de r1 es: " + r1.tipo.toString());
+	  result = r1;
+  	}
+  	( t = operador_relacional() r2 = expresion_simple() 
+  	{
+  	  boolean ok = true;
+ 
+	  String operacion = t.image;
+//	  if(operacion != null) { 
+		  switch(operacion) { 
+		  		case ">":
+		  			System.out.println("Detectado >");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorEnt > r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case "<":
+		  			System.out.println("Detectado <");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorEnt < r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case ">=":
+		  			System.out.println("Detectado >=");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >=");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >=");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorEnt >= r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case "<=":
+		  			System.out.println("Detectado <=");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <=");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <=");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorEnt <= r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		//TODO: mirar el < > y en = si se puede hacer con booleanos, cadenas, caracteres
+		  		case "=":
+		  			System.out.println("Detectado =");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede =");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorEnt == r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case "<>":
+		  			System.out.println("Detectado <>");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <>");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorEnt != r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  }
+  	}
+  	)* {
+  	  //System.out.println("Voy a devolver result:" + result.tipo);
+  	  return result;
+  	  }
+}
+
+RegistroExpr expresion_simple():
+{
+  RegistroExpr r1 = new RegistroExpr();
+  RegistroExpr r2 = new  RegistroExpr();
+  Token t = new Token();
+  RegistroExpr result = new RegistroExpr();
+}
+{
+	r1 = termino() {
+	  //System.out.println("primero");
+      result = r1;
+	  
+	}(t = operador_aditivo() r2 = termino()
+	{
+
+	 
+	  boolean ok = true;
+	  String operacion = t.image;
+		  switch(operacion.toLowerCase()) { 
+		  		case "+":
+		  			System.out.println("Detectado +");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede sumar");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede sumar");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
+		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
+		  					result.valorEnt =	result.valorEnt + r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case "-":
+		  			System.out.println("Detectado -");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede restar");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede restar");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobacionesde modulo por 0
+		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
+		  					result.valorEnt =	result.valorEnt - r2.valorEnt; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+	  				//return result;
+					break;
+		  		case "or":
+		  			System.out.println("Detectado and");
+		  			if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer and");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es booleano o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.BOOLEANO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer and");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorBool | r2.valorBool; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  }
+
+	}
+	)*
+	{
+	  //System.out.println("Voy a devolver result:" + result.tipo);
+	  return result;
+	}
+}
+
+
+RegistroExpr termino():
+{
+  RegistroExpr r1 = new RegistroExpr();
+  RegistroExpr r2 = new  RegistroExpr();
+  RegistroExpr ant = new  RegistroExpr();
+  Token t = new Token();
+  RegistroExpr result = new RegistroExpr();
+}
+{
+  
+  r1 = factor()
+  {
+    //System.out.println("primero");
+    //Si solo es un valor devolvemos ese valor solo
+    result = r1;
+    ant = r1;
+  }
+
+  ( t = operador_multiplicativo() r2 = factor()
+  { 
+	  boolean ok = true;
+	  //System.out.println("segundo");
+	  String operacion = t.image;
+  		  //Hay que hacer lowercase porque aunque el analizador sea case insensitive, el switch reconoce la diferencia entre mayusculas y minusculas
+		  switch(operacion.toLowerCase()) { 
+		  		case "*":
+		  			System.out.println("Detectado *");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede multiplicar");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede multiplicar");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				    System.out.println("Voy a multiplicar: " + result.valorEnt + " y " + r2.valorEnt);
+		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
+		  					result.valorEnt =	result.valorEnt * r2.valorEnt;
+//		  					ant.valorEnt = ant.valorEnt * r2.valorEnt;
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case "mod":
+		  			System.out.println("Detectado mod");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede hacer mod");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede hacer mod");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobacionesde modulo por 0
+		  				  	System.out.println("Voy a mod: " + result.valorEnt + " y " + r2.valorEnt);
+		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
+		  					result.valorEnt =	result.valorEnt % r2.valorEnt;
+//		  					ant.valorEnt = ant.valorEnt % r2.valorEnt;
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+					break;
+		  		case "div":
+		  			System.out.println("Detectado /");
+		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede dividir");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede dividir");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  				  //TODO: hay que hacer las comprobaciones de division por 0
+		  				  	System.out.println("Voy a dividir: " + result.valorEnt + " y " + r2.valorEnt);
+		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
+		  					result.valorEnt =	result.valorEnt / r2.valorEnt;
+//		  					ant.valorEnt = ant.valorEnt / r2.valorEnt;
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  		case "and":
+		  			System.out.println("Detectado and");
+		  			if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer and");
+		  			  	ok = false;
+		  			}
+		  			if(ok){ //El primer parametro es entero o desconocido
+		  				if(r2.tipo != Simbolo.Tipo_variable.BOOLEANO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer and");
+			  			  	ok = false;
+		  				}
+		  			} 
+		  			if(ok) {
+		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+							System.out.println("Voy a and: " + result.valorBool + " y " + r2.valorBool);
+		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+		  					result.valorBool =	result.valorBool && r2.valorBool; 
+//		  					ant.valorBool = r1.valorBool && r2.valorBool; 
+		  				}else {
+		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
+		  				}
+		  			}
+		  			break;
+		  			
+		  }
+  }
+  )*
+  {
+    //System.out.println("Voy a devolver result:" + result.tipo);
+    return result;
+  }
+  
+}
+
+/*("-" factor()
+	| <tNOT> factor()
+	| "(" expresion() ")"
+	| <tENTACAR> "(" expresion() ")"
+	| <tCARAENT> "(" expresion() ")"
+	| <tID>
+	| <tNUM>
+	| <tCAR>
+	| <tCADENA>
+	| <tTRUE>| <tFALSE>)*/
+
+RegistroExpr factor():
+{
+  RegistroExpr re = new RegistroExpr();
+  Token t;
+  Simbolo s;
+}
+{
+  ("-" re = factor()
+  {
+    if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			System.out.println("El tipo de la variable no es compatible con \"-\" ");
+			//TODO: mirar si hay que lanzar una excepcion o hacer algo mas
+			//Hay que devolver un Registro expr que sea de tipo desconocido??
+    }
+    else if(re.tipo == Simbolo.Tipo_variable.ENTERO) {
+		re.valorEnt = -re.valorEnt;
+		return re;
+    }else {
+      //Caso en el que el tipo de la variable es desconocido.
+      return re;
+    }
+  }
+  
+  | <tNOT> re = factor()
+  {
+    if(re.tipo != Simbolo.Tipo_variable.BOOLEANO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+			System.out.println("El tipo de la variable no es compatible con \"NOT\" ");
+			//TODO: mirar si hay que lanzar una excepcion o hacer algo mas
+			//Hay que devolver un Registro expr que sea de tipo desconocido??
+    }
+    else if(re.tipo == Simbolo.Tipo_variable.BOOLEANO) {
+		re.valorBool = !re.valorBool;
+		return re;
+    }else {
+      //Caso en el que el tipo de la variable es desconocido.
+      return re;
+    }
+  }
+
+  //TODO: descomentar esto cuando ya vaya expresion
+  | "(" re = expresion() ")"
+  {
+    //Si solo hay parentesis hay que devolver lo que hay dentro de los parentesis
+    return re;
+  }
+
+  
+  //TODO: descomentar esto cuando ya vaya expresion
+  | t = <tENTACAR> "(" re =expresion() ")"
+  {
+  	if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
+    }else if( re.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
+      	//Si no sabemos el tipo propagamos lo que nos han pasado
+		return re;
+    }else {
+      	RegistroExpr new_r = new  RegistroExpr();
+      	new_r.tipo= Simbolo.Tipo_variable.CHAR;
+		new_r.valorChar = (char)re.valorEnt;
+		return new_r;
+    }
+    
+    
+    
+  }
+  | <tCARAENT> "(" re = expresion() ")"
+  {
+    if(re.tipo != Simbolo.Tipo_variable.CHAR && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
+    }else if( re.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
+      	//Si no sabemos el tipo propagamos lo que nos han pasado
+		return re;
+    }else {
+      	RegistroExpr new_r = new  RegistroExpr();
+      	new_r.tipo= Simbolo.Tipo_variable.ENTERO;
+		new_r.valorEnt = (int)re.valorChar;
+		return new_r;
+    }
+    
+  }
+  | t = <tID>
+  {
+     s = tabla_simbolos.buscar_simbolo(t.image);
+     re.tipo = s.getVariable();
+     re.s = s.getTipo();
+     re.esVariable = true;
+     return re;
+     //TODO: me hace falta el token t??
+     
+  }
+  | t  = <tNUM>
+  {
+     return RegistroExpr.ENTERO(t.image);
+  }
+  | t = <tCAR>
+  {
+     return RegistroExpr.CHAR(t.image);
+  }
+	
+  | t = <tCADENA>
+  {
+     return RegistroExpr.CADENA(t.image);
+  }
+  | <tTRUE>
+  {
+     return RegistroExpr.BOOL(true);
+  }
+  | t = <tFALSE>)
+  {
+     return RegistroExpr.BOOL(false);
+  }
+}
+
