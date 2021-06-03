@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 public class MiniLengCompiler
 {
 
-  //HOla
 
   public static class RegistroExpr {
 	int valorEnt;
@@ -231,7 +230,7 @@ void programa():
 	  pw.println("; Programa " + programa.image + ".");
 	  //Introducimos la primera intruccion de inicio de programa
 	  String et_p = et.nueva_et();
-	  pw.println("ENP  " + et_p);
+	  pw.println("	ENP  " + et_p);
 	  
 	  //tabla_simbolos.imprimirTabla();
 	 }";" 
@@ -663,18 +662,42 @@ void lista_escribibles():
   r1 = expresion()
   {
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
-       System.out.println("No se puede escribir un tipo desconocido");
-    }else {
-      //TODO: mirar si hay que añador algo mas
-    }
+       	System.out.println("No se puede escribir un tipo desconocido");
+    }else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
+		//TODO mirar escribir verdaddero si es true o falso si es false
+    }else if(r1.tipo == Simbolo.Tipo_variable.CADENA){
+      	//Recorrer la cadena escribiendo letra por letra
+
+      	for (int x=1;x<r1.cadena.length()-1;x++) { 
+	   		pw.println("	STC		" + (int)r1.cadena.charAt(x));
+	   		pw.println("	WRT		0");
+	  	}
+	}
+	else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
+	 	pw.println("	WRT		1");
+	}else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
+	 	pw.println("	WRT		0");
+	}
   }
   (","r2 = expresion()
   {
-	   if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
+	   if(r2.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
 	       System.out.println("No se puede escribir un tipo desconocido");
-	   }else {
-      //TODO: mirar si hay que añador algo mas
-       }
+	   }else if(r2.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
+		//TODO mirar escribir verdaddero si es true o falso si es false
+    }else if(r2.tipo == Simbolo.Tipo_variable.CADENA){
+      	//Recorrer la cadena escribiendo letra por letra
+      	
+      	for (int x=1;x<r2.cadena.length()-1;x++) { 
+	   		pw.println("	STC		" + (int)r2.cadena.charAt(x));  
+	   		pw.println("	WRT		0");
+	   	}
+	}
+	else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
+	 	pw.println("	WRT		1");
+	}else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
+	 	pw.println("	WRT		0");
+	}
   }
   )*
   } catch (ParseException e) {
@@ -707,12 +730,12 @@ void asignacion(Simbolo id, Simbolo.Tipo_variable tpID/*Esto igual es inutil*/):
     	System.out.println("No se puede asignar una expresion a una accion");
     }else if(id.ES_REFERENCIA()) {
       	pw.println("; Direccion del parametro por referencia " + id.getNombre());
-        pw.println("SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
-        pw.println("DRF");
+        pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
+        pw.println("	DRF");
     }else {
       //Es una variable normal
       pw.println("; Direccion de la variable " + id.getNombre());
-      pw.println("SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
+      pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
     }
   }
   t = <tOPAS> r1 = expresion()
@@ -741,7 +764,7 @@ void asignacion(Simbolo id, Simbolo.Tipo_variable tpID/*Esto igual es inutil*/):
 
 	//Si todo va bien hacemos la asignacion
    	pw.println("; Asignacion.");
-    pw.println("\t ASG");
+    pw.println("	ASG");
 	
   }
   ";"
@@ -758,13 +781,15 @@ void mientras_que():
 { try {
   <tMQ>
   {
+    
     String etMQ = et.nueva_et();
+    pw.println(";MQ");
     pw.println(etMQ + ":");
   }
   r = expresion()
   {
        String etFIN = et.nueva_et();
-       pw.println("JMF	" + etFIN);
+       pw.println("	JMF	" + etFIN);
   	   if(r.tipo != Simbolo.Tipo_variable.BOOLEANO) {
 		//TODO: gestionar excepciones
 		System.out.println("La condicion del mientras que no es un booleano");
@@ -772,7 +797,9 @@ void mientras_que():
   }
   lista_sentencias() <tFMQ>
   {
-     pw.println("JMP	" + etMQ);
+     
+     pw.println("	JMP	" + etMQ);
+     pw.println(";FMQ");
      pw.println(etFIN + ":");
      
     
@@ -788,10 +815,12 @@ void seleccion():
   
 }
 { try {
-  <tSI> r = expresion()
+  <tSI> {pw.println(";SI" );}
+  r = expresion()
   {
-    pw.println(";SI" );
+    
     String etiqSINO = et.nueva_et();
+    pw.println("	JMF " + etiqSINO);
     if(r.tipo == Simbolo.Tipo_variable.BOOLEANO && !r.esVariable){
       //TODO mirar este if si hay que ejecutarlo
      	if(r.valorBool) {
@@ -799,19 +828,18 @@ void seleccion():
      	}else {
 			System.out.println("Este codigo nunca se va a ejecutar porque es una constante FALSE");	
      	}
-		
-     	
-        pw.println("JMF " + etiqSINO);
+        
     }else if(r.tipo != Simbolo.Tipo_variable.BOOLEANO ) {
 		//TODO: gestionar excepciones
 		System.out.println("La condicion de la seleccion no es un booleano");
     }
   }
-  <tENT> lista_sentencias()
+  <tENT> { pw.println(";ENT" );}
+  lista_sentencias()
   {
-    pw.println(";ENT" );
+    
     String etiqFIN= et.nueva_et();
-    pw.println("JMP " + etiqFIN);
+    pw.println("	JMP " + etiqFIN);
     pw.println(etiqSINO +":" );
     
   }
@@ -964,7 +992,7 @@ RegistroExpr expresion():
 //	  if(operacion != null) { 
 		  switch(operacion) { 
 		  		case ">":
-		  			pw.println("GT");
+		  			pw.println("	GT");
 		  			//System.out.println("Detectado >");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >");
@@ -987,7 +1015,7 @@ RegistroExpr expresion():
 		  			}
 		  			break;
 		  		case "<":
-		  			pw.println("LT");
+		  			pw.println("	LT");
 		  			//System.out.println("Detectado <");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <");
@@ -1010,7 +1038,7 @@ RegistroExpr expresion():
 		  			}
 		  			break;
 		  		case ">=":
-		  			pw.println("GTE");
+		  			pw.println("	GTE");
 		  			//System.out.println("Detectado >=");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >=");
@@ -1033,7 +1061,7 @@ RegistroExpr expresion():
 		  			}
 		  			break;
 		  		case "<=":
-		  			pw.println("LTE");
+		  			pw.println("	LTE");
 		  			//System.out.println("Detectado <=");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <=");
@@ -1057,7 +1085,7 @@ RegistroExpr expresion():
 		  			break;
 		  		//TODO: mirar el < > y en = si se puede hacer con booleanos, cadenas, caracteres
 		  		case "=":
-		  			pw.println("EQ");
+		  			pw.println("	EQ");
 		  			//System.out.println("Detectado =");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
@@ -1080,7 +1108,7 @@ RegistroExpr expresion():
 		  			}
 		  			break;
 		  		case "<>":
-		  			pw.println("NEQ");
+		  			pw.println("	NEQ");
 		  			//System.out.println("Detectado <>");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
@@ -1130,7 +1158,7 @@ RegistroExpr expresion_simple():
 	  String operacion = t.image;
 		  switch(operacion.toLowerCase()) { 
 		  		case "+":
-		  			pw.println("PLUS");
+		  			pw.println("	PLUS");
 		  			//System.out.println("Detectado +");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede sumar");
@@ -1153,7 +1181,7 @@ RegistroExpr expresion_simple():
 		  			}
 		  			break;
 		  		case "-":
-		  			pw.println("SBT");
+		  			pw.println("	SBT");
 		  			//System.out.println("Detectado -");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede restar");
@@ -1177,7 +1205,7 @@ RegistroExpr expresion_simple():
 	  				//return result;
 					break;
 		  		case "or":
-		  			pw.println("OR");
+		  			pw.println("	OR");
 		  			//System.out.println("Detectado and");
 		  			if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer and");
@@ -1235,7 +1263,7 @@ RegistroExpr termino():
   		  //Hay que hacer lowercase porque aunque el analizador sea case insensitive, el switch reconoce la diferencia entre mayusculas y minusculas
 		  switch(operacion.toLowerCase()) { 
 		  		case "*":
-		  			pw.println("TMS");
+		  			pw.println("	TMS");
 		  			//System.out.println("Detectado *");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede multiplicar");
@@ -1259,7 +1287,7 @@ RegistroExpr termino():
 		  			}
 		  			break;
 		  		case "mod":
-		  			pw.println("MOD");
+		  			pw.println("	MOD");
 		  			//System.out.println("Detectado mod");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede hacer mod");
@@ -1284,7 +1312,7 @@ RegistroExpr termino():
 		  			}
 					break;
 		  		case "div":
-		  			pw.println("DIV");
+		  			pw.println("	DIV");
 		  			//System.out.println("Detectado /");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede dividir");
@@ -1362,7 +1390,7 @@ RegistroExpr factor():
 {
   ("-" re = factor()
   {
-    pw.println("NGBI");
+    pw.println("	NGBI");
     if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 			System.out.println("El tipo de la variable no es compatible con \"-\" ");
 			//TODO: mirar si hay que lanzar una excepcion o hacer algo mas
@@ -1379,7 +1407,7 @@ RegistroExpr factor():
   
   | <tNOT> re = factor()
   {
-    pw.println("NGB");
+    pw.println("	NGB");
     if(re.tipo != Simbolo.Tipo_variable.BOOLEANO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 			System.out.println("El tipo de la variable no es compatible con \"NOT\" ");
 			//TODO: mirar si hay que lanzar una excepcion o hacer algo mas
@@ -1444,8 +1472,8 @@ RegistroExpr factor():
        //TODO: no existe el simbolo hay que lanzar una exepcion
      }else {
        	 pw.println("; Acceso a la variable " + s.getNombre());
-       	 pw.println("SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
-       	 pw.println("DRF");
+       	 pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
+       	 pw.println("	DRF");
 	     re.tipo = s.getVariable();
 	     re.s = s.getTipo();
 	     re.esVariable = true;
@@ -1455,28 +1483,28 @@ RegistroExpr factor():
   }
   | t  = <tNUM>
   {
-     pw.println("STC   " + t.image);
+     pw.println("	STC   " + t.image);
      return RegistroExpr.ENTERO(t.image);
   }
   | t = <tCAR>
   {
-     pw.println("STC   " + t.image);
+     pw.println("	STC   " + t.image);
      return RegistroExpr.CHAR(t.image);
   }
 	
   | t = <tCADENA>
   {
-     pw.println("STC   " + t.image);
+     pw.println(";cadena	" + t.image);
      return RegistroExpr.CADENA(t.image);
   }
   | <tTRUE>
   {
-     pw.println("STC   1" );
+     pw.println("	STC   1" );
      return RegistroExpr.BOOL(true);
   }
   | t = <tFALSE>)
   {
-     pw.println("STC   0" );
+     pw.println("	STC   0" );
      return RegistroExpr.BOOL(false);
   }
 }
