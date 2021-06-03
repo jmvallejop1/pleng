@@ -294,13 +294,13 @@ public class TablaSimbolos {
 	}
 	
 	public void ocultar_parametros(int nivel) {
-		System.out.println("Voy a ocultar parametros");
+		//System.out.println("Voy a ocultar parametros");
 		for (int i = 0; i < M; i++) {
 			Iterator<Simbolo> iter = tabla_hash[i].iterator();
 			while (iter.hasNext()) {
 				Simbolo s = iter.next();
 				if (s.nivel == nivel && s.tipo == Tipo_simbolo.PARAMETRO) {
-					System.out.println("Se ha ocultado el parametro: "+s.getNombre());
+					//System.out.println("Se ha ocultado el parametro: "+s.getNombre());
 					s.setVisible(false);
 				}
 			}
@@ -308,7 +308,7 @@ public class TablaSimbolos {
 	}
 	
 	public void eliminar_parametros_ocultos(int nivel) {
-		System.out.println("Voy a eliminar los parametros ocultos del nivel: "+nivel);
+		//System.out.println("Voy a eliminar los parametros ocultos del nivel: "+nivel);
 		for (int i = 0; i < M; i++) {
 			Iterator<Simbolo> iter = tabla_hash[i].iterator();
 			while (iter.hasNext()) {

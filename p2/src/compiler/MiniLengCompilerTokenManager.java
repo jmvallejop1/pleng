@@ -3,6 +3,8 @@ package compiler;
 import java.io.*;
 import semantico.*;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /** Token Manager. */
 public class MiniLengCompilerTokenManager implements MiniLengCompilerConstants
