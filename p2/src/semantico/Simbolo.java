@@ -40,6 +40,7 @@ public class Simbolo {
 	Tipo_simbolo tipo;
 	Tipo_variable variable;
 	Clase_parametro parametro;
+	String etiqueta;
 
 	ArrayList<Simbolo> lista_parametros; // Lista de simbolos que representan los parametros de una accion
 
@@ -50,6 +51,14 @@ public class Simbolo {
 
 
 	// Getters y setters
+	
+	public String getEtiqueta() {
+		return etiqueta;
+	}
+	
+	public void setEtiqueta(String e) {
+		this.etiqueta = e;
+	}
 	
 	public boolean esVisible() {
 		return visible;
@@ -164,13 +173,14 @@ public class Simbolo {
 	}
 
 	// Configura los campos del simbolo correspondiente a una accion
-	public void introducir_accion(String nombre, int nivel, int dir) {
+	public void introducir_accion(String nombre, int nivel, int dir, String s) {
 		this.nombre = nombre;
 		this.tipo = Tipo_simbolo.ACCION;
 		this.lista_parametros = new ArrayList<Simbolo>();
 		this.nivel = nivel;
 		this.dir = dir;
 		this.visible = true;
+		this.etiqueta = s;
 	}
 
 	// Configura los campos del simbolo correspondiente a un parametro
