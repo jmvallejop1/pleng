@@ -241,6 +241,27 @@ public class Simbolo {
 	public Boolean es_asignable() {
 		return this.ES_VARIABLE() || this.ES_REFERENCIA();
 	}
+	
+	public int get_tamanyo() {
+		int bytes;
+		switch (this.variable) {
+			case ENTERO:
+				bytes = 2;
+				break;
+			
+			case CHAR:
+				bytes =1;
+				break;
+			
+			case BOOLEANO:
+				bytes = 1;
+				break;
+			default:
+				bytes = 1;
+			break;
+		};
+		return bytes;
+	}
 
 	// Funcion toString()
 
