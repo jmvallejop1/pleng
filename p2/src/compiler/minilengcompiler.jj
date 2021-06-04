@@ -250,7 +250,7 @@ void programa():
 	 }
  }catch (ParseException e) {
 //    System.out.println("1");
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la creacion del programa");
   }
 }
 
@@ -263,7 +263,7 @@ void declaracion_variables():
     (declaracion()";")*
   } catch (ParseException e) {
       //TODO: idea->crear una variable booleana que indique que ha ocurrido un error
-          SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+          SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la declaracion de variables");
     }
 }
 
@@ -283,7 +283,7 @@ Simbolo.Tipo_variable tipo_variables():
   | < tBOOLEANO >	{return Simbolo.Tipo_variable.BOOLEANO;}
   | < tCARACTER > {return Simbolo.Tipo_variable.CHAR;}
 } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el tipo de las variables"));
   }
 }
 
@@ -321,7 +321,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
   	)*
   
   } catch (ParseException e) {   
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el identificador");
   }
 }
 
@@ -392,7 +392,7 @@ void parametros_formales(Simbolo simbolo_accion):
   	//Seguimos pasando el simbolo de la accion para poder asiciarla con los parametros
 	("("(lista_parametros(simbolo_accion))")")?
   } catch (ParseException e) {   
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en los parametros formales");
   }
 }
 
@@ -403,7 +403,7 @@ void lista_parametros(Simbolo simbolo_accion):
   	//Seguimos propagando el simbolo de la accion para poder asociarla
 	parametros(simbolo_accion)(";"parametros(simbolo_accion))*
   } catch (ParseException e) {
-       SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+       SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la lista de parametros");
   }
 }
 
@@ -453,7 +453,7 @@ void parametros(Simbolo simbolo_accion):
 	}
 	)*)
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en los parametros");
   }
 }
 
@@ -464,7 +464,7 @@ Simbolo.Clase_parametro clase_parametros():
 	(< tVAL > {return Simbolo.Clase_parametro.VAL; }
 	| < tREF >){return Simbolo.Clase_parametro.REF; }
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la clase de parametros");
   }
 }
 
@@ -509,7 +509,7 @@ void bloque_sentencias(Simbolo s):
   } catch (ParseException e) {
 //    System.out.println("1");
     
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el bloque de sentencias");
   }
 }
 void lista_sentencias():
@@ -557,7 +557,7 @@ void leer():
   <tLEER> {pw.println("; Lectura"); }
   "(" lista_asignables() ")"
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage "fallo al leer");
   }
 }
 
@@ -636,7 +636,7 @@ void lista_asignables():
 
   )*
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la lista de asignables");
   }
 }
 
@@ -647,7 +647,7 @@ void escribir():
   <tESCRIBIR> { pw.println("; Escritura");}
   "(" lista_escribibles() ")"
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo al escribir");
   }
 }
 
@@ -701,7 +701,7 @@ void lista_escribibles():
   }
   )*
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la lista de escribibles");
   }
 }
 
@@ -713,7 +713,7 @@ void invocacion_accion(Simbolo id, Simbolo.Tipo_variable tpID):
 { try {
   argumentos(id,tpID,parametros_necesarios) ";"
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la invocacion de acciones");
   }
 }
 
@@ -769,7 +769,7 @@ void asignacion(Simbolo id, Simbolo.Tipo_variable tpID/*Esto igual es inutil*/):
   }
   ";"
   } catch (ParseException e) {
-     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en asignacion");
   }
 }
 
@@ -805,7 +805,7 @@ void mientras_que():
     
   }
   } catch (ParseException e) {
-   SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+   SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en mientras que");
   }
 }
 
@@ -853,7 +853,7 @@ void seleccion():
     pw.println(";FSI" );
   }
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en seleccion");
   }
 }
 
@@ -891,7 +891,7 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
  }
   )? ")")?
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage "fallo en argumentos");
   }
 }
 
@@ -919,7 +919,7 @@ ArrayList<RegistroExpr> lista_expresiones(Simbolo id, Simbolo.Tipo_variable tpID
    return params;
  }
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la lista de expresiones");
   }
 }
 
@@ -935,7 +935,7 @@ Token operador_multiplicativo():
   | t = <tMOD>{return t;}
   )
   } catch (ParseException e) {
-   SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+   SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el operador multiplicativo");
   }
 }
 
@@ -949,7 +949,7 @@ Token operador_aditivo():
   | t = <tOR>{return t;}
   )
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el operador aditivo");
   }
 }
 
@@ -966,7 +966,7 @@ Token operador_relacional():
   | t = <tNI>{return t;}
    )
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage);
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el operador relacional");
   }
 }
 
