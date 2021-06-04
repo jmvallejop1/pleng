@@ -557,7 +557,7 @@ void leer():
   <tLEER> {pw.println("; Lectura"); }
   "(" lista_asignables() ")"
   } catch (ParseException e) {
-        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage "fallo al leer");
+        SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo al leer");
   }
 }
 
@@ -891,7 +891,7 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
  }
   )? ")")?
   } catch (ParseException e) {
-    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage "fallo en argumentos");
+    SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en argumentos");
   }
 }
 
