@@ -36,6 +36,8 @@ public class Simbolo {
 	Integer nivel; // Nivel en el que se ha declarado el simbolo (primer nivel = 0)
 	Integer dir; // Direccion del simbolo
 	boolean visible;
+	boolean esVector;
+	int tam_vector;
 
 	Tipo_simbolo tipo;
 	Tipo_variable variable;
@@ -163,13 +165,17 @@ public class Simbolo {
 	}
 
 	// Configura los campos del simbolo correspondiente a una variable
-	public void introducir_variable(String nombre, Tipo_variable tipo_var, int nivel, int dir) {
+	public void introducir_variable(String nombre, Tipo_variable tipo_var, int nivel, int dir, boolean esV, int t) {
 		this.nombre = nombre;
 		this.tipo = Tipo_simbolo.VARIABLE;
 		this.variable = tipo_var;
 		this.nivel = nivel;
 		this.dir = dir;
 		this.visible = true;
+		this.esVector = esV;
+		if(esV) {
+			this.tam_vector = t;
+		}
 	}
 
 	// Configura los campos del simbolo correspondiente a una accion

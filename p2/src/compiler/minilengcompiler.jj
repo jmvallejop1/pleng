@@ -202,9 +202,12 @@ TOKEN : /* OPERADORES */
 
 TOKEN : /* VALORES */
 {
-< tID : ((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) | < tLetra > >
-| 
-< tNUM : (<tCifra>)+ >
+< tIDv: ((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) "[" (<tCifra>)+ "]" | < tLetra > "[" (<tCifra>)+ "]">
+{
+  System.out.println("he encontrado un vector");
+}
+| < tID : ((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) | < tLetra > >
+| < tNUM : (<tCifra>)+ >
 | <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "ï¿½") "\"" >
 | <  tCADENA : "\"" (<tLetra> |<tSigno>|<tSigno>| " "|"."|","|";"|"*"|":"|"("|")"|"/"|"?")+  "\"" >
 | <  tCifra : ["0"-"9"] >
@@ -289,33 +292,63 @@ Simbolo.Tipo_variable tipo_variables():
   }
 }
 
-
+//TODO: cambiar tamaño de la variable del vector por TIPO * longitud
 void identificadores(Simbolo.Tipo_variable tipo):
 {
-  Token id1;
-  Token id2;
+  Token id1 = null;
+  Token id2 = null;
+  //Vectores
+  Token id1v = null;
+  Token id2v = null;
   Simbolo s1 = new Simbolo();
   Simbolo s2 = new Simbolo();
 }
 {
   try {
-  	id1 = < tID >
+  	 ( (id1 = < tID > | id1v = < tIDv >))
 	  {
 	    try {
-	      	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir/*aqui tiene que ir la direccion de la variable*/);
-			System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
-			dir += s1.get_tamanyo();
+	      	//Caso es un vector
+	        if(id1 == null) {
+	          	  //Obtencion de la longitud del vector
+		          int i = id1v.image.length()-2;
+		          while( id1v.image.charAt(i) != '[') {
+			            i--;
+		          }
+		          String tam_vec = id1v.image.substring(i+1,id1v.image.length()-1);
+		          s1 = tabla_simbolos.introducir_variable(id1v.image,tipo,nivel,dir,true,Integer.parseInt(tam_vec));
+		          System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+				  dir += s1.get_tamanyo();
+		          System.out.println(id1v.image);
+	        }else { 
+		      	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir,false,0);
+				System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+				dir += s1.get_tamanyo();
+			}
 	  	}catch(SimboloYaDeclaradoException e2) {
 	  	  	System.out.println("Error  semantico");
 	  	}
 	  }
 
-  	(","id2 = < tID >
+  	("," ( id2 = < tID > | id2v = < tIDv >)
   	{
 	    try {
-	      	 s2= tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir/*aqui tiene que ir la direccion de la variable*/);
-	      	 dir += s2.get_tamanyo();
-	      	 System.out.println("Voy a aumentar el tamaño en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+	      if(id2 == null) {
+	          	  //Obtencion de la longitud del vector
+		          int i = id2v.image.length()-2;
+		          while( id2v.image.charAt(i) != '[') {
+			            i--;
+		          }
+		          String tam_vec = id2v.image.substring(i+1,id2v.image.length()-1);
+		          s2 = tabla_simbolos.introducir_variable(id2v.image,tipo,nivel,dir,true,Integer.parseInt(tam_vec));
+		          System.out.println("Voy a aumentar el tamaño en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+				  dir += s2.get_tamanyo();
+		          System.out.println(id1v.image);
+	        }else { 
+		      	s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir,false,0);
+				System.out.println("Voy a aumentar el tamaño en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+				dir += s2.get_tamanyo();
+			}
 	  	}catch(SimboloYaDeclaradoException e2) {
 	  	  	System.out.println("Error  semantico");
 	  	}
