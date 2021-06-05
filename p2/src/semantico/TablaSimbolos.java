@@ -170,10 +170,10 @@ public class TablaSimbolos {
 	 * una excepcion. De lo contrario, introduce un simbolo VARIABLE (simple) con
 	 * los datos de los argumentos.
 	 */
-	public Simbolo introducir_variable(String nombre, Tipo_variable variable, int nivel, int dir)
+	public Simbolo introducir_variable(String nombre, Tipo_variable variable, int nivel, int dir, boolean esVector, int tam)
 			throws SimboloYaDeclaradoException {
 		Simbolo simbolo = new Simbolo();
-		simbolo.introducir_variable(nombre, variable, nivel, dir);
+		simbolo.introducir_variable(nombre, variable, nivel, dir, esVector, tam);
 		return introducir_simbolo(simbolo);
 	}
 
@@ -182,9 +182,9 @@ public class TablaSimbolos {
 	 * una excepcion. De lo contrario, introduce un simbolo ACCION con los datos de
 	 * los argumentos.
 	 */
-	public Simbolo introducir_accion(String nombre, int nivel, int dir) throws SimboloYaDeclaradoException {
+	public Simbolo introducir_accion(String nombre, int nivel, int dir, String s) throws SimboloYaDeclaradoException {
 		Simbolo simbolo = new Simbolo();
-		simbolo.introducir_accion(nombre, nivel, dir);
+		simbolo.introducir_accion(nombre, nivel, dir, s);
 		return introducir_simbolo(simbolo);
 	}
 

@@ -36,10 +36,13 @@ public class Simbolo {
 	Integer nivel; // Nivel en el que se ha declarado el simbolo (primer nivel = 0)
 	Integer dir; // Direccion del simbolo
 	boolean visible;
+	boolean esVector;
+	int tam_vector;
 
 	Tipo_simbolo tipo;
 	Tipo_variable variable;
 	Clase_parametro parametro;
+	String etiqueta;
 
 	ArrayList<Simbolo> lista_parametros; // Lista de simbolos que representan los parametros de una accion
 
@@ -50,6 +53,14 @@ public class Simbolo {
 
 
 	// Getters y setters
+	
+	public String getEtiqueta() {
+		return etiqueta;
+	}
+	
+	public void setEtiqueta(String e) {
+		this.etiqueta = e;
+	}
 	
 	public boolean esVisible() {
 		return visible;
@@ -154,23 +165,28 @@ public class Simbolo {
 	}
 
 	// Configura los campos del simbolo correspondiente a una variable
-	public void introducir_variable(String nombre, Tipo_variable tipo_var, int nivel, int dir) {
+	public void introducir_variable(String nombre, Tipo_variable tipo_var, int nivel, int dir, boolean esV, int t) {
 		this.nombre = nombre;
 		this.tipo = Tipo_simbolo.VARIABLE;
 		this.variable = tipo_var;
 		this.nivel = nivel;
 		this.dir = dir;
 		this.visible = true;
+		this.esVector = esV;
+		if(esV) {
+			this.tam_vector = t;
+		}
 	}
 
 	// Configura los campos del simbolo correspondiente a una accion
-	public void introducir_accion(String nombre, int nivel, int dir) {
+	public void introducir_accion(String nombre, int nivel, int dir, String s) {
 		this.nombre = nombre;
 		this.tipo = Tipo_simbolo.ACCION;
 		this.lista_parametros = new ArrayList<Simbolo>();
 		this.nivel = nivel;
 		this.dir = dir;
 		this.visible = true;
+		this.etiqueta = s;
 	}
 
 	// Configura los campos del simbolo correspondiente a un parametro
