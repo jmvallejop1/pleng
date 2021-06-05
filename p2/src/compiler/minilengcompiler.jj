@@ -1,5 +1,5 @@
 /**
- * Especificación JavaCC para la Práctica 2 (Procesadores de Lenguajes)
+ * EspecificaciÃ³n JavaCC para la PrÃ¡ctica 2 (Procesadores de Lenguajes)
  * Javier Fabra - jfabra@unizar.es
  * v1.2 - 2021/03/08
  */
@@ -80,7 +80,7 @@ public class MiniLengCompiler
   static int nivel = 0;
   static final int INICIAL = 3;
 
-  //Inicializacion de la direccion para a�adir a la tabla de simbolos
+  //Inicializacion de la direccion para aï¿½adir a la tabla de simbolos
   
   public static int dir = INICIAL;
   static TablaSimbolos tabla_simbolos = new TablaSimbolos();
@@ -208,7 +208,7 @@ TOKEN : /* VALORES */
 }
 | < tID : ((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) | < tLetra > >
 | < tNUM : (<tCifra>)+ >
-| <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "�") "\"" >
+| <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "ï¿½") "\"" >
 | <  tCADENA : "\"" (<tLetra> |<tSigno>|<tSigno>| " "|"."|","|";"|"*"|":"|"("|")"|"/"|"?")+  "\"" >
 | <  tCifra : ["0"-"9"] >
 | <  tLetra: ["a"-"z"] >
@@ -292,7 +292,8 @@ Simbolo.Tipo_variable tipo_variables():
   }
 }
 
-//TODO: cambiar tama�o de la variable del vector por TIPO * longitud
+
+//TODO: cambiar tamaño de la variable del vector por TIPO * longitud
 void identificadores(Simbolo.Tipo_variable tipo):
 {
   Token id1 = null;
@@ -317,12 +318,17 @@ void identificadores(Simbolo.Tipo_variable tipo):
 		          }
 		          String tam_vec = id1v.image.substring(i+1,id1v.image.length()-1);
 		          s1 = tabla_simbolos.introducir_variable(id1v.image,tipo,nivel,dir,true,Integer.parseInt(tam_vec));
-		          System.out.println("Voy a aumentar el tama�o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+
+		          System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+
 				  dir += s1.get_tamanyo();
 		          System.out.println(id1v.image);
 	        }else { 
 		      	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir,false,0);
-				System.out.println("Voy a aumentar el tama�o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+
+
+				System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+
 				dir += s1.get_tamanyo();
 			}
 	  	}catch(SimboloYaDeclaradoException e2) {
@@ -341,12 +347,16 @@ void identificadores(Simbolo.Tipo_variable tipo):
 		          }
 		          String tam_vec = id2v.image.substring(i+1,id2v.image.length()-1);
 		          s2 = tabla_simbolos.introducir_variable(id2v.image,tipo,nivel,dir,true,Integer.parseInt(tam_vec));
-		          System.out.println("Voy a aumentar el tama�o en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+
+		          System.out.println("Voy a aumentar el tamaño en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+
 				  dir += s2.get_tamanyo();
 		          System.out.println(id1v.image);
 	        }else { 
 		      	s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir,false,0);
-				System.out.println("Voy a aumentar el tama�o en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+
+				System.out.println("Voy a aumentar el tamaño en: " +s2.get_tamanyo()+ " por "+ s2.getNombre());
+
 				dir += s2.get_tamanyo();
 			}
 	  	}catch(SimboloYaDeclaradoException e2) {
@@ -464,7 +474,7 @@ void parametros(Simbolo simbolo_accion):
 
 	    //Introducimos el parametro a la lista de los parametros del simbolo de la accion he hemos ido propagando
 	    simbolo_accion.addParametro(param);
-	    //System.out.println("A�adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
+	    //System.out.println("Aï¿½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
 	    
 	    
 	    
@@ -481,7 +491,7 @@ void parametros(Simbolo simbolo_accion):
 	    param2 = tabla_simbolos.introducir_parametro(id2.image,tipo, clase, nivel, dir/*aqui va la direccion*/);
 	    simbolo_accion.addParametro(param2);
 
-	    //System.out.println("A�adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
+	    //System.out.println("Aï¿½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
 	    
 	  }catch(SimboloYaDeclaradoException e2) {
 	  	System.out.println("Error  semantico");
@@ -569,7 +579,7 @@ void sentencia():
    //tabla_simbolos.imprimirTabla();
    simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
    if(simbolo_id == null) {
-     	System.out.println("Error semantico no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos");
+     	System.out.println("Error semantico, no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos");
      	tpID = Simbolo.Tipo_variable.DESCONOCIDO;
    }
    else if(simbolo_id.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && simbolo_id.getParametro() == Simbolo.Clase_parametro.VAL) {
