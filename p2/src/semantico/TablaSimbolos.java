@@ -141,7 +141,7 @@ public class TablaSimbolos {
 	 */
 	private Simbolo introducir_simbolo(Simbolo simbolo) throws SimboloYaDeclaradoException {
 		int clave = h(simbolo.getNombre());
-
+		//System.out.println("eyyyyy " + simbolo.getNombre() );
 		for (Simbolo s : tabla_hash[clave]) {
 			// Si el simbolo ya esta declarado en ese mismo nivel, lanzar una excepcion
 			if (s.getNombre().equals(simbolo.getNombre()) && s.getNivel() == simbolo.getNivel()) {
@@ -170,10 +170,10 @@ public class TablaSimbolos {
 	 * una excepcion. De lo contrario, introduce un simbolo VARIABLE (simple) con
 	 * los datos de los argumentos.
 	 */
-	public Simbolo introducir_variable(String nombre, Tipo_variable variable, int nivel, int dir, boolean esVector, int tam)
+	public Simbolo introducir_variable(String nombre, Tipo_variable variable, int nivel, int dir)
 			throws SimboloYaDeclaradoException {
 		Simbolo simbolo = new Simbolo();
-		simbolo.introducir_variable(nombre, variable, nivel, dir, esVector, tam);
+		simbolo.introducir_variable(nombre, variable, nivel, dir);
 		return introducir_simbolo(simbolo);
 	}
 

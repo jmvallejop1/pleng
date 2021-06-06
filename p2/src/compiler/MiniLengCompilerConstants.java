@@ -89,9 +89,9 @@ public interface MiniLengCompilerConstants {
   /** RegularExpression Id. */
   int tMENOS = 49;
   /** RegularExpression Id. */
-  int tIDv = 50;
+  int tID = 50;
   /** RegularExpression Id. */
-  int tID = 51;
+  int tIDv = 51;
   /** RegularExpression Id. */
   int tNUM = 52;
   /** RegularExpression Id. */
@@ -164,14 +164,16 @@ public interface MiniLengCompilerConstants {
     "\"div\"",
     "\"+\"",
     "\"-\"",
-    "<tIDv>",
     "<tID>",
+    "\"vector\"",
     "<tNUM>",
     "<tCAR>",
     "<tCADENA>",
     "<tCifra>",
     "<tLetra>",
     "<tSigno>",
+    "\"[\"",
+    "\"]\"",
     "\",\"",
     "\"(\"",
     "\")\"",

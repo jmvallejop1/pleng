@@ -20,7 +20,7 @@ public class Simbolo {
 
 	// Representa el tipo de variable
 	public enum Tipo_variable {
-		DESCONOCIDO, ENTERO, BOOLEANO, CHAR, CADENA
+		DESCONOCIDO, ENTERO, BOOLEANO, CHAR, CADENA, VECENT, VECCHAR,VECBOOL
 	};
 
 	// Representa la clase de los parámetros en las acciones
@@ -36,8 +36,6 @@ public class Simbolo {
 	Integer nivel; // Nivel en el que se ha declarado el simbolo (primer nivel = 0)
 	Integer dir; // Direccion del simbolo
 	boolean visible;
-	boolean esVector;
-	int tam_vector;
 
 	Tipo_simbolo tipo;
 	Tipo_variable variable;
@@ -53,7 +51,6 @@ public class Simbolo {
 
 
 	// Getters y setters
-	
 	public String getEtiqueta() {
 		return etiqueta;
 	}
@@ -165,17 +162,13 @@ public class Simbolo {
 	}
 
 	// Configura los campos del simbolo correspondiente a una variable
-	public void introducir_variable(String nombre, Tipo_variable tipo_var, int nivel, int dir, boolean esV, int t) {
+	public void introducir_variable(String nombre, Tipo_variable tipo_var, int nivel, int dir) {
 		this.nombre = nombre;
 		this.tipo = Tipo_simbolo.VARIABLE;
 		this.variable = tipo_var;
 		this.nivel = nivel;
 		this.dir = dir;
 		this.visible = true;
-		this.esVector = esV;
-		if(esV) {
-			this.tam_vector = t;
-		}
 	}
 
 	// Configura los campos del simbolo correspondiente a una accion
@@ -210,6 +203,7 @@ public class Simbolo {
 		this.longitud = longitud;
 		this.nivel = nivel;
 		this.dir = dir;
+		this.visible =true;
 	}
 
 	public void introducir_parametro_vector(String nombre, Tipo_variable tipo_var, Clase_parametro clase_param,
@@ -272,11 +266,73 @@ public class Simbolo {
 			case BOOLEANO:
 				bytes = 1;
 				break;
+			case VECENT:
+				bytes = this.longitud * 2;
+				break;
+			case VECCHAR:
+				bytes = this.longitud * 1;
+				break;
+			case VECBOOL:
+				bytes = this.longitud * 1;
+				break;
 			default:
 				bytes = 1;
 			break;
 		};
 		return bytes;
+	}
+	
+	public int get_tamanyo_componente() {
+		int bytes;
+		switch (this.variable) {
+			case VECENT:
+				bytes =  2;
+				break;
+			case VECCHAR:
+				bytes =  1;
+				break;
+			case VECBOOL:
+				bytes =  1;
+				break;
+			default:
+				bytes = 1;
+			break;
+		};
+		return bytes;
+	}
+	
+	public Tipo_variable getTipoComponente() {
+		if(this.vector) {
+			switch (this.variable) {
+				case VECENT:
+					return Tipo_variable.ENTERO;
+				case VECCHAR:
+					return Tipo_variable.CHAR;
+				case VECBOOL:
+					return Tipo_variable.BOOLEANO;
+				default:
+					return Tipo_variable.DESCONOCIDO;
+			}
+		}else {
+			return Tipo_variable.DESCONOCIDO;
+		}
+	}
+	
+	public int calcularDesplazamientoDireccion(int desp) {
+		if(this.vector) {
+			switch (this.variable) {
+				case VECENT:
+					return this.dir + desp * 2;
+				case VECCHAR:
+					return this.dir + desp;
+				case VECBOOL:
+					return this.dir + desp;
+				default:
+					return this.dir;
+			}
+		}else {
+			return this.dir;
+		}
 	}
 
 	// Funcion toString()
