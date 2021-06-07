@@ -207,6 +207,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   boolean esVector = false;
     try {
       id1 = jj_consume_token(tID);
+             r = null;
+              esVector = false;
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
@@ -250,7 +252,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 }
                              }
                            }
-
                         }else {
                                 System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
                                 s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
@@ -272,6 +273,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
         jj_consume_token(60);
         id2 = jj_consume_token(tID);
+             r = null;
+             esVector = false;
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case 58:
           jj_consume_token(58);
@@ -315,7 +318,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 }
                              }
                            }
-
                         }else {
                                 System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
                                 s1 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir);
@@ -387,6 +389,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 System.out.println("Error  semantico");
         }
     parametros_formales(simbolo_accion);
+    tabla_simbolos.imprimirTabla();
     {if (true) return simbolo_accion;}
     throw new Error("Missing return statement in function");
   }
@@ -463,6 +466,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             }else{
                 //Caso vector
                 if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
+                        System.out.println("Se declara un vector como parametro");
                         //El vector esta bien definido
                         Simbolo.Tipo_variable tipo_aux = null;
                         if(tipo == Simbolo.Tipo_variable.ENTERO) {
@@ -473,6 +477,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                         }
                         param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo_aux, clase, r.valorEnt, nivel, dir);
+                        System.out.println("He introducido el vector a la lista de params");
                         simbolo_accion.addParametro(param);
                 }else {
                         //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
@@ -575,6 +580,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   //Lista necesaria para recuperar los parametros en la invicacion de la accion
   ArrayList<Simbolo> lista_param = new ArrayList<Simbolo>();
     try {
+          System.out.println("Entro a bloque sentencias");
           //Generamos nueva etiqueta para el comienzo de las acciones de la accion
 
 
@@ -648,8 +654,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       break;
     case tID:
       id = jj_consume_token(tID);
+                System.out.println("SE entra a sentencia "+ id.image);
                 simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
-                if(simbolo_id.ES_VARIABLE()) {
+                if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
+                    System.out.println("Es una variable");
                         if(simbolo_id == null) {
                         System.out.println("Error semantico, no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos");
                         tpID = Simbolo.Tipo_variable.DESCONOCIDO;
@@ -685,7 +693,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       }
    //Si es el vector entero
 
-                if(simbolo_id.ES_VARIABLE()) {
+                if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
                 if(r == null) {
                     //Aqui ya se empieza a asignar la primera componente
                     pw.println(";Asignacion componente 1");
@@ -747,8 +755,23 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   Token t2 = new Token();
   Simbolo s1 = new Simbolo();
   Simbolo s2 = new Simbolo();
+  boolean esComponente = false;
+  RegistroExpr r = null;
     try {
       t1 = jj_consume_token(tID);
+    esComponente = false;
+    r = null;
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 58:
+        jj_consume_token(58);
+        r = expresion(false);
+        jj_consume_token(59);
+        esComponente = true;
+        break;
+      default:
+        jj_la1[16] = jj_gen;
+        ;
+      }
     //Obtenemos el simbolo con el nombre del id
     s1 = tabla_simbolos.buscar_simbolo(t1.image);
     if(s1 == null){
@@ -759,25 +782,98 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
         }else if(s1.ES_VARIABLE()){
           //Obtenemos la variable
-                pw.println("; Leer variable " + s1.getNombre());
-        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
-        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
-                pw.println("\u005ct RD    1");
-                }
-                else{
-                        pw.println("\u005ct RD    0");
+            if(s1.ES_VECTOR() && !esComponente) {
+              //Es un vector entero hay que ir componente por componente leyendo
+              pw.println("; Leer variable " + s1.getNombre());
+              int offset = 0;
+              int bytes_componente = s1.get_tamanyo_componente();
+              for(int i = 0; i < s1.getLongitud(); i++) {
+                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+                        if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                                offset+=bytes_componente;
+              }
+            }else {
+                //Es o una variable normal o una componente de un vector
+                if(esComponente) {
+                        if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
+                                int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
+                                pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir()+offset);
+                                if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                        pw.println("\u005ct RD    1");
+                                        }
+                                        else{
+                                                pw.println("\u005ct RD    0");
+                                        }
+                        }else {
+                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
+                                System.out.println("No se puede declarar un vector sin una constante entera");
+                        }
+
+                }else {
+                                pw.println("; Leer variable " + s1.getNombre());
+                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+                        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                        }
                 }
         }else if(s1.ES_REFERENCIA()) {
-                pw.println("; Leer parametro por referencia " + s1.getNombre());
-        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
-        pw.println("\u005ct DRF");
-        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
-                        pw.println("\u005ct RD    1");
+             pw.println("; Leer parametro por referencia " + s1.getNombre());
+             if(s1.ES_VECTOR() && !esComponente) {
+              //Es un vector entero hay que ir componente por componente leyendo
+              pw.println("; Leer variable " + s1.getNombre());
+              int offset = 0;
+              int bytes_componente = s1.get_tamanyo_componente();
+              for(int i = 0; i < s1.getLongitud(); i++) {
+                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+                        pw.println("\u005ct DRF");
+                        if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                                offset+=bytes_componente;
+              }
+            }else {
+                //Es o una variable normal o una componente de un vector
+                if(esComponente) {
+                        if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
+                                int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
+                                pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+                                pw.println("\u005ct DRF");
+                                if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                        pw.println("\u005ct RD    1");
+                                        }
+                                        else{
+                                                pw.println("\u005ct RD    0");
+                                        }
+                        }else {
+                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
+                                System.out.println("No se puede declarar un vector sin una constante entera");
+                        }
+
+                }else {
+                                pw.println("; Leer variable " + s1.getNombre());
+                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+                        pw.println("\u005ct DRF");
+                        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                        }
                 }
-                else{
-                        pw.println("\u005ct RD    0");
-                }
-        }
+  }
       label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -785,12 +881,26 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[16] = jj_gen;
+          jj_la1[17] = jj_gen;
           break label_7;
         }
         jj_consume_token(60);
         t2 = jj_consume_token(tID);
-        s2 = tabla_simbolos.buscar_simbolo(t2.image);
+    r = null;
+    esComponente = false;
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 58:
+          jj_consume_token(58);
+          r = expresion(false);
+          jj_consume_token(59);
+                esComponente = true;
+          break;
+        default:
+          jj_la1[18] = jj_gen;
+          ;
+        }
+        //Obtenemos el simbolo con el nombre del id
+    s2 = tabla_simbolos.buscar_simbolo(t2.image);
     if(s2 == null){
         System.out.println("El simbolo que se esta buscando no esta en la tabla");
         }else if(s2.getTipo() !=  Simbolo.Tipo_simbolo.PARAMETRO &&  s2.getTipo() != Simbolo.Tipo_simbolo.VARIABLE){
@@ -799,25 +909,98 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
         }else if(s2.ES_VARIABLE()){
           //Obtenemos la variable
-                pw.println("; Leer variable " + s2.getNombre());
-        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
-        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
-                        pw.println("\u005ct RD    1");
-                }
-                else{
-                        pw.println("\u005ct RD    0");
+            if(s2.ES_VECTOR() && !esComponente) {
+              //Es un vector entero hay que ir componente por componente leyendo
+              pw.println("; Leer variable " + s2.getNombre());
+              int offset = 0;
+              int bytes_componente = s2.get_tamanyo_componente();
+              for(int i = 0; i < s2.getLongitud(); i++) {
+                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
+                        if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                                offset+=bytes_componente;
+              }
+            }else {
+                //Es o una variable normal o una componente de un vector
+                if(esComponente) {
+                        if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
+                                int offset = (r.valorEnt - 1) * s2.get_tamanyo_componente();
+                                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
+                                if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                        pw.println("\u005ct RD    1");
+                                        }
+                                        else{
+                                                pw.println("\u005ct RD    0");
+                                        }
+                        }else {
+                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
+                                System.out.println("No se puede declarar un vector sin una constante entera");
+                        }
+
+                }else {
+                                pw.println("; Leer variable " + s2.getNombre());
+                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+                        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                        }
                 }
         }else if(s2.ES_REFERENCIA()) {
-                pw.println("; Leer parametro por referencia " + s2.getNombre());
-        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
-        pw.println("\u005ct DRF");
-        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
-                        pw.println("\u005ct RD    1");
+             pw.println("; Leer parametro por referencia " + s2.getNombre());
+             if(s2.ES_VECTOR() && !esComponente) {
+              //Es un vector entero hay que ir componente por componente leyendo
+              pw.println("; Leer variable " + s2.getNombre());
+              int offset = 0;
+              int bytes_componente = s2.get_tamanyo_componente();
+              for(int i = 0; i < s2.getLongitud(); i++) {
+                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir()+offset);
+                        pw.println("\u005ct DRF");
+                        if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                                offset+=bytes_componente;
+              }
+            }else {
+                //Es o una variable normal o una componente de un vector
+                if(esComponente) {
+                        if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
+                                int offset = (r.valorEnt - 1) * s2.get_tamanyo_componente();
+                                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir()+offset);
+                                pw.println("\u005ct DRF");
+                                if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                                        pw.println("\u005ct RD    1");
+                                        }
+                                        else{
+                                                pw.println("\u005ct RD    0");
+                                        }
+                        }else {
+                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
+                                System.out.println("No se puede declarar un vector sin una constante entera");
+                        }
+
+                }else {
+                                pw.println("; Leer variable " + s2.getNombre());
+                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+                        pw.println("\u005ct DRF");
+                        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u005ct RD    1");
+                                }
+                                else{
+                                        pw.println("\u005ct RD    0");
+                                }
+                        }
                 }
-                else{
-                        pw.println("\u005ct RD    0");
-                }
-        }
+  }
       }
     } catch (ParseException e) {
         SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la lista de asignables");
@@ -841,6 +1024,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   RegistroExpr r2 = new RegistroExpr();
     try {
       r1 = expresion(true);
+    System.out.println("Tipo dentro de escribi" + r1.tipo);
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
         System.out.println("No se puede escribir un tipo desconocido");
     }else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) {
@@ -852,6 +1036,26 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         pw.println("\u0009STC\u0009\u0009" + (int)r1.cadena.charAt(x));
                         pw.println("\u0009WRT\u0009\u00090");
                 }
+        }
+        else if(r1.sim.ES_VECTOR()) {
+                        if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
+                                pw.println("\u0009WRT\u0009\u00091");
+                        }else {
+                                pw.println("\u0009WRT\u0009\u00090");
+                        }
+                        int bytes_componente = r1.sim.get_tamanyo_componente();
+                        int offset = r1.sim.get_tamanyo_componente();
+                        for(int i = 1; i <r1.tam_vec; i++) {
+                                 pw.println(";Escritura variablea la variable " + r1.sim.getNombre());
+                        pw.println("\u0009SRF\u0009"+  (nivel - r1.sim.getNivel()) + "\u0009" + (r1.sim.getDir() + offset));
+                        pw.println("\u0009DRF");
+                        if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
+                                        pw.println("\u0009WRT\u0009\u00091");
+                                }else {
+                                        pw.println("\u0009WRT\u0009\u00090");
+                                }
+                                offset+= bytes_componente;
+                        }
         }
         else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
                 pw.println("\u0009WRT\u0009\u00091");
@@ -865,7 +1069,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[17] = jj_gen;
+          jj_la1[19] = jj_gen;
           break label_8;
         }
         jj_consume_token(60);
@@ -881,6 +1085,26 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         pw.println("\u0009STC\u0009\u0009" + (int)r2.cadena.charAt(x));
                         pw.println("\u0009WRT\u0009\u00090");
                 }
+        }
+        else if(r1.sim.ES_VECTOR()) {
+                        if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
+                                pw.println("\u0009WRT\u0009\u00091");
+                        }else {
+                                pw.println("\u0009WRT\u0009\u00090");
+                        }
+                        int bytes_componente = r2.sim.get_tamanyo_componente();
+                        int offset = r2.sim.get_tamanyo_componente();
+                        for(int i = 1; i <r2.tam_vec; i++) {
+                                 pw.println(";Escritura variablea la variable " + r2.sim.getNombre());
+                        pw.println("\u0009SRF\u0009"+  (nivel - r2.sim.getNivel()) + "\u0009" + (r2.sim.getDir() + offset));
+                        pw.println("\u0009DRF");
+                        if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
+                                        pw.println("\u0009WRT\u0009\u00091");
+                                }else {
+                                        pw.println("\u0009WRT\u0009\u00090");
+                                }
+                                offset+= bytes_componente;
+                        }
         }
         else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
                 pw.println("\u0009WRT\u0009\u00091");
@@ -938,6 +1162,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
 
             //Hay que mirar que los tipos sean asignables y que coincidan ambos tipos
+            System.out.println("AccesoComponente: " + ac);
             if(ac && r1.tipo != id.getTipoComponente()) {
                 //TODO: excepcion no coincide tipo, componente del vector
                 System.out.println("Acceso componente true y no coinciden tipos tipos");
@@ -1042,7 +1267,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         lista_sentencias();
         break;
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[20] = jj_gen;
         ;
       }
       jj_consume_token(tFSI);
@@ -1085,7 +1310,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 for( int i = 0; i < num_params; i++) {
                         s = parametros_necesarios.get(i);
                         r = params.get(i);
-                        //System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
+                        tabla_simbolos.imprimirTabla();
+                        System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
                         if(s.getVariable() != r.tipo) {
                                 //TODO: gestionar excepciones
                                 System.out.println("Los tipos de los argumentos no coinciden");
@@ -1097,13 +1323,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
           break;
         default:
-          jj_la1[19] = jj_gen;
+          jj_la1[21] = jj_gen;
           ;
         }
         jj_consume_token(62);
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[22] = jj_gen;
         ;
       }
     } catch (ParseException e) {
@@ -1127,7 +1353,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[21] = jj_gen;
+          jj_la1[23] = jj_gen;
           break label_9;
         }
         jj_consume_token(60);
@@ -1162,7 +1388,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                {if (true) return t;}
         break;
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1189,7 +1415,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
               {if (true) return t;}
         break;
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[25] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1228,7 +1454,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
               {if (true) return t;}
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[26] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1259,7 +1485,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[27] = jj_gen;
         break label_10;
       }
       t = operador_relacional();
@@ -1432,7 +1658,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[28] = jj_gen;
         break label_11;
       }
       t = operador_aditivo();
@@ -1537,7 +1763,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[27] = jj_gen;
+        jj_la1[29] = jj_gen;
         break label_12;
       }
       t = operador_multiplicativo();
@@ -1764,7 +1990,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_consume_token(59);
         break;
       default:
-        jj_la1[28] = jj_gen;
+        jj_la1[30] = jj_gen;
         ;
       }
      System.out.println("He encontrado un id");
@@ -1793,7 +2019,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         //TODO: excepciones tiene que ser una constante positiva
                                 }else if(re.valorEnt > s.getLongitud()){
                                   System.out.println("Overflow vectores");
-                                        //TODO: Overflow indexacion
+                                        //TODO: Excepcion overflow indexacion
 
                                 }else {
                                         System.out.println("aaSe ha detectado una varieable vector llamada: " + t.image +" y de tam: "+re.valorEnt + " y se puede declarar");
@@ -1812,7 +2038,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         }
                 }
         }else {
-                System.out.println("He encontrado un id normal");
+                System.out.println("He encontrado vector entero");
                 re = new  RegistroExpr();
                         re.tipo = s.getVariable();
                 //Es un vector entero
@@ -1863,7 +2089,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       t = jj_consume_token(tFALSE);
       break;
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[31] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1882,7 +2108,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[30];
+  static final private int[] jj_la1 = new int[32];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1890,10 +2116,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6880000,0x0,0x0,0x6880000,0x0,0x0,0x200000,0xf0010000,0x0,0x0,0x8004000,0x8000,0x0,0x0,0x8000,0x8004000,0x0,0xf0010000,};
+      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6880000,0x0,0x0,0x6880000,0x0,0x0,0x0,0x0,0x200000,0xf0010000,0x0,0x0,0x8004000,0x8000,0x0,0x0,0x8000,0x8004000,0x0,0xf0010000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x38,0x38,0x4000000,0x10000000,0x4000000,0x1,0x20000000,0x80,0x4000000,0x10000000,0x4000000,0x6,0x40000,0x4000000,0x20002080,0x40000,0x10000000,0x10000000,0x0,0x20760000,0x20000000,0x10000000,0xc000,0x30000,0x1f40,0x1f40,0x30000,0xc000,0x4000000,0x20760000,};
+      jj_la1_1 = new int[] {0x38,0x38,0x4000000,0x10000000,0x4000000,0x1,0x20000000,0x80,0x4000000,0x10000000,0x4000000,0x6,0x40000,0x4000000,0x20002080,0x40000,0x4000000,0x10000000,0x4000000,0x10000000,0x0,0x20760000,0x20000000,0x10000000,0xc000,0x30000,0x1f40,0x1f40,0x30000,0xc000,0x4000000,0x20760000,};
    }
 
   /** Constructor with InputStream. */
@@ -1914,7 +2140,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1928,7 +2154,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1945,7 +2171,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1955,7 +2181,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1971,7 +2197,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1980,7 +2206,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -2036,7 +2262,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 32; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

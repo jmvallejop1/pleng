@@ -216,6 +216,7 @@ public class Simbolo {
 		this.longitud = longitud;
 		this.nivel = nivel;
 		this.dir = dir;
+		this.visible = true;
 	}
 
 	// Comprobadores del tipo de simbolo
