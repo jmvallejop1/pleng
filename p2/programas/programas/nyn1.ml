@@ -29,6 +29,5 @@ Principio
         y := n mod 10;
         m := 10*y + x;
         n := m + n;
-
         escribir(n, entacar(13), entacar(10));
 Fin

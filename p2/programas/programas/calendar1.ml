@@ -106,6 +106,6 @@ PRINCIPIO
      leer(anho, ln);
      primer_dia_anho;
      primer_dia_mes;
-     escribir(dia1mes);    
+     escribir(dia1mes);  
 
 FIN
