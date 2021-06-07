@@ -320,15 +320,15 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	 		if(esVector) {
 	 		   if(r.esVariable) {
 	 		     //TODO: excepciones, tiene que ser una constante positiva, no una variable
-	 		     System.out.println("Se ha detectado una varieable vector y es un identificador no cont entera");
+	 		     System.out.println("Error semantico: Se ha detectado una varieable vector y es un identificador no cont entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	 		   }else {
 	 		     //Caso es una constante
 	 		     if(r.tipo != Simbolo.Tipo_variable.ENTERO) {
-	 		       System.out.println("Se ha detectado una varieable vector y no es constante entera");
+	 		       System.out.println("Error semantico: Se ha detectado una varieable vector y no es constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	 		       //TODO: expeciones tiene que ser una constante entera
 	 		     }else {
 	 		        if(r.valorEnt <= 0) {
-	 		          System.out.println("Se ha detectado una varieable vector y no es positivo");
+	 		          System.out.println("Error semantico: Se ha detectado una varieable vector y no es positivo. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	 		          //TODO: excepciones tiene que ser una constante positiva
 	 		        }else {
 	 		          System.out.println("Se ha detectado una varieable vector llamada: " + id1.image +" y de tam: "+r.valorEnt + " y se puede declarar");
@@ -350,13 +350,13 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	 		   }
 	 		  
 	 		}else {
-	 			System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
+	 			System.out.println("Se ha detectado una variable normal, se procede con normalidad");
 	 		  	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
 				//System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 				dir += s1.get_tamanyo();
 	 		} 	
 	  	}catch(SimboloYaDeclaradoException e2) {
-	  	  	System.out.println("Error  semantico");
+	  	  	System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	  	}
 	  }
 	("," (id2 = < tID >("[" r = expresion(false)"]"
@@ -369,15 +369,15 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	      if(esVector) {
 	 		   if(r.esVariable) {
 	 		     //TODO: excepciones, tiene que ser una constante positiva, no una variable
-	 		     System.out.println("Se ha detectado una varieable vector y es un identificador no cont entera");
+	 		     System.out.println("Error semantico: Se ha detectado una varieable vector y es un identificador no const entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	 		   }else {
 	 		     //Caso es una constante
 	 		     if(r.tipo != Simbolo.Tipo_variable.ENTERO) {
-	 		       System.out.println("Se ha detectado una varieable vector y no es constante entera");
+	 		       System.out.println("Error semantico: Se ha detectado una varieable vector y no es constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	 		       //TODO: expeciones tiene que ser una constante entera
 	 		     }else {
 	 		        if(r.valorEnt <= 0) {
-	 		          System.out.println("Se ha detectado una varieable vector y no es positivo");
+	 		          System.out.println("Error semantico: Se ha detectado una varieable vector y no es positivo. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	 		          //TODO: excepciones tiene que ser una constante positiva
 	 		        }else {
 	 		          System.out.println("Se ha detectado una varieable vector y se puede declarar");
@@ -423,7 +423,6 @@ void declaracion_acciones():
   (declaracion_accion())*
 }
 
-
 // (cabecera_accion())";"(declaracion_variables()) (declaracion_acciones()) (bloque_sentencias())
 void declaracion_accion():
 {
@@ -467,7 +466,7 @@ Simbolo cabecera_accion(String etACC):
 	    nivel++;
 	   
 	}catch(SimboloYaDeclaradoException e2) {
-	  	System.out.println("Error  semantico");
+	  	System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image() + " En la linea " + id_accion.beginLine + " y la columna " + id_accion.beginColumn);
 	}
   }
   //le pasamos a los parametros formales el simbolo de la accion a la que pertenecen para asi poder relacionarlos.
@@ -539,7 +538,7 @@ void parametros(Simbolo simbolo_accion):
 	      	  	simbolo_accion.addParametro(param);
 	      	}else {
 	      	  	//TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-	      	  	System.out.println("No se puede declarar un vector sin una constante entera");
+	      	  	System.out.println("Errpr semantico: No se puede declarar un vector sin una constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	      	}
 	      	
 	      	 
@@ -582,7 +581,7 @@ void parametros(Simbolo simbolo_accion):
 	      	  	simbolo_accion.addParametro(param2);
 	      	}else {
 	      	  	//TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-	      	  	System.out.println("No se puede declarar un vector sin una constante entera");
+	      	  	System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. En la linea " + id2.beginLine + " y la columna " + id2.beginColumn);
 	      	}
 	      	
 	      	 
@@ -676,11 +675,11 @@ void sentencia():
  		simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
  		if(simbolo_id.ES_VARIABLE()) { 
 	   	  	if(simbolo_id == null) {
-	     		System.out.println("Error semantico, no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos");
+	     		System.out.println("Error semantico, no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 	     		tpID = Simbolo.Tipo_variable.DESCONOCIDO;
 		   	}
 		  	else if(simbolo_id.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && simbolo_id.getParametro() == Simbolo.Clase_parametro.VAL) {
-				 System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor");
+				 System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 				 //TODO: Mirar si esto tiene que ir aqui o en asignacion, y si se tiene que poner el tpId a desconocido para seguir la ejecucuion
 				 tpID = Simbolo.Tipo_variable.DESCONOCIDO;
 		   	}else {
@@ -715,7 +714,7 @@ void sentencia():
 	          	System.out.println("Acceso a componente del vector aa");
 	    	  	if(r.valorEnt > simbolo_id.getLongitud()) {
 	    	  	 	 //TODO: excepciones, la componente solicitada esta fuera de rango
-	    	  	  	System.out.println("Acceso componente fuera de rango");
+	    	  	  	System.out.println("Error semantico: Acceso componente fuera de rango. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 	    		}
 	    		pw.println("	PLUS   ");
 		    }
@@ -910,7 +909,7 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
   {
     if(id.ES_ACCION()){
     	//TODO: excepciones
-    	System.out.println("No se puede asignar una expresion a una accion");
+    	System.out.println("Error semantico: No se puede asignar una expresion a una accion. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
     }else if(id.ES_REFERENCIA()) {
       	pw.println("; Direccion del parametro por referencia " + id.getNombre());
         pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
@@ -937,7 +936,7 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
 	    //Hay que mirar que los tipos sean asignables y que coincidan ambos tipos
 	    if(ac && r1.tipo != id.getTipoComponente()) {
 	        //TODO: excepcion no coincide tipo, componente del vector
-	    	System.out.println("Acceso componente true y no coinciden tipos tipos");
+	    	System.out.println("Error semantico: Acceso componente true y no coinciden tipos. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 	    	ac = false;
 	  	}else if(ac && r1.tipo == id.getTipoComponente()) {
 	  	  	pw.println("	ASG");
@@ -945,17 +944,17 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
 	    	ac = false;
 	    }else if(id.getVariable() != r1.tipo && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 	  		//TODO: excepciones
-	      	System.out.println("No se puede asignar porque los tipos no coinciden " + id.getVariable().toString()+" " + id.getNombre() + " " + r1.tipo.toString());
+	      	System.out.println("Error semantico: No se puede asignar porque los tipos no coinciden " + id.getVariable().toString()+" " + id.getNombre() + " " + r1.tipo.toString() + " .En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 	   	}else if( r1.tipo == Simbolo.Tipo_variable.CADENA) {
 	   		//TODO: excepciones
 	   		//Caso especial las cadenas solo sirven en escribirss
-	      	System.out.println("No se pueden asignar las cadenas, solo para escritura");
+	      	System.out.println("Error semantico: No se pueden asignar las cadenas, solo para escritura .En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 	   	}else if(id.ES_VECTOR()) {
 			if(id.getLongitud() != r1.tam_vec) {
-				//TODO: excepciones no coinciden en tamaño no se puede asignar
-				System.out.println("Los vectores NO coinciden en tamaño");
+				//TODO: excepciones no coinciden en tamaï¿½o no se puede asignar
+				System.out.println("Error semantico: Los vectores NO coinciden en tamanyo. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 			}else {
-				System.out.println("Los vectores SI coinciden en tamaño");
+				System.out.println("Los vectores SI coinciden en tamanyo");
 				
 				int bytes_componente = id.get_tamanyo_componente();
 				int offset = bytes_componente;
@@ -998,11 +997,12 @@ void mientras_que():
   }
   r = expresion(true)
   {
+       Token t = getToken(0);
        String etFIN = et.nueva_et();
        pw.println("	JMF	" + etFIN);
   	   if(r.tipo != Simbolo.Tipo_variable.BOOLEANO) {
 		//TODO: gestionar excepciones
-		System.out.println("La condicion del mientras que no es un booleano");
+		System.out.println("Error seantico: La condicion del mientras que no es un booleano. En la linea " + t.beginLine + " y la columna " + t.beginColumn);
     }
   }
   lista_sentencias() <tFMQ>
@@ -1032,6 +1032,7 @@ void seleccion():
     String etiqSINO = et.nueva_et();
     //TODO: mirar etiqueta sino si no hay sino
     pw.println("	JMF " + etiqSINO);
+    Token t = getToken(0);
     if(r.tipo == Simbolo.Tipo_variable.BOOLEANO && !r.esVariable){
       //TODO mirar este if si hay que ejecutarlo
      	if(r.valorBool) {
@@ -1042,7 +1043,7 @@ void seleccion():
         
     }else if(r.tipo != Simbolo.Tipo_variable.BOOLEANO ) {
 		//TODO: gestionar excepciones
-		System.out.println("La condicion de la seleccion no es un booleano");
+		System.out.println("Error semantico: La condicion de la seleccion no es un booleano. En la linea " + t.beginLine + " y la columna " + t.beginColumn);
     }
   }
   <tENT> { pw.println(";ENT" );}
@@ -1078,9 +1079,9 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
     //TODO: pruebas con distintas funciones
    	if(params.size() != parametros_necesarios.size()) {
    	  	//TODO: gestionar excepciones 
-		System.out.println("Los parametros patra invocar a la accion no coinciden "+ params.size() + " , " + parametros_necesarios.size());
+		System.out.println("Error semantico: Los parametros patra invocar a la accion no coinciden "+ params.size() + " , " + parametros_necesarios.size());
    	}else {
-   	  	System.out.println("Los parametros patra invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
+   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
    	  	Simbolo s = new Simbolo();
    	  	RegistroExpr r = new RegistroExpr();
    	  	int num_params = params.size();
@@ -1091,10 +1092,10 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
 			//System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
 			if(s.getVariable() != r.tipo) {
 				//TODO: gestionar excepciones
-				System.out.println("Los tipos de los argumentos no coinciden");
+				System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
 			}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r.esVariable) {
 			  	//TODO: gestionar excepciones
-			  	System.out.println("Se esperaba un parametro por referecncia, no por valor");
+			  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
 			} 
    	  	}
    	}
@@ -1517,7 +1518,7 @@ RegistroExpr termino(boolean vec):
 		  				      	System.out.println("Voy a mod de constante: " + result.valorEnt + " y " + r2.valorEnt);
 		  				      	if(r2.valorEnt == 0) {
 		  				      	  	//TODO: Gestionar excepciones de modulo 0
-		  				      	  	System.out.println("Es modeulo 0");
+		  				      	  	System.out.println("Error semantico: Es modulo 0. En la linea " + t.beginLine + " y la columna " + t.beginColumn);
 		  				      	}else {
 		  				      	  	result.valorEnt =	result.valorEnt % r2.valorEnt;
 		  				      	}
@@ -1692,10 +1693,10 @@ RegistroExpr factor(boolean vec):
      System.out.println("He encontrado un id");
      s = tabla_simbolos.buscar_simbolo(t.image);
      if(s == null) {
-       	 System.out.println("No he encontrado simbolo");
+       	 System.out.println("Error semantico: No he encontrado simbolo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
      	//TODO: no existe el simbolo hay que lanzar una exepcion
      }else if(s.ES_ACCION()) {
-        System.out.println("He encontrado una accion");
+        System.out.println("Error semantico: He encontrado una accion. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
      	//TODO: no existe el simbolo hay que lanzar una exepcion
      }else if(s.ES_VECTOR()) {
         System.out.println("He encontrado un vector");
@@ -1707,11 +1708,11 @@ RegistroExpr factor(boolean vec):
  		   	}else {
  		     	//Caso es una constante
  		     	if(re.tipo != Simbolo.Tipo_variable.ENTERO) {
- 		       		System.out.println("Se ha detectado una varieable vector y no es constante entera");
+ 		       		System.out.println("Error semantico: Se ha detectado una varieable vector y no es constante entera. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
  		       		//TODO: expeciones tiene que ser una constante entera
  		     	}else {
  		        	if(re.valorEnt <= 0) {
- 		          		System.out.println("Se ha detectado una varieable vector y no es positivo");
+ 		          		System.out.println("Error semantico: Se ha detectado una variable vector y no es positivo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
  		          		//TODO: excepciones tiene que ser una constante positiva
  		        	}else if(re.valorEnt > s.getLongitud()){
  		        	  System.out.println("Overflow vectores");
