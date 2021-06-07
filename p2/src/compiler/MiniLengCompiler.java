@@ -1024,7 +1024,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   RegistroExpr r2 = new RegistroExpr();
     try {
       r1 = expresion(true);
-    System.out.println("Tipo dentro de escribi" + r1.tipo);
+    System.out.println("Tipo dentro de escribir " + r1.tipo);
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
         System.out.println("No se puede escribir un tipo desconocido");
     }else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) {
@@ -1037,7 +1037,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         pw.println("\u0009WRT\u0009\u00090");
                 }
         }
-        else if(r1.sim.ES_VECTOR()) {
+
+        else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
+                pw.println("\u0009WRT\u0009\u00091");
+        }else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
+                pw.println("\u0009WRT\u0009\u00090");
+        }else if(r1.sim.ES_VECTOR()) {
                         if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                 pw.println("\u0009WRT\u0009\u00091");
                         }else {
@@ -1056,11 +1061,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 }
                                 offset+= bytes_componente;
                         }
-        }
-        else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
-                pw.println("\u0009WRT\u0009\u00091");
-        }else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
-                pw.println("\u0009WRT\u0009\u00090");
         }
       label_8:
       while (true) {
@@ -1086,7 +1086,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         pw.println("\u0009WRT\u0009\u00090");
                 }
         }
-        else if(r1.sim.ES_VECTOR()) {
+
+        else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
+                pw.println("\u0009WRT\u0009\u00091");
+        }else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
+                pw.println("\u0009WRT\u0009\u00090");
+        }else if(r1.sim.ES_VECTOR()) {
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                 pw.println("\u0009WRT\u0009\u00091");
                         }else {
@@ -1105,11 +1110,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 }
                                 offset+= bytes_componente;
                         }
-        }
-        else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
-                pw.println("\u0009WRT\u0009\u00091");
-        }else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
-                pw.println("\u0009WRT\u0009\u00090");
         }
       }
     } catch (ParseException e) {

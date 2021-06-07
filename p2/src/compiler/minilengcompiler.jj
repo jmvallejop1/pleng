@@ -1019,7 +1019,7 @@ void lista_escribibles():
 { try {
   r1 = expresion(true)
   {
-    System.out.println("Tipo dentro de escribi" + r1.tipo);
+    System.out.println("Tipo dentro de escribir " + r1.tipo);
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
        	System.out.println("No se puede escribir un tipo desconocido");
     }else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
@@ -1032,7 +1032,12 @@ void lista_escribibles():
 	   		pw.println("	WRT		0");
 	  	}
 	}
-	else if(r1.sim.ES_VECTOR()) {
+	
+	else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
+	 	pw.println("	WRT		1");
+	}else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
+	 	pw.println("	WRT		0");
+	}else if(r1.sim.ES_VECTOR()) {
 	  		if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 	  		  	pw.println("	WRT		1");
 	  		}else {
@@ -1052,11 +1057,6 @@ void lista_escribibles():
 		  		offset+= bytes_componente;
 	  		}
 	}
-	else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
-	 	pw.println("	WRT		1");
-	}else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
-	 	pw.println("	WRT		0");
-	}
   }
   (","r2 = expresion(true)
   {
@@ -1072,7 +1072,12 @@ void lista_escribibles():
 	   		pw.println("	WRT		0");
 	   	}
 	}
-	else if(r1.sim.ES_VECTOR()) {
+	
+	else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
+	 	pw.println("	WRT		1");
+	}else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
+	 	pw.println("	WRT		0");
+	}else if(r1.sim.ES_VECTOR()) {
 	  		if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 	  		  	pw.println("	WRT		1");
 	  		}else {
@@ -1091,11 +1096,6 @@ void lista_escribibles():
 		  		}
 		  		offset+= bytes_componente;
 	  		}
-	}
-	else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
-	 	pw.println("	WRT		1");
-	}else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
-	 	pw.println("	WRT		0");
 	}
   }
   )*
