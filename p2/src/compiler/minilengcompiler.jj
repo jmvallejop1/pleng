@@ -6,6 +6,7 @@
 
 //TODO IMPORTNTE: comprobacion overflow lado derecho asignacion
 //Hay algo mal en las direcciones
+//fib no va
 options
 {
   static = true;
@@ -97,8 +98,9 @@ public class MiniLengCompiler
     //Pasamos como parametro el fichero que queremos compilar
     //Intentamos leer el fichero 
     try {
-      	  System.out.println(args[0]);
-	      FileInputStream F = new FileInputStream(args[0]);
+      	  String dir ="C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\programas\\programas\\"+args[0] +".ml";
+      	  System.out.println(dir);
+	      FileInputStream F = new FileInputStream(dir);
 	      System.setIn(F);
 	}catch (Exception e) {
 	   //Si no encuentra fichero lee de la entrada estandar
@@ -107,8 +109,8 @@ public class MiniLengCompiler
     
    
 	 try {
-	   		 //TODO: camviar esto por el nombre del fichero + code
-	   		 File cod_inter = new File("C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\codigo_intermedio\\pruebas.code");
+	   		 //TODO: cambiar esto por el nombre del fichero + code
+	   		 File cod_inter = new File("C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\codigo_intermedio\\"+args[0]+".code");
     		 FileWriter fichero_salida = new FileWriter(cod_inter);
    			 pw = new PrintWriter(fichero_salida);
 	         MiniLengCompiler parser = new MiniLengCompiler(System.in);
@@ -213,7 +215,7 @@ TOKEN : /* VALORES */
 < tID : ((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) | < tLetra > >
 | < tIDv: "vector"/*((( < tLetra > | "_" )(<tLetra> | "_" | <tCifra>)* (<tLetra> | <tCifra>))) "[" (<tCifra>)+ "]" | < tLetra > "[" (<tCifra>)+ "]"*/>
 {
-  System.out.println("he encontrado un vector");
+//  System.out.println("he encontrado un vector");
 }
 | < tNUM : (<tCifra>)+ >
 | <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "ï¿½") "\"" >
@@ -237,7 +239,7 @@ void programa():
 	  p = tabla_simbolos.introducir_programa(programa.image,dir);
 	  dir++;
 	  //Escribimos en el fichero de codigo intermedio el programa
-	  System.out.println("Voy a escribir probrama en .code");
+//	  System.out.println("Voy a escribir probrama en .code");
 	  
 	  pw.println("; Programa " + programa.image + ".");
 	  //Introducimos la primera intruccion de inicio de programa
@@ -321,7 +323,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
   	     r = null;
   	      esVector = false;
   	   }
-  	   ("[" r = expresion(false)"]"
+  	   ("[" r = expresion(false,false)"]"
   	   {
   	     	
   	    	esVector = true;
@@ -361,7 +363,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	 		     }
 	 		   }
 	 		}else {
-	 			System.out.println("Se ha detectado una variable normal, se procede con normalidad");
+//	 			System.out.println("Se ha detectado una variable normal, se procede con normalidad");
 	 		  	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
 				//System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 				dir += s1.get_tamanyo();
@@ -375,7 +377,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
   	     r = null;
   	     esVector = false;
   	   }
-	("[" r = expresion(false)"]"
+	("[" r = expresion(false,false)"]"
 	{
   	     esVector = true;
   	}
@@ -414,7 +416,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	 		     }
 	 		   }
 	 		}else {
-	 			System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
+//	 			System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
 	 		  	s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir);
 				//System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 				dir += s2.get_tamanyo();
@@ -460,11 +462,6 @@ void declaracion_accion():
 	    tabla_simbolos.eliminar_acciones(nivel);
 	    tabla_simbolos.eliminar_parametros_ocultos(nivel+1);
 	    nivel--;
-//	    if(nivel == 0) {
-//			dir = dir0;
-//	    }else {
-//			dir = dir_a;
-//	    }
 		dir++;
   }
 }
@@ -485,13 +482,6 @@ Simbolo cabecera_accion(String etACC):
       	//System.out.println("Voy a aumrntar el nivel " + (nivel +1));
       	dir = INICIAL;
 	    nivel++;
-//	    if(nivel-1 ==0){
-//	  	  dir0 = dir;
-//	  	}else {
-//	  	  dir_a= dir;
-//
-//	  	}
-//	  	dir = INICIAL;
 	   
 	}catch(SimboloYaDeclaradoException e2) {
 	  	//System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image() + " En la linea " + id_accion.beginLine + " y la columna " + id_accion.beginColumn);
@@ -500,7 +490,7 @@ Simbolo cabecera_accion(String etACC):
   //le pasamos a los parametros formales el simbolo de la accion a la que pertenecen para asi poder relacionarlos.
   ) parametros_formales(simbolo_accion))
   {
-    tabla_simbolos.imprimirTabla();
+//    tabla_simbolos.imprimirTabla();
     return simbolo_accion;
   }
 }
@@ -540,7 +530,7 @@ void parametros(Simbolo simbolo_accion):
 }
 { try {
   	//Obtenemos la clase y el timpod el parametro que queremos introducir
-	(clase = clase_parametros() tipo = tipo_variables()  id1 = < tID > ("[" r = expresion(false) "]")?
+	(clase = clase_parametros() tipo = tipo_variables()  id1 = < tID > ("[" r = expresion(false, false) "]")?
 	{
 	  try {
 	    if(r== null) {
@@ -554,7 +544,7 @@ void parametros(Simbolo simbolo_accion):
 	    }else{
 	      	//Caso vector
 	      	if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
-	      	  	System.out.println("Se declara un vector como parametro");
+//	      	  	System.out.println("Se declara un vector como parametro");
 	      	  	//El vector esta bien definido
 	      	  	Simbolo.Tipo_variable tipo_aux = null;
 	      	  	if(tipo == Simbolo.Tipo_variable.ENTERO) {
@@ -565,8 +555,8 @@ void parametros(Simbolo simbolo_accion):
 	            	tipo_aux = Simbolo.Tipo_variable.VECBOOL;
 	          	}
 	      	  	param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo_aux, clase, r.valorEnt, nivel, dir);
-	      	  	dir += param.get_tamanyo();
-	      	  	System.out.println("He introducido el vector a la lista de params");
+	      	  	dir +=  param.get_tamanyo();
+//	      	  	System.out.println("He introducido el vector a la lista de params");
 	      	  	simbolo_accion.addParametro(param);
 	      	}else {
 	      	  	//TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
@@ -586,7 +576,7 @@ void parametros(Simbolo simbolo_accion):
 
 
 
-	(","id2 = < tID > ("[" r = expresion(false) "]")?
+	(","id2 = < tID > ("[" r = expresion(false,false) "]")?
 	{
 	  try {
 	    if(r == null) {
@@ -647,20 +637,21 @@ void bloque_sentencias(Simbolo s, String etACC):
 }
 { try {
   	{
-  	  System.out.println("Entro a bloque sentencias");
+//  	  System.out.println("Entro a bloque sentencias");
   	  //Generamos nueva etiqueta para el comienzo de las acciones de la accion
   	  
   	  
 	  //Es una accion hay una etiqueta para saber donde empiezan las intrucciones de la accion
-  	  if(!s.ES_PROGRAMA()) {
-  	    pw.println(";Accion " + s.getNombre());
-  	    pw.println(etACC+":");
-  	  }
 
 	  //Obtenemos los parametros de la accion
   	  lista_param = s.getListaParametros();
   	  //Recorremos la lista de forma inversa porque los parametros estan apilados al reves
   	  Simbolo p = new Simbolo();
+  	   if(!s.ES_PROGRAMA()) {
+	    pw.println("\t JMP	" + etACC);
+  	    pw.println(";Accion " + s.getNombre());
+  	    pw.println(etACC+":");
+  	  }
   	  if(lista_param!= null) { 
 	  	  for (int j = lista_param.size() - 1; j >= 0; j--)
 	      {
@@ -671,6 +662,8 @@ void bloque_sentencias(Simbolo s, String etACC):
 	         pw.println("\t ASGI");
 	      }
 	  }
+	 
+	 
 
   	}
 	(< tPRINCIPIO > lista_sentencias() < tFIN >)
@@ -705,48 +698,52 @@ void sentencia():
  | escribir() ";"
  | (id = < tID >
  {
-   		System.out.println("SE entra a sentencia "+ id.image);
+   		pw.println(";Acceso a variable " + id.image);
+//   		System.out.println("SE entra a sentencia "+ id.image);
  		simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
- 		if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
- 		    System.out.println("Es una variable");
-	   	  	if(simbolo_id == null) {
-	     		//System.out.println("Error semantico, no existe el simbolo con nombre: " + id.image +" en la tabla de simbolos. En la linea " + iinLine + " y la columna " + id.beginColumn);
-	     		tpID = Simbolo.Tipo_variable.DESCONOCIDO;
-		   	}
-		  	else if(simbolo_id.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && simbolo_id.getParametro() == Simbolo.Clase_parametro.VAL) {
-				 //System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
-				 //TODO: Mirar si esto tiene que ir aqui o en asignacion, y si se tiene que poner el tpId a desconocido para seguir la ejecucuion
-				 tpID = Simbolo.Tipo_variable.DESCONOCIDO;
-		   	}else {
-		     	tpID = simbolo_id.getVariable();
-	  		}
-	
-	  		//MIRAR si hay que unificar if 		
-			if(simbolo_id.ES_VECTOR()) {
+ 		if(simbolo_id == null){
+			//TODO: excepciones no eciste el simbolo
+ 		}else if(simbolo_id.ES_ACCION()) {
+ 		  	//TODO: expeciones no se puede asignar nada a una accion
+ 		}else if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
+// 		    System.out.println("Es una variable");
+		  	if(simbolo_id.ES_VALOR()) {
+		  	  	//TODO: expeciones no se puede asignar nada a algo por valor
+				//System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
+				//TODO: Mirar si esto tiene que ir aqui o en asignacion, y si se tiene que poner el tpId a desconocido para seguir la ejecucuion
+				tpID = Simbolo.Tipo_variable.DESCONOCIDO;
+		   	}else if(simbolo_id.ES_REFERENCIA()) {
+		   	  	//Sie s un parametro por referencia hay que hacer un drf porque con el srf no se obtiene la direccion
+				pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
+				pw.println("	DRF");
+		   	}else if(simbolo_id.ES_VECTOR()) {
 		        pw.println(";Inicial vector");
 		        pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
 		        System.out.println("VECTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOr");
 	        
-		     }else { 
-			      pw.println("; Direccion de la variable " + simbolo_id.getNombre());
-			      pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
+		     }else {
+		        //Es una variable normal, solo hay que hacer srf
+			 	pw.println("; Direccion de la variable " + simbolo_id.getNombre());
+			 	pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
 			 }
 		}	
+	
+	  		
    
  }
- ("["r = expresion(true)"]")?
+ ("["r = expresion(true,false)"]")?
  {
    //Si es el vector entero
 		
    		if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) { 
 	        if(r == null) {
 	            //Aqui ya se empieza a asignar la primera componente
-	            pw.println(";Asignacion componente 1");
-	          	System.out.println("Se va a asignar una variable nombre: "+ id.image + " tipo: " + simbolo_id.getVariable());
+	            //pw.println(";Asignacion componente 1");
+//	          	System.out.println("Se va a asignar una variable nombre: "+ id.image + " tipo: " + simbolo_id.getVariable());
 	          	accesoComponente = false;
 	        }else{
 	            accesoComponente = true;
-	          	System.out.println("Acceso a componente del vector aa");
+//	          	System.out.println("Acceso a componente del vector aa");
 	    	  	if(r.valorEnt > simbolo_id.getLongitud()) {
 	    	  	 	 //TODO: excepciones, la componente solicitada esta fuera de rango
 //	    	  	  	System.out.println("Error semantico: Acceso componente fuera de rango. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
@@ -789,7 +786,7 @@ void lista_asignables():
     esComponente = false;
     r = null;
   }
-  ("[" r = expresion(false) "]"
+  ("[" r = expresion(false,false) "]"
   {
 	esComponente = true;
   }
@@ -810,7 +807,14 @@ void lista_asignables():
   	      pw.println("; Leer variable " + s1.getNombre());
   	      int offset = 0;
   	      int bytes_componente = s1.get_tamanyo_componente();
+  	      String mensaje = "Valor componente ";
+  	      String aux = "";
   	      for(int i = 0; i < s1.getLongitud(); i++) {
+				aux = mensaje + (i+1) + ": ";
+  	        	for (int x=0;x<=aux.length()-1;x++) { 
+			   		pw.println("	STC		" + (int)aux.charAt(x));
+			   		pw.println("	WRT		0");
+	  			}
 	  	       	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
 	  	       	if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 		    		pw.println("\t RD    1");
@@ -825,7 +829,7 @@ void lista_asignables():
   	      	if(esComponente) {
   	      	  	if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
 		      	  	int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
-		          	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir()+offset);
+		          	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
 		          	if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 			    		pw.println("\t RD    1");
 			  	  	}
@@ -901,7 +905,7 @@ void lista_asignables():
     r = null;
     esComponente = false;
   }
-  ("[" r = expresion(false) "]"
+  ("[" r = expresion(false,false) "]"
   {
 		esComponente = true;
   }
@@ -922,7 +926,14 @@ void lista_asignables():
   	      pw.println("; Leer variable " + s2.getNombre());
   	      int offset = 0;
   	      int bytes_componente = s2.get_tamanyo_componente();
+  	      String mensaje = "Valor componente ";
+  	      String aux = "";
   	      for(int i = 0; i < s2.getLongitud(); i++) {
+  	        	aux = mensaje + (i+1) + ": ";
+  	        	for (int x=0;x<=aux.length()-1;x++) { 
+			   		pw.println("	STC		" + (int)aux.charAt(x));
+			   		pw.println("	WRT		0");
+	  			}
 	  	       	pw.println("\t SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
 	  	       	if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 		    		pw.println("\t RD    1");
@@ -1036,12 +1047,14 @@ void lista_escribibles():
   
 }
 { try {
-  r1 = expresion(true)
-  {
+  //TODO: mirar para escribir los vectores [x,y,z]
+  r1 = expresion(true,false)
+  {  
     System.out.println("Tipo dentro de escribir " + r1.tipo);
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
        	System.out.println("No se puede escribir un tipo desconocido");
-    }else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
+    }
+    else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
 		//TODO mirar escribir verdaddero si es true o falso si es false
     }else if(r1.tipo == Simbolo.Tipo_variable.CADENA){
       	//Recorrer la cadena escribiendo letra por letra
@@ -1051,7 +1064,6 @@ void lista_escribibles():
 	   		pw.println("	WRT		0");
 	  	}
 	}
-	
 	else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
 	 	pw.println("	WRT		1");
 	}else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
@@ -1065,7 +1077,7 @@ void lista_escribibles():
 	  		int bytes_componente = r1.sim.get_tamanyo_componente();
 	  		int offset = r1.sim.get_tamanyo_componente();
 	  		for(int i = 1; i <r1.tam_vec; i++) {
-				 pw.println(";Escritura variablea la variable " + r1.sim.getNombre());
+				pw.println(";Escritura variablea la variable " + r1.sim.getNombre());
        	 		pw.println("	SRF	"+  (nivel - r1.sim.getNivel()) + "	" + (r1.sim.getDir() + offset));
        	 		pw.println("	DRF");
        	 		if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
@@ -1077,13 +1089,13 @@ void lista_escribibles():
 	  		}
 	}
   }
-  (","r2 = expresion(true)
+  (","r2 = expresion(true,false)
   {
 	   if(r2.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
 	       System.out.println("No se puede escribir un tipo desconocido");
-	   }else if(r2.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
+	    }else if(r2.tipo == Simbolo.Tipo_variable.BOOLEANO) { 
 		//TODO mirar escribir verdaddero si es true o falso si es false
-    }else if(r2.tipo == Simbolo.Tipo_variable.CADENA){
+    	}else if(r2.tipo == Simbolo.Tipo_variable.CADENA){
       	//Recorrer la cadena escribiendo letra por letra
       	
       	for (int x=1;x<r2.cadena.length()-1;x++) { 
@@ -1096,7 +1108,7 @@ void lista_escribibles():
 	 	pw.println("	WRT		1");
 	}else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
 	 	pw.println("	WRT		0");
-	}else if(r1.sim.ES_VECTOR()) {
+	}else if(r2.sim.ES_VECTOR()) {
 	  		if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 	  		  	pw.println("	WRT		1");
 	  		}else {
@@ -1111,7 +1123,7 @@ void lista_escribibles():
        	 		if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 		  		  	pw.println("	WRT		1");
 		  		}else {
-		  		 	pw.println("	WRT		0"); 
+		  		 	pw.println("	WRT		0");
 		  		}
 		  		offset+= bytes_componente;
 	  		}
@@ -1126,7 +1138,7 @@ void lista_escribibles():
 void invocacion_accion(Simbolo id, Simbolo.Tipo_variable tpID):
 {
   ArrayList<Simbolo > parametros_necesarios = id.getListaParametros();
-  System.out.println("Se va a invocar una accion cuyos parametros son: "+ parametros_necesarios.toString());
+//  System.out.println("Se va a invocar una accion cuyos parametros son: "+ parametros_necesarios.toString());
 }
 { try {
   argumentos(id,tpID,parametros_necesarios) ";"
@@ -1147,18 +1159,7 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
   boolean accesoComponente = false;
 }
 { try {
-  {
-    if(id.ES_ACCION()){
-    	//TODO: excepciones
-    }else if(id.ES_REFERENCIA()) {
-      	pw.println("; Direccion del parametro por referencia " + id.getNombre());
-        pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
-        pw.println("	DRF");
-    }else {
-		//TODO: este else no se si hace falta
-    }
-  }
-  t = <tOPAS> r1 = expresion(true)
+  t = <tOPAS> r1 = expresion(true,false)
   {
 	    System.out.println("OPAS");
 	    if(r1.tipo == Simbolo.Tipo_variable.ENTERO) {
@@ -1213,7 +1214,6 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
 			//Si todo va bien hacemos la asignacion
 		   	pw.println("; Asignacion.");
 		    pw.println("	ASG");
-	    	System.out.println("salgo");
 	  }
 	
   }
@@ -1236,7 +1236,7 @@ void mientras_que():
     pw.println(";MQ");
     pw.println(etMQ + ":");
   }
-  r = expresion(true)
+  r = expresion(true,false)
   {
        Token t = getToken(0);
        String etFIN = et.nueva_et();
@@ -1267,7 +1267,7 @@ void seleccion():
 }
 { try {
   <tSI> {pw.println(";SI" );}
-  r = expresion(true)
+  r = expresion(true,false)
   {
     
     String etiqSINO = et.nueva_et();
@@ -1322,7 +1322,7 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
    	  	//TODO: gestionar excepciones 
 		System.out.println("Error semantico: Los parametros patra invocar a la accion no coinciden "+ params.size() + " , " + parametros_necesarios.size());
    	}else {
-   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
+//   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
    	  	Simbolo s = new Simbolo();
    	  	RegistroExpr r = new RegistroExpr();
    	  	int num_params = params.size();
@@ -1330,8 +1330,8 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
    	  	for( int i = 0; i < num_params; i++) {
 			s = parametros_necesarios.get(i);
 			r = params.get(i);
-			tabla_simbolos.imprimirTabla();
-			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
+//			tabla_simbolos.imprimirTabla();
+//			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
 			if(s.getVariable() != r.tipo) {
 				//TODO: gestionar excepciones
 				System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
@@ -1357,16 +1357,53 @@ ArrayList<RegistroExpr> lista_expresiones(Simbolo id, Simbolo.Tipo_variable tpID
   ArrayList<RegistroExpr > params = new ArrayList<RegistroExpr>();
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new RegistroExpr();
+  int i = 0;
+  Simbolo s = new Simbolo();
+  System.out.println("Llego a lista expresiones y el numero de parametros es:" + parametros_necesarios.size());
   
 }
 { try {
-  r1 = expresion(true)
+  r1 = expresion(true,true)
   {
-    params.add(r1);
+    //Nuevo
+    if(parametros_necesarios != null) {
+	    s = parametros_necesarios.get(i);
+	    System.out.println("Parametro numero " + (i+1) + " de:" + parametros_necesarios.size()  + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r1.tipo.toString()+"y por: " + s.getParametro());
+	    if(i >= parametros_necesarios.size()) {
+	        //Todo excepciones hay mas parametros de los necesarios
+	    }else if(s.getVariable() != r1.tipo) {
+			//TODO: gestionar excepciones
+			System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
+		}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r1.esVariable) {
+		  	//TODO: gestionar excepciones
+		  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
+		}else if(s.ES_VALOR() && r1.esVariable) {
+		    System.out.println("No detecto que es una variable por valor");
+		  	pw.println("	DRF");
+		}
+		i++;
+	    params.add(r1);
+	}
   }
-  ( "," r2 = expresion(true)
+  ( "," r2 = expresion(true,true)
   {
-    params.add(r2);
+    if(parametros_necesarios != null) {
+	    s = parametros_necesarios.get(i);
+	    System.out.println("Parametro numero " + (i+1) + " de:" + parametros_necesarios.size()  + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r2.tipo.toString());
+	    if(i >= parametros_necesarios.size()) {
+	        //Todo excepciones hay mas parametros de los necesarios
+	    }else if(s.getVariable() != r2.tipo) {
+			//TODO: gestionar excepciones
+			System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
+		}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r2.esVariable) {
+		  	//TODO: gestionar excepciones
+		  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
+		}else if(s.ES_VALOR() && r2.esVariable) {
+		  	pw.println("	DRF");
+		}
+		i++;
+	    params.add(r2);
+	}
   }
   )*
  {
@@ -1425,7 +1462,7 @@ Token operador_relacional():
 }
 
 //TODO: hacer que se pueda hacer mayor menor de caracteres, cadenas, etc??
-RegistroExpr expresion(boolean vec):
+RegistroExpr expresion(boolean vec,boolean invoc_acc):
 { 
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
@@ -1433,12 +1470,12 @@ RegistroExpr expresion(boolean vec):
   RegistroExpr result = new RegistroExpr();
 }
 {
-  	r1 = expresion_simple(vec)
+  	r1 = expresion_simple(vec,invoc_acc)
   	{
   	  //System.out.println("El tipo de r1 es: " + r1.tipo.toString());
 	  result = r1;
   	}
-  	( t = operador_relacional() r2 = expresion_simple(vec) 
+  	( t = operador_relacional() r2 = expresion_simple(vec,invoc_acc) 
   	{
   	  boolean ok = true;
  
@@ -1454,7 +1491,7 @@ RegistroExpr expresion(boolean vec):
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1472,12 +1509,12 @@ RegistroExpr expresion(boolean vec):
 		  			pw.println("	LT");
 		  			//System.out.println("Detectado <");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1495,12 +1532,12 @@ RegistroExpr expresion(boolean vec):
 		  			pw.println("	GTE");
 		  			//System.out.println("Detectado >=");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >=");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >=");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >=");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >=");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1518,12 +1555,12 @@ RegistroExpr expresion(boolean vec):
 		  			pw.println("	LTE");
 		  			//System.out.println("Detectado <=");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <=");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <=");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <=");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <=");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1542,12 +1579,12 @@ RegistroExpr expresion(boolean vec):
 		  			pw.println("	EQ");
 		  			//System.out.println("Detectado =");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede =");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede =");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1565,12 +1602,12 @@ RegistroExpr expresion(boolean vec):
 		  			pw.println("	NEQ");
 		  			//System.out.println("Detectado <>");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <>");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <>");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1592,7 +1629,7 @@ RegistroExpr expresion(boolean vec):
   	  }
 }
 
-RegistroExpr expresion_simple(boolean vec):
+RegistroExpr expresion_simple(boolean vec, boolean invoc_acc):
 {
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
@@ -1600,11 +1637,11 @@ RegistroExpr expresion_simple(boolean vec):
   RegistroExpr result = new RegistroExpr();
 }
 {
-	r1 = termino(vec) {
+	r1 = termino(vec,invoc_acc) {
 	  //System.out.println("primero");
       result = r1;
 	  
-	}(t = operador_aditivo() r2 = termino(vec)
+	}(t = operador_aditivo() r2 = termino(vec,invoc_acc)
 	{
 
 	 
@@ -1615,12 +1652,12 @@ RegistroExpr expresion_simple(boolean vec):
 		  			pw.println("	PLUS");
 		  			//System.out.println("Detectado +");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede sumar");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede sumar");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede sumar");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede sumar");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1638,12 +1675,12 @@ RegistroExpr expresion_simple(boolean vec):
 		  			pw.println("	SBT");
 		  			//System.out.println("Detectado -");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede restar");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede restar");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede restar");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede restar");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1662,12 +1699,12 @@ RegistroExpr expresion_simple(boolean vec):
 		  			pw.println("	OR");
 		  			//System.out.println("Detectado and");
 		  			if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer or");
+//		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer or");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es booleano o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.BOOLEANO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer or");
+//			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer or");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1691,7 +1728,7 @@ RegistroExpr expresion_simple(boolean vec):
 }
 
 
-RegistroExpr termino(boolean vec):
+RegistroExpr termino(boolean vec, boolean invoc_acc):
 {
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
@@ -1701,7 +1738,7 @@ RegistroExpr termino(boolean vec):
 }
 {
   
-  r1 = factor(vec)
+  r1 = factor(vec,invoc_acc)
   {
     //System.out.println("primero");
     //Si solo es un valor devolvemos ese valor solo
@@ -1709,7 +1746,7 @@ RegistroExpr termino(boolean vec):
     ant = r1;
   }
 
-  ( t = operador_multiplicativo() r2 = factor(vec)
+  ( t = operador_multiplicativo() r2 = factor(vec,invoc_acc)
   { 
 	  boolean ok = true;
 	  //System.out.println("segundo");
@@ -1720,18 +1757,18 @@ RegistroExpr termino(boolean vec):
 		  			pw.println("	TMS");
 		  			//System.out.println("Detectado *");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede multiplicar");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede multiplicar");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede multiplicar");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede multiplicar");
 			  			  	ok = false;
 		  				}
 		  			} 
 		  			if(ok) {
 		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  				    System.out.println("Voy a multiplicar: " + result.valorEnt + " y " + r2.valorEnt);
+//		  				    System.out.println("Voy a multiplicar: " + result.valorEnt + " y " + r2.valorEnt);
 		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
 		  					result.valorEnt =	result.valorEnt * r2.valorEnt;
 //		  					ant.valorEnt = ant.valorEnt * r2.valorEnt;
@@ -1744,12 +1781,12 @@ RegistroExpr termino(boolean vec):
 		  			pw.println("	MOD");
 		  			//System.out.println("Detectado mod");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede hacer mod");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede hacer mod");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede hacer mod");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede hacer mod");
 			  			  	ok = false;
 		  				}
 		  			} 
@@ -1757,7 +1794,7 @@ RegistroExpr termino(boolean vec):
 		  			  //Mirar si esto va bien
 		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  				    if(!r2.esVariable) {
-		  				      	System.out.println("Voy a mod de constante: " + result.valorEnt + " y " + r2.valorEnt);
+//		  				      	System.out.println("Voy a mod de constante: " + result.valorEnt + " y " + r2.valorEnt);
 		  				      	if(r2.valorEnt == 0) {
 		  				      	  	//TODO: Gestionar excepciones de modulo 0
 //		  				      	  	System.out.println("Error semantico: Es modulo 0. En la linea " + t.beginLine + " y la columna " + t.beginColumn);
@@ -1778,21 +1815,21 @@ RegistroExpr termino(boolean vec):
 					break;
 		  		case "div":
 		  			pw.println("	DIV");
-		  			System.out.println("Detectado /");
+//		  			System.out.println("Detectado /");
 		  			if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede dividir");
+//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede dividir");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede dividir");
+//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede dividir");
 			  			  	ok = false;
 		  				}
 		  			} 
 		  			if(ok) {
 		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 		  				  //TODO: hay que hacer las comprobaciones de division por 0
-		  				  	System.out.println("Voy a dividir: " + result.valorEnt + " y " + r2.valorEnt);
+//		  				  	System.out.println("Voy a dividir: " + result.valorEnt + " y " + r2.valorEnt);
 		  					result.tipo =  Simbolo.Tipo_variable.ENTERO;
 		  					result.valorEnt =	result.valorEnt / r2.valorEnt;
 //		  					ant.valorEnt = ant.valorEnt / r2.valorEnt;
@@ -1805,21 +1842,21 @@ RegistroExpr termino(boolean vec):
 		  			pw.println("	AND");
 		  			//System.out.println("Detectado and");
 		  			if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer and");
+//		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer and");
 		  			  	ok = false;
 		  			}
 		  			if(ok){ //El primer parametro es entero o desconocido
 		  				if(r2.tipo != Simbolo.Tipo_variable.BOOLEANO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer and");
+//			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer and");
 			  			  	ok = false;
 		  				}
 		  			} 
 		  			if(ok) {
 		  				if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-							System.out.println("Voy a and: " + result.valorBool + " y " + r2.valorBool);
+//							System.out.println("Voy a and: " + result.valorBool + " y " + r2.valorBool);
 		  					result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
 		  					result.valorBool =	result.valorBool && r2.valorBool;
-		  					System.out.println("salgo de and");
+//		  					System.out.println("salgo de and");
 //		  					ant.valorBool = r1.valorBool && r2.valorBool; 
 		  				}else {
 		  				  	result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
@@ -1848,18 +1885,18 @@ RegistroExpr termino(boolean vec):
 	| <tCADENA>
 	| <tTRUE>| <tFALSE>)*/
 
-RegistroExpr factor(boolean vec):
+RegistroExpr factor(boolean vec, boolean invoc_acc):
 {
   RegistroExpr re = null;
   Token t;
   Simbolo s;
 }
 {
-  ("-" re = factor(vec)
+  ("-" re = factor(vec, invoc_acc)
   {
     pw.println("	NGBI");
     if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			System.out.println("El tipo de la variable no es compatible con \"-\" ");
+//			System.out.println("El tipo de la variable no es compatible con \"-\" ");
 			//TODO: mirar si hay que lanzar una excepcion o hacer algo mas
 			//Hay que devolver un Registro expr que sea de tipo desconocido??
     }
@@ -1872,11 +1909,11 @@ RegistroExpr factor(boolean vec):
     }
   }
   
-  | <tNOT> re = factor(vec)
+  | <tNOT> re = factor(vec,invoc_acc)
   {
     pw.println("	NGB");
     if(re.tipo != Simbolo.Tipo_variable.BOOLEANO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-			System.out.println("El tipo de la variable no es compatible con \"NOT\" ");
+//			System.out.println("El tipo de la variable no es compatible con \"NOT\" ");
 			//TODO: mirar si hay que lanzar una excepcion o hacer algo mas
 			//Hay que devolver un Registro expr que sea de tipo desconocido??
     }
@@ -1890,17 +1927,17 @@ RegistroExpr factor(boolean vec):
   }
 
   //TODO: descomentar esto cuando ya vaya expresion
-  | "(" re = expresion(true) ")"
+  | "(" re = expresion(true, invoc_acc) ")"
   {
     //Si solo hay parentesis hay que devolver lo que hay dentro de los parentesis
     return re;
   }
 
   
-  | t = <tENTACAR> "(" re =expresion(true) ")"
+  | t = <tENTACAR> "(" re =expresion(true,invoc_acc) ")"
   {
   	if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
+//		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
     }else if( re.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
       	//Si no sabemos el tipo propagamos lo que nos han pasado
 		return re;
@@ -1914,10 +1951,10 @@ RegistroExpr factor(boolean vec):
     
     
   }
-  | <tCARAENT> "(" re = expresion(true) ")"
+  | <tCARAENT> "(" re = expresion(true,invoc_acc) ")"
   {
     if(re.tipo != Simbolo.Tipo_variable.CHAR && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
+//		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
     }else if( re.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
       	//Si no sabemos el tipo propagamos lo que nos han pasado
 		return re;
@@ -1930,9 +1967,10 @@ RegistroExpr factor(boolean vec):
     
   }
   //TODO: vector
-  | t = <tID>("["re = expresion(false)"]")?
+  | t = <tID>("["re = expresion(false,invoc_acc)"]")?
   {
-     System.out.println("He encontrado un id");
+     pw.println(";Acceso a la variable " + t.image);
+//     System.out.println("He encontrado un id");
      s = tabla_simbolos.buscar_simbolo(t.image);
      if(s == null) {
 //       	 System.out.println("Error semantico: No he encontrado simbolo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
@@ -1941,9 +1979,9 @@ RegistroExpr factor(boolean vec):
 //        System.out.println("Error semantico: He encontrado una accion. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
      	//TODO: no existe el simbolo hay que lanzar una exepcion
      }else if(s.ES_VECTOR()) {
-        System.out.println("He encontrado un vector");
+//        System.out.println("He encontrado un vector");
      	if(re != null) {
-     	  	System.out.println("eteteyyeyeyeyyeye");
+//     	  	System.out.println("eteteyyeyeyeyyeye");
      		//Es una componente del vector
      	   	if(re.esVariable) {
 	 			//otras cosas
@@ -1957,11 +1995,11 @@ RegistroExpr factor(boolean vec):
 // 		          		System.out.println("Error semantico: Se ha detectado una variable vector y no es positivo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
  		          		//TODO: excepciones tiene que ser una constante positiva
  		        	}else if(re.valorEnt > s.getLongitud()){
- 		        	  System.out.println("Overflow vectores");
+// 		        	  System.out.println("Overflow vectores");
  		          		//TODO: Excepcion overflow indexacion
  		        	  
  		        	}else {
- 		          		System.out.println("aaSe ha detectado una varieable vector llamada: " + t.image +" y de tam: "+re.valorEnt + " y se puede declarar");
+// 		          		System.out.println("aaSe ha detectado una varieable vector llamada: " + t.image +" y de tam: "+re.valorEnt + " y se puede declarar");
  		          		//Se puede declarar el vector
  		          		Simbolo.Tipo_variable tipo_aux = s.getTipoComponente();
  		          		re.tipo = tipo_aux;
@@ -1977,36 +2015,69 @@ RegistroExpr factor(boolean vec):
      			}
      		}
      	}else {
-     	  	System.out.println("He encontrado vector entero");
+//     	  	System.out.println("He encontrado vector entero");
      	  	re = new  RegistroExpr();
  			re.tipo = s.getVariable();
      	  	//Es un vector entero
      		re.tam_vec = s.getLongitud();
-     		re.s = s.getTipo();
 		    re.esVariable = true;
 		    re.sim = s;
-		    pw.println("; Acceso a la variable " + s.getNombre());
-       	 	pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
-       		pw.println("	DRF");
+		    if(s.ES_VALOR()){
+		      	pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
+       			pw.println("	DRF");
+		    }else if( s.ES_REFERENCIA()) {
+				pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
+		    }else {
+				pw.println("; Acceso a la variable " + s.getNombre());
+	       	 	pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
+	       		pw.println("	DRF");
+		    }
+		    
 		    return re;
      	}
      }else {
-       	 re = new  RegistroExpr();
-	     pw.println("; Acceso a la variable " + s.getNombre());
-       	 pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
-       	 pw.println("	DRF");
-	     re.tipo = s.getVariable();
-	     re.s = s.getTipo();
-	     re.esVariable = true;
-	     re.sim = s;
-	     return re;
+   	 	//Caso variable normal
+       	re = new  RegistroExpr();
+       	if(s.ES_VALOR()) {
+			System.out.println("Es un parametro por valoor");
+       	}
+	    pw.println("; Acceso a la variable " + s.getNombre());
+       	pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
+       	
+       	//Estamos en una invocacion de la accion
+       	if(invoc_acc){
+       	  	//Es un parametro por valor hay que pasar el valor del parametro, por eso drf
+       	  	if(s.ES_VALOR()) {
+       	  	  	pw.println("	DRF");
+       	  	}
+       	}
+       	//Todos los otros casos que no son invocaciones de accion
+       	else{
+       	  	//Se accede al valor, como si fuera una variable normal
+       	 	pw.println("	DRF");
+       	 	if(s.ES_REFERENCIA()){
+       	 	  	//Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
+       	 	  	pw.println("	DRF");
+       	    }
+       	  
+       	}
+	    re.tipo = s.getVariable();
+	    re.s = s.getTipo();
+	    if(s.ES_VALOR()) {
+			re.esVariable = false;
+	    }else{
+			re.esVariable = true;
+	    }
+	    
+	    re.sim = s;
+	    return re;
 	}
      
   }
   | t  = <tNUM>
   {
      if(vec)pw.println("	STC   " + t.image);
-     System.out.println("Hay una const entera");
+//     System.out.println("Hay una const entera");
      
      return RegistroExpr.ENTERO(t.image);
   }
