@@ -217,7 +217,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
-        r = expresion(false,false);
+        r = expresion(true,false,null);
         jj_consume_token(59);
                 esVector = true;
         break;
@@ -283,7 +283,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case 58:
           jj_consume_token(58);
-          r = expresion(false,false);
+          r = expresion(true,false,null);
           jj_consume_token(59);
              esVector = true;
           break;
@@ -454,7 +454,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
-        r = expresion(false, false);
+        r = expresion(false, false,null);
         jj_consume_token(59);
         break;
       default:
@@ -516,7 +516,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case 58:
           jj_consume_token(58);
-          r = expresion(false,false);
+          r = expresion(false,false,null);
           jj_consume_token(59);
           break;
         default:
@@ -696,7 +696,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
-        r = expresion(true,false);
+        r = expresion(false,false,simbolo_id);
         jj_consume_token(59);
         break;
       default:
@@ -718,7 +718,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                  //TODO: excepciones, la componente solicitada esta fuera de rango
 //	    	  	  	System.out.println("Error semantico: Acceso componente fuera de rango. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
                         }
-                        pw.println("\u0009PLUS   ");
+                        //Como se empieza por la componente 1 hay que restar lo que ocupe el primer elemanto
+                        pw.println("\u0009STC\u0009" + simbolo_id.get_tamanyo_componente());
+                        pw.println("\u0009TMS\u0009");
+                        pw.println("\u0009STC\u0009" + simbolo_id.get_tamanyo_componente());
+                        pw.println("\u0009SBT\u0009\u0009");
+                        pw.println("\u0009PLUS\u0009\u0009");
                     }
 
                         esVector = true;
@@ -769,39 +774,80 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   Simbolo s2 = new Simbolo();
   boolean esComponente = false;
   RegistroExpr r = null;
+  boolean esvector= false;
     try {
       t1 = jj_consume_token(tID);
     esComponente = false;
-    r = null;
+    r = null;//Obtenemos el simbolo con el nombre del id
+    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
+    s1 = tabla_simbolos.buscar_simbolo(t1.image);
+    if(s1 == null){
+        System.out.println("El simbolo que se esta buscando no esta en la tabla");
+        }else if(!s1.ES_PARAMETRO() &&  !s1.ES_VARIABLE()){
+                System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
+        }else if(s1.ES_VALOR()){
+            System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
+        }else if(s1.ES_VECTOR()) {
+                esvector = true;
+            pw.println("; Leer variable vector " + s1.getNombre());
+                pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+                System.out.println("Lectura de un vector");
+        }else if(s1.ES_VARIABLE()){
+                //Obtenemos la variable 
+                pw.println("; Leer variable " + s1.getNombre());
+                pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+                if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                        pw.println("\u005ct RD    1");
+                }
+                else{
+                        pw.println("\u005ct RD    0");
+                }
+        }else if(s1.ES_REFERENCIA()) {
+                pw.println("; Leer parametro por referencia" + s1.getNombre());
+        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+        pw.println("\u005ct DRF");
+        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                pw.println("\u005ct RD    1");
+                }
+                else{
+                        pw.println("\u005ct RD    0");
+                }
+        }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
-        r = expresion(false,false);
+        r = expresion(false,false,s1);
         jj_consume_token(59);
         esComponente = true;
+        System.out.println("EsCOMPOnente");
         break;
       default:
         jj_la1[16] = jj_gen;
         ;
       }
     //Obtenemos el simbolo con el nombre del id
-    s1 = tabla_simbolos.buscar_simbolo(t1.image);
-    if(s1 == null){
-        System.out.println("El simbolo que se esta buscando no esta en la tabla");
-        }else if(s1.getTipo() !=  Simbolo.Tipo_simbolo.PARAMETRO &&  s1.getTipo() != Simbolo.Tipo_simbolo.VARIABLE){
-                System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
-        }else if(s1.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && s1.getParametro() == Simbolo.Clase_parametro.VAL){
-            System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
-        }else if(s1.ES_VARIABLE()){
-          //Obtenemos la variable
-            if(s1.ES_VECTOR() && !esComponente) {
-              //Es un vector entero hay que ir componente por componente leyendo
-              pw.println("; Leer variable " + s1.getNombre());
-              int offset = 0;
-              int bytes_componente = s1.get_tamanyo_componente();
-              String mensaje = "Valor componente ";
+    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
+    if(s1.ES_VECTOR() && !esComponente) {
+          String mensaje = "Valor componente ";
               String aux = "";
-              for(int i = 0; i < s1.getLongitud(); i++) {
+              aux = mensaje + "1: ";
+              for (int x=0;x<=aux.length()-1;x++) {
+                                        pw.println("\u0009STC\u0009\u0009" + (int)aux.charAt(x));
+                                        pw.println("\u0009WRT\u0009\u00090");
+                  }
+          //Es un vector entero hay que ir componente por componente leyendo
+
+          //La primera componente ya se le ha hecho SRF, solo hay que leerla
+          if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                pw.println("\u005ct RD    1");
+                  }
+                  else{
+                        pw.println("\u005ct RD    0");
+                  }
+              int offset = s1.get_tamanyo_componente();
+              int bytes_componente = s1.get_tamanyo_componente();
+
+              for(int i = 1; i < s1.getLongitud(); i++) {
                                 aux = mensaje + (i+1) + ": ";
                         for (int x=0;x<=aux.length()-1;x++) {
                                         pw.println("\u0009STC\u0009\u0009" + (int)aux.charAt(x));
@@ -816,34 +862,27 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 }
                                 offset+=bytes_componente;
               }
-            }else {
-                //Es o una variable normal o una componente de un vector
-                if(esComponente) {
-                        if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
-                                int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
-                                pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
-                                if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
-                                        pw.println("\u005ct RD    1");
-                                        }
-                                        else{
-                                                pw.println("\u005ct RD    0");
-                                        }
-                        }else {
-                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                                System.out.println("No se puede declarar un vector sin una constante entera");
-                        }
+      }else if(s1.ES_VECTOR() && esComponente){
+                System.out.println("Es un acceso a una componente vector");
+                if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
 
-                }else {
-                                pw.println("; Leer variable " + s1.getNombre());
-                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
-                        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u0009STC " + s1.get_tamanyo_componente());
+                                pw.println("\u0009TMS\u0009");
+                                pw.println("\u0009STC " + s1.get_tamanyo_componente());
+                                pw.println("\u0009SBT\u0009");
+
+                    pw.println("\u005ct PLUS");
+                        if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                                 pw.println("\u005ct RD    1");
                                 }
                                 else{
                                         pw.println("\u005ct RD    0");
                                 }
-                        }
+                }else {
+                        //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
+                        System.out.println("No se puede acceder al vector sin un entero");
                 }
+
         }else if(s1.ES_REFERENCIA()) {
              pw.println("; Leer parametro por referencia " + s1.getNombre());
              if(s1.ES_VECTOR() && !esComponente) {
@@ -905,12 +944,46 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
         jj_consume_token(60);
         t2 = jj_consume_token(tID);
-    r = null;
     esComponente = false;
+    r = null;//Obtenemos el simbolo con el nombre del id
+    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
+    s2 = tabla_simbolos.buscar_simbolo(t2.image);
+    if(s2 == null){
+        System.out.println("El simbolo que se esta buscando no esta en la tabla");
+        }else if(!s2.ES_PARAMETRO() &&  !s2.ES_VARIABLE()){
+                System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
+        }else if(s2.ES_VALOR()){
+            System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
+        }else if(s1.ES_VECTOR()) {
+                esvector = true;
+            pw.println("; Leer variable vector " + s2.getNombre());
+                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+                System.out.println("Lectura de un vector");
+        }else if(s2.ES_VARIABLE()){
+                //Obtenemos la variable 
+                pw.println("; Leer variable " + s2.getNombre());
+                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+                if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                        pw.println("\u005ct RD    1");
+                }
+                else{
+                        pw.println("\u005ct RD    0");
+                }
+        }else if(s2.ES_REFERENCIA()) {
+            pw.println("; Leer parametro por referencia " + s2.getNombre());
+        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s2.getDir());
+        pw.println("\u005ct DRF");
+        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                pw.println("\u005ct RD    1");
+                }
+                else{
+                        pw.println("\u005ct RD    0");
+                }
+        }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case 58:
           jj_consume_token(58);
-          r = expresion(false,false);
+          r = expresion(false,false,s2);
           jj_consume_token(59);
                 esComponente = true;
           break;
@@ -918,6 +991,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           jj_la1[18] = jj_gen;
           ;
         }
+    //TODO:sustituir como en el de arriba
         //Obtenemos el simbolo con el nombre del id
     s2 = tabla_simbolos.buscar_simbolo(t2.image);
     if(s2 == null){
@@ -953,7 +1027,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             }else {
                 //Es o una variable normal o una componente de un vector
                 if(esComponente) {
-                        if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
+                        if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
                                 int offset = (r.valorEnt - 1) * s2.get_tamanyo_componente();
                                 pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
                                 if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
@@ -964,7 +1038,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         }
                         }else {
                                 //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                                System.out.println("No se puede declarar un vector sin una constante entera");
+                                System.out.println("No se puede acceder al vector si no es un entero");
                         }
 
                 }else {
@@ -1050,7 +1124,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   RegistroExpr r2 = new RegistroExpr();
     try {
       //TODO: mirar para escribir los vectores [x,y,z]
-        r1 = expresion(true,false);
+        r1 = expresion(false,false,null);
     System.out.println("Tipo dentro de escribir " + r1.tipo);
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
         System.out.println("No se puede escribir un tipo desconocido");
@@ -1100,12 +1174,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           break label_8;
         }
         jj_consume_token(60);
-        r2 = expresion(true,false);
-           if(r2.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
-               System.out.println("No se puede escribir un tipo desconocido");
-            }else if(r2.tipo == Simbolo.Tipo_variable.BOOLEANO) {
+        r2 = expresion(false,false,null);
+    System.out.println("Tipo dentro de escribir " + r2.tipo);
+    if(r2.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
+        System.out.println("No se puede escribir un tipo desconocido");
+    }
+    else if(r2.tipo == Simbolo.Tipo_variable.BOOLEANO) {
                 //TODO mirar escribir verdaddero si es true o falso si es false
-        }else if(r2.tipo == Simbolo.Tipo_variable.CADENA){
+    }else if(r2.tipo == Simbolo.Tipo_variable.CADENA){
         //Recorrer la cadena escribiendo letra por letra
 
         for (int x=1;x<r2.cadena.length()-1;x++) {
@@ -1113,7 +1189,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         pw.println("\u0009WRT\u0009\u00090");
                 }
         }
-
         else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
                 pw.println("\u0009WRT\u0009\u00091");
         }else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
@@ -1127,7 +1202,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         int bytes_componente = r2.sim.get_tamanyo_componente();
                         int offset = r2.sim.get_tamanyo_componente();
                         for(int i = 1; i <r2.tam_vec; i++) {
-                                 pw.println(";Escritura variablea la variable " + r2.sim.getNombre());
+                                pw.println(";Escritura variablea la variable " + r2.sim.getNombre());
                         pw.println("\u0009SRF\u0009"+  (nivel - r2.sim.getNivel()) + "\u0009" + (r2.sim.getDir() + offset));
                         pw.println("\u0009DRF");
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
@@ -1163,7 +1238,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   boolean accesoComponente = false;
     try {
       t = jj_consume_token(tOPAS);
-      r1 = expresion(true,false);
+      r1 = expresion(false,false,null);
             System.out.println("OPAS");
             if(r1.tipo == Simbolo.Tipo_variable.ENTERO) {
                         System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorEnt);
@@ -1178,7 +1253,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
 
             //Hay que mirar que los tipos sean asignables y que coincidan ambos tipos
-            System.out.println("AccesoComponente: " + ac);
+            //System.out.println("AccesoComponente: " + ac);
             if(ac && r1.tipo != id.getTipoComponente()) {
                 //TODO: excepcion no coincide tipo, componente del vector
 //	    	System.out.println("Error semantico: Acceso componente true y no coinciden tipos. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
@@ -1231,7 +1306,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     String etMQ = et.nueva_et();
     pw.println(";MQ");
     pw.println(etMQ + ":");
-      r = expresion(true,false);
+      r = expresion(false,false,null);
        Token t = getToken(0);
        String etFIN = et.nueva_et();
        pw.println("\u0009JMF\u0009" + etFIN);
@@ -1254,7 +1329,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     try {
       jj_consume_token(tSI);
          pw.println(";SI" );
-      r = expresion(true,false);
+      r = expresion(false,false,null);
     String etiqSINO = et.nueva_et();
     //TODO: mirar etiqueta sino si no hay sino
     pw.println("\u0009JMF " + etiqSINO);
@@ -1364,7 +1439,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   Simbolo s = new Simbolo();
   System.out.println("Llego a lista expresiones y el numero de parametros es:" + parametros_necesarios.size());
     try {
-      r1 = expresion(true,true);
+      r1 = expresion(false,true,null);
     //Nuevo
     if(parametros_necesarios != null) {
             s = parametros_necesarios.get(i);
@@ -1395,7 +1470,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           break label_9;
         }
         jj_consume_token(60);
-        r2 = expresion(true,true);
+        r2 = expresion(false,true,null);
     if(parametros_necesarios != null) {
             s = parametros_necesarios.get(i);
             System.out.println("Parametro numero " + (i+1) + " de:" + parametros_necesarios.size()  + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r2.tipo.toString());
@@ -1519,12 +1594,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   }
 
 //TODO: hacer que se pueda hacer mayor menor de caracteres, cadenas, etc??
-  static final public RegistroExpr expresion(boolean vec,boolean invoc_acc) throws ParseException {
+  static final public RegistroExpr expresion(boolean vec,boolean invoc_acc,Simbolo sim) throws ParseException {
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
   Token t = new Token();
   RegistroExpr result = new RegistroExpr();
-    r1 = expresion_simple(vec,invoc_acc);
+    r1 = expresion_simple(vec,invoc_acc,sim);
           //System.out.println("El tipo de r1 es: " + r1.tipo.toString());
           result = r1;
     label_10:
@@ -1543,7 +1618,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         break label_10;
       }
       t = operador_relacional();
-      r2 = expresion_simple(vec,invoc_acc);
+      r2 = expresion_simple(vec,invoc_acc,sim);
           boolean ok = true;
 
           String operacion = t.image;
@@ -1695,12 +1770,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public RegistroExpr expresion_simple(boolean vec, boolean invoc_acc) throws ParseException {
+  static final public RegistroExpr expresion_simple(boolean vec, boolean invoc_acc,Simbolo sim) throws ParseException {
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
   Token t = new Token();
   RegistroExpr result = new RegistroExpr();
-    r1 = termino(vec,invoc_acc);
+    r1 = termino(vec,invoc_acc,sim);
           //System.out.println("primero");
       result = r1;
     label_11:
@@ -1716,7 +1791,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         break label_11;
       }
       t = operador_aditivo();
-      r2 = termino(vec,invoc_acc);
+      r2 = termino(vec,invoc_acc,sim);
           boolean ok = true;
           String operacion = t.image;
                   switch(operacion.toLowerCase()) {
@@ -1796,13 +1871,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public RegistroExpr termino(boolean vec, boolean invoc_acc) throws ParseException {
+  static final public RegistroExpr termino(boolean vec, boolean invoc_acc,Simbolo sim) throws ParseException {
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
   RegistroExpr ant = new  RegistroExpr();
   Token t = new Token();
   RegistroExpr result = new RegistroExpr();
-    r1 = factor(vec,invoc_acc);
+    r1 = factor(vec,invoc_acc,sim);
     //System.out.println("primero");
     //Si solo es un valor devolvemos ese valor solo
     result = r1;
@@ -1821,7 +1896,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         break label_12;
       }
       t = operador_multiplicativo();
-      r2 = factor(vec,invoc_acc);
+      r2 = factor(vec,invoc_acc,sim);
           boolean ok = true;
           //System.out.println("segundo");
           String operacion = t.image;
@@ -1904,8 +1979,11 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
                                                   //TODO: hay que hacer las comprobaciones de division por 0
 //		  				  	System.out.println("Voy a dividir: " + result.valorEnt + " y " + r2.valorEnt);
+                                                        if(!r2.esVariable) {
+                                                          result.valorEnt =     result.valorEnt / r2.valorEnt;
+                                                        }
                                                         result.tipo =  Simbolo.Tipo_variable.ENTERO;
-                                                        result.valorEnt =       result.valorEnt / r2.valorEnt;
+
 //		  					ant.valorEnt = ant.valorEnt / r2.valorEnt;
                                                 }else {
                                                         result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
@@ -1955,14 +2033,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 	| <tCAR>
 	| <tCADENA>
 	| <tTRUE>| <tFALSE>)*/
-  static final public RegistroExpr factor(boolean vec, boolean invoc_acc) throws ParseException {
+  static final public RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim) throws ParseException {
   RegistroExpr re = null;
   Token t;
   Simbolo s;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case tMENOS:
       jj_consume_token(tMENOS);
-      re = factor(vec, invoc_acc);
+      re = factor(vec, invoc_acc,sim);
     pw.println("\u0009NGBI");
     if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //			System.out.println("El tipo de la variable no es compatible con \"-\" ");
@@ -1979,7 +2057,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       break;
     case tNOT:
       jj_consume_token(tNOT);
-      re = factor(vec,invoc_acc);
+      re = factor(vec,invoc_acc,sim);
     pw.println("\u0009NGB");
     if(re.tipo != Simbolo.Tipo_variable.BOOLEANO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //			System.out.println("El tipo de la variable no es compatible con \"NOT\" ");
@@ -1996,7 +2074,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       break;
     case 61:
       jj_consume_token(61);
-      re = expresion(true, invoc_acc);
+      re = expresion(vec, invoc_acc,sim);
       jj_consume_token(62);
     //Si solo hay parentesis hay que devolver lo que hay dentro de los parentesis
     {if (true) return re;}
@@ -2004,7 +2082,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     case tENTACAR:
       t = jj_consume_token(tENTACAR);
       jj_consume_token(61);
-      re = expresion(true,invoc_acc);
+      re = expresion(vec,invoc_acc,sim);
       jj_consume_token(62);
         if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
@@ -2021,7 +2099,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     case tCARAENT:
       jj_consume_token(tCARAENT);
       jj_consume_token(61);
-      re = expresion(true,invoc_acc);
+      re = expresion(vec,invoc_acc,sim);
       jj_consume_token(62);
     if(re.tipo != Simbolo.Tipo_variable.CHAR && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
@@ -2037,32 +2115,96 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       break;
     case tID:
       t = jj_consume_token(tID);
+     re = null;
+     boolean esvector = false;
+     s = tabla_simbolos.buscar_simbolo(t.image);
+     pw.println(";Acceso a la variable " + t.image);
+     if(s == null) {
+        //System.out.println("Error semantico: No he encontrado simbolo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
+        //TODO: no existe el simbolo hay que lanzar una exepcion
+     }  else if(s.ES_ACCION()) {
+//        System.out.println("Error semantico: He encontrado una accion. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
+        //TODO: no existe el simbolo hay que lanzar una exepcion
+     } else if(s.ES_VECTOR()) {
+        System.out.println("He encontrado un vector "+ t.image);
+        pw.println("; Acceso al vector " + s.getNombre());
+        pw.println("\u0009SRF\u0009"+  (nivel - s.getNivel()) + "\u0009" + s.getDir());
+                esvector = true;
+         }else {
+                //Caso variable normal
+        re = new  RegistroExpr();
+//       	if(s.ES_VALOR()) {
+//				System.out.println("Es un parametro por valoor");
+//       	}
+            pw.println("; Acceso a la variable " + s.getNombre());
+        pw.println("\u0009SRF\u0009"+  (nivel - s.getNivel()) + "\u0009" + s.getDir());
+
+        //Estamos en una invocacion de la accion
+        if(invoc_acc){
+                //Es un parametro por valor hay que pasar el valor del parametro, por eso drf
+                if(s.ES_VALOR()) {
+                        pw.println("\u0009DRF");
+                }
+        }
+        //Todos los otros casos que no son invocaciones de accion
+        else{
+
+                //Se accede al valor, como si fuera una variable normal
+                pw.println("\u0009DRF");
+                if(sim != null) {
+                        //Es la ecpresion de los corchetes del vector
+                        pw.println("\u0009STC\u0009" + s.get_tamanyo());
+                                pw.println("\u0009TMS");
+                                pw.println("\u0009STC\u0009" + s.get_tamanyo());
+                                pw.println("\u0009SBT");
+                                pw.println("\u0009PLUS");
+                                pw.println("\u0009DRF");
+
+                }
+
+                if(s.ES_REFERENCIA()){
+                        //Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
+                        pw.println("\u0009DRF");
+            }
+
+        }
+
+//       	if(sim != null) {
+//			//Esta dentro de un vector
+//			System.out.println("Tipo de variable:"+s.getVariable()+ "...................");
+//			pw.println("------------------");
+//			pw.println("	STC	" + s.get_tamanyo());
+//			pw.println("	TMS");
+//       	}
+            re.tipo = s.getVariable();
+            re.s = s.getTipo();
+            if(s.ES_VALOR()) {
+                        re.esVariable = false;
+            }else{
+                        re.esVariable = true;
+            }
+
+            re.sim = s;
+            {if (true) return re;}
+        }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
-        re = expresion(false,invoc_acc);
+        re = expresion(false,invoc_acc,s);
         jj_consume_token(59);
         break;
       default:
         jj_la1[30] = jj_gen;
         ;
       }
-     pw.println(";Acceso a la variable " + t.image);
-//     System.out.println("He encontrado un id");
-     s = tabla_simbolos.buscar_simbolo(t.image);
-     if(s == null) {
-//       	 System.out.println("Error semantico: No he encontrado simbolo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
-        //TODO: no existe el simbolo hay que lanzar una exepcion
-     }else if(s.ES_ACCION()) {
-//        System.out.println("Error semantico: He encontrado una accion. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
-        //TODO: no existe el simbolo hay que lanzar una exepcion
-     }else if(s.ES_VECTOR()) {
-//        System.out.println("He encontrado un vector");
+    if(esvector) {
         if(re != null) {
-//     	  	System.out.println("eteteyyeyeyeyyeye");
-                //Es una componente del vector
                 if(re.esVariable) {
-                                //otras cosas
+                    re = new  RegistroExpr();
+                                pw.println(";Se ha indexado con una variable");
+//				pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
+                                re.tipo = s.getTipoComponente();
+                                {if (true) return re;}
                         }else {
                         //Caso es una constante
                         if(re.tipo != Simbolo.Tipo_variable.ENTERO) {
@@ -2085,7 +2227,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                             re.esVariable = true;
                                             re.sim = s;
                                         pw.println("; Acceso a la variable " + s.getNombre() + "[" + re.valorEnt+ "]");
-                                        pw.println("\u0009SRF\u0009"+  (nivel - s.getNivel()) + "\u0009" + s.calcularDesplazamientoDireccion(re.valorEnt -1));
+                                        pw.println("\u0009STC\u0009" + s.get_tamanyo_componente());
+                                        pw.println("\u0009TMS");
+                                        pw.println("\u0009STC\u0009" + s.get_tamanyo_componente());
+                                        pw.println("\u0009SBT");
+                                        pw.println("\u0009PLUS");
+                                        //pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.calcularDesplazamientoDireccion(re.valorEnt -1));
                                         pw.println("\u0009DRF");
 
                                             {if (true) return re;}
@@ -2113,47 +2260,24 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 
                     {if (true) return re;}
         }
-     }else {
-                //Caso variable normal
-        re = new  RegistroExpr();
-        if(s.ES_VALOR()) {
-                        System.out.println("Es un parametro por valoor");
-        }
-            pw.println("; Acceso a la variable " + s.getNombre());
-        pw.println("\u0009SRF\u0009"+  (nivel - s.getNivel()) + "\u0009" + s.getDir());
-
-        //Estamos en una invocacion de la accion
-        if(invoc_acc){
-                //Es un parametro por valor hay que pasar el valor del parametro, por eso drf
-                if(s.ES_VALOR()) {
-                        pw.println("\u0009DRF");
-                }
-        }
-        //Todos los otros casos que no son invocaciones de accion
-        else{
-                //Se accede al valor, como si fuera una variable normal
-                pw.println("\u0009DRF");
-                if(s.ES_REFERENCIA()){
-                        //Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
-                        pw.println("\u0009DRF");
-            }
-
-        }
-            re.tipo = s.getVariable();
-            re.s = s.getTipo();
-            if(s.ES_VALOR()) {
-                        re.esVariable = false;
-            }else{
-                        re.esVariable = true;
-            }
-
-            re.sim = s;
-            {if (true) return re;}
-        }
+    }else {
+      //TODO: excepciones no se puede indexar algo que no sea un vector
+    }
       break;
     case tNUM:
       t = jj_consume_token(tNUM);
-     if(vec)pw.println("\u0009STC   " + t.image);
+          if(!vec){
+                                pw.println("\u0009STC   " + t.image);
+                        }
+//       //Mirar vectores en la definicion para que no haga stc
+//       if(sim != null) {
+//         System.out.println("Simbolo != nul ---------------------------------------------");
+//         pw.println(";Simbolo != null en vector" + ((Integer.parseInt(t.image) - 1) * sim.get_tamanyo_componente()));
+//         pw.println("	STC   " + ((Integer.parseInt(t.image) - 1) * sim.get_tamanyo_componente()));
+//       }else { 
+//	       if(!vec)
+//		   		pw.println("	STC   " + t.image);
+//	   }
 //     System.out.println("Hay una const entera");
 
      {if (true) return RegistroExpr.ENTERO(t.image);}
