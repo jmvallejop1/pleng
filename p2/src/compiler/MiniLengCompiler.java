@@ -20,6 +20,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         Simbolo.Tipo_simbolo s;
         int tam_vec = -1;
         Simbolo sim = null;
+        boolean componente = false;
 
         //Devuelve un Registro expresion booleano 
         public static RegistroExpr BOOL(boolean b) {
@@ -1140,13 +1141,25 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
         else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
+//	  	if(r1.esVariable) {
+//			pw.println("	DRF");
+//	  	}
                 pw.println("\u0009WRT\u0009\u00091");
         }else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
+//	  	if(r1.esVariable) {
+//			pw.println("	DRF");
+//	  	}
                 pw.println("\u0009WRT\u0009\u00090");
         }else if(r1.sim.ES_VECTOR()) {
                         if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
+//	  		  	if(r1.esVariable) {
+//					pw.println("	DRF");
+//			  	}
                                 pw.println("\u0009WRT\u0009\u00091");
                         }else {
+//	  		  	if(r1.esVariable) {
+//				pw.println("	DRF");
+//		  	}
                                 pw.println("\u0009WRT\u0009\u00090");
                         }
                         int bytes_componente = r1.sim.get_tamanyo_componente();
@@ -1190,8 +1203,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
         else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
+//	  	if(r1.esVariable) {
+//			pw.println("	DRF");
+//	  	}
                 pw.println("\u0009WRT\u0009\u00091");
         }else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
+//	  	if(r1.esVariable) {
+//			pw.println("	DRF");
+//	  	}
                 pw.println("\u0009WRT\u0009\u00090");
         }else if(r2.sim.ES_VECTOR()) {
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
@@ -1239,28 +1258,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     try {
       t = jj_consume_token(tOPAS);
       r1 = expresion(false,false,null);
-//	    System.out.println("OPAS");
-//	    if(r1.tipo == Simbolo.Tipo_variable.ENTERO) {
-//			System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorEnt);
-//	  	}else if(r1.tipo == Simbolo.Tipo_variable.CHAR) {
-//	  	  	System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorChar);
-//	  	}else if(r1.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
-//	  	  	System.out.println("Se va a asignar un " + r1.tipo.toString());
-//	  	}else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) {
-//	  	 	System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.valorBool);
-//	  	}else if(r1.tipo == Simbolo.Tipo_variable.CADENA) {
-//	  	  	System.out.println("Se va a asignar un " + r1.tipo.toString() + " con valor: " + r1.cadena);
-//	  	}
-
-            //Hay que mirar que los tipos sean asignables y que coincidan ambos tipos
-            //System.out.println("AccesoComponente: " + ac);
             if(ac && r1.tipo != id.getTipoComponente()) {
                 //TODO: excepcion no coincide tipo, componente del vector
 //	    	System.out.println("Error semantico: Acceso componente true y no coinciden tipos. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
                 ac = false;
                 }else if(ac && r1.tipo == id.getTipoComponente()) {
+                        System.out.println("Acceso a acomponente y coincide");
+                        System.out.println("Entro aqui");
+                        if(r1.esVariable) {
+                          pw.println("\u0009DRF");
+                        }
+                        //TODO: falta si es variable DRF sino na
                         pw.println("\u0009ASG");
-                //TODO: mirar si hay que hacer algoe special
                 ac = false;
             }else if(id.getVariable() != r1.tipo && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
                         //TODO: excepciones
@@ -1291,6 +1300,11 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }else {
                         //Si todo va bien hacemos la asignacion
                         pw.println("; Asignacion.");
+                        //TODO: esto esta mal xd
+//		   	if(r1.esVariable) {
+//		   	  	System.out.println("Entro aqui");
+//		   	  	pw.println("	DRF");
+//		   	}
                     pw.println("\u0009ASG");
           }
       jj_consume_token(tFIN_SENTENCIA);
@@ -2046,7 +2060,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     case tMENOS:
       jj_consume_token(tMENOS);
       re = factor(vec, invoc_acc,sim);
-    pw.println("\u0009NGBI");
+    pw.println("\u0009NGI");
     if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //			System.out.println("El tipo de la variable no es compatible con \"-\" ");
                         //TODO: mirar si hay que lanzar una excepcion o hacer algo mas
@@ -2210,7 +2224,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         //TODO: Mirar si el plus si que tiene que estar a[1] = 2 por ejemplo
                                         pw.println("\u0009PLUS");
                                         //pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.calcularDesplazamientoDireccion(re.valorEnt -1));
-//				       	pw.println("	DRF");
+                                        pw.println("\u0009DRF");
 
                                             {if (true) return re;}
                                 }
