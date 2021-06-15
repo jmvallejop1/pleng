@@ -1,0 +1,280 @@
+; Programa maximo_comun_divisor.
+	ENP  L0
+; Comienzo del programa maximo_comun_divisor
+	 JMP	L1
+;Accion dato
+L1:
+;Acceso a variable d
+; Direccion de la variable d
+	SRF   1  6
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L2:
+;Acceso a la variable d
+; Acceso a la variable d
+	SRF	1	6
+	DRF
+	STC   0
+	LTE
+	JMF	L3
+; Escritura
+;cadena	"Escribe un numero: "
+	STC		69
+	WRT		0
+	STC		115
+	WRT		0
+	STC		99
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		98
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+; Lectura
+; Leer variable d
+	 SRF   1  6
+	 RD    1
+;SI
+;Acceso a la variable d
+; Acceso a la variable d
+	SRF	1	6
+	DRF
+	STC   0
+	LTE
+	JMF L4
+;ENT
+; Escritura
+;cadena	"El numero debe ser postivo."
+	STC		69
+	WRT		0
+	STC		108
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		100
+	WRT		0
+	STC		101
+	WRT		0
+	STC		98
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		115
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		118
+	WRT		0
+	STC		111
+	WRT		0
+	STC		46
+	WRT		0
+; Escritura
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+	JMP L5
+L4:
+L5:
+;FSI
+	JMP	L2
+;FMQ
+L3:
+; Fin de la accion 
+CSF
+	 JMP	L6
+;Accion mcd
+L6:
+;Acceso a variable r
+; Direccion de la variable r
+	SRF   0  3
+;Acceso a la variable a
+; Acceso a la variable a
+	SRF	1	8
+	DRF
+;Acceso a la variable b
+; Acceso a la variable b
+	SRF	1	10
+	DRF
+	MOD
+; Asignacion.
+	ASG
+;MQ
+L7:
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	3
+	DRF
+	STC   0
+	NEQ
+	JMF	L8
+;Acceso a variable a
+; Direccion de la variable a
+	SRF   1  8
+;Acceso a la variable b
+; Acceso a la variable b
+	SRF	1	10
+	DRF
+; Asignacion.
+	ASG
+;Acceso a variable b
+; Direccion de la variable b
+	SRF   1  10
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	3
+	DRF
+; Asignacion.
+	ASG
+;Acceso a variable r
+; Direccion de la variable r
+	SRF   0  3
+;Acceso a la variable a
+; Acceso a la variable a
+	SRF	1	8
+	DRF
+;Acceso a la variable b
+; Acceso a la variable b
+	SRF	1	10
+	DRF
+	MOD
+; Asignacion.
+	ASG
+	JMP	L7
+;FMQ
+L8:
+;Acceso a variable m
+; Direccion de la variable m
+	SRF   1  4
+;Acceso a la variable b
+; Acceso a la variable b
+	SRF	1	10
+	DRF
+; Asignacion.
+	ASG
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable dato
+; Invocando a DATO
+	 OSF   11  0 L1
+;Acceso a variable a
+; Direccion de la variable a
+	SRF   0  8
+;Acceso a la variable d
+; Acceso a la variable d
+	SRF	0	6
+	DRF
+; Asignacion.
+	ASG
+;Acceso a variable dato
+; Invocando a DATO
+	 OSF   11  0 L1
+;Acceso a variable b
+; Direccion de la variable b
+	SRF   0  10
+;Acceso a la variable d
+; Acceso a la variable d
+	SRF	0	6
+	DRF
+; Asignacion.
+	ASG
+;Acceso a variable mcd
+; Invocando a MCD
+	 OSF   12  0 L6
+; Escritura
+;cadena	"El MCD es: "
+	STC		69
+	WRT		0
+	STC		108
+	WRT		0
+	STC		32
+	WRT		0
+	STC		77
+	WRT		0
+	STC		67
+	WRT		0
+	STC		68
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a la variable m
+; Acceso a la variable m
+	SRF	0	4
+	DRF
+	WRT		1
+; Escritura
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+; Fin del programa maximo_comun_divisor
+LVP

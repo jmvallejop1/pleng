@@ -1,0 +1,155 @@
+; Programa nprimos.
+	ENP  L0
+; Comienzo del programa nprimos
+	 JMP	L1
+;Accion es_primo
+L1:
+;Acceso a variable j
+; Direccion de la variable j
+	SRF   0  3
+	STC   2
+; Asignacion.
+	ASG
+;Acceso a variable divisible
+; Direccion de la variable divisible
+	SRF   0  5
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L2:
+;Acceso a la variable j
+; Acceso a la variable j
+	SRF	0	3
+	DRF
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	1	6
+	DRF
+	STC   2
+	DIV
+	LT
+;Acceso a la variable divisible
+; Acceso a la variable divisible
+	SRF	0	5
+	DRF
+	NGB
+	AND
+	JMF	L3
+;Acceso a variable divisible
+; Direccion de la variable divisible
+	SRF   0  5
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	1	6
+	DRF
+;Acceso a la variable j
+; Acceso a la variable j
+	SRF	0	3
+	DRF
+	MOD
+	STC   0
+	EQ
+; Asignacion.
+	ASG
+;Acceso a variable j
+; Direccion de la variable j
+	SRF   0  3
+;Acceso a la variable j
+; Acceso a la variable j
+	SRF	0	3
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+	JMP	L2
+;FMQ
+L3:
+;SI
+;Acceso a la variable divisible
+; Acceso a la variable divisible
+	SRF	0	5
+	DRF
+	NGB
+	JMF L4
+;ENT
+; Escritura
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	1	6
+	DRF
+	WRT		1
+;cadena	"es primo."
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		32
+	WRT		0
+	STC		112
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		109
+	WRT		0
+	STC		111
+	WRT		0
+	STC		46
+	WRT		0
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+	JMP L5
+L4:
+L5:
+;FSI
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  4
+	STC   100
+; Asignacion.
+	ASG
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  6
+	STC   2
+; Asignacion.
+	ASG
+;MQ
+L6:
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	6
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	LTE
+	JMF	L7
+;Acceso a variable es_primo
+; Invocando a ES_PRIMO
+	 OSF   7  0 L1
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  6
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	6
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+	JMP	L6
+;FMQ
+L7:
+; Fin del programa nprimos
+LVP

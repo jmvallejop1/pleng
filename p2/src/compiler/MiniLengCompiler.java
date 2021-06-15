@@ -794,7 +794,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
                 System.out.println("Lectura de un vector");
         }else if(s1.ES_VARIABLE()){
-                //Obtenemos la variable 
+                //Obtenemos la variable
+                System.out.println("Leer variable");
                 pw.println("; Leer variable " + s1.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
                 if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
@@ -826,6 +827,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_la1[16] = jj_gen;
         ;
       }
+    System.out.println("Entro aqui");
     //Obtenemos el simbolo con el nombre del id
 //    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
     if(s1.ES_VECTOR() && !esComponente) {
@@ -920,17 +922,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 System.out.println("No se puede declarar un vector sin una constante entera");
                         }
 
-                }else {
-                                pw.println("; Leer variable " + s1.getNombre());
-                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
-                        pw.println("\u005ct DRF");
-                        if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
-                                pw.println("\u005ct RD    1");
-                                }
-                                else{
-                                        pw.println("\u005ct RD    0");
-                                }
-                        }
+                }
+//  	      	else { 
+//		  	  	pw.println("; Leer variable " + s1.getNombre());
+//		      	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+//		      	pw.println("\t DRF");
+//		      	if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){ 
+//		    		pw.println("\t RD    1");
+//		  	  	}
+//		  	  	else{
+//		  	  		pw.println("\t RD    0");
+//		  		}
+//	  		}
                 }
   }
       label_7:
@@ -955,13 +958,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
         }else if(s2.ES_VALOR()){
             System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
-        }else if(s1.ES_VECTOR()) {
+        }else if(s2.ES_VECTOR()) {
                 esvector = true;
             pw.println("; Leer variable vector " + s2.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
                 System.out.println("Lectura de un vector");
         }else if(s2.ES_VARIABLE()){
-                //Obtenemos la variable 
+                //Obtenemos la variable
+                System.out.println("s2 es variable");
                 pw.println("; Leer variable " + s2.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
                 if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
@@ -972,7 +976,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }else if(s2.ES_REFERENCIA()) {
             pw.println("; Leer parametro por referencia " + s2.getNombre());
-        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s2.getDir());
+        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
         pw.println("\u005ct DRF");
         if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
                 pw.println("\u005ct RD    1");
@@ -992,26 +996,31 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           jj_la1[18] = jj_gen;
           ;
         }
-    //TODO:sustituir como en el de arriba
-        //Obtenemos el simbolo con el nombre del id
-    s2 = tabla_simbolos.buscar_simbolo(t2.image);
-    if(s2 == null){
-        System.out.println("El simbolo que se esta buscando no esta en la tabla");
-        }else if(s2.getTipo() !=  Simbolo.Tipo_simbolo.PARAMETRO &&  s2.getTipo() != Simbolo.Tipo_simbolo.VARIABLE){
-                System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
-        }else if(s2.getTipo() == Simbolo.Tipo_simbolo.PARAMETRO && s2.getParametro() == Simbolo.Clase_parametro.VAL){
-            System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
-        }else if(s2.ES_VARIABLE()){
-          //Obtenemos la variable
-            if(s2.ES_VECTOR() && !esComponente) {
-              //Es un vector entero hay que ir componente por componente leyendo
-              pw.println("; Leer variable " + s2.getNombre());
-              int offset = 0;
-              int bytes_componente = s2.get_tamanyo_componente();
-              String mensaje = "Valor componente ";
+    System.out.println("Entro aqui");
+    //Obtenemos el simbolo con el nombre del id
+//    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
+    if(s2.ES_VECTOR() && !esComponente) {
+          String mensaje = "Valor componente ";
               String aux = "";
-              for(int i = 0; i < s2.getLongitud(); i++) {
-                        aux = mensaje + (i+1) + ": ";
+              aux = mensaje + "1: ";
+              for (int x=0;x<=aux.length()-1;x++) {
+                                        pw.println("\u0009STC\u0009\u0009" + (int)aux.charAt(x));
+                                        pw.println("\u0009WRT\u0009\u00090");
+                  }
+          //Es un vector entero hay que ir componente por componente leyendo
+
+          //La primera componente ya se le ha hecho SRF, solo hay que leerla
+          if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
+                pw.println("\u005ct RD    1");
+                  }
+                  else{
+                        pw.println("\u005ct RD    0");
+                  }
+              int offset = s2.get_tamanyo_componente();
+              int bytes_componente = s2.get_tamanyo_componente();
+
+              for(int i = 1; i < s2.getLongitud(); i++) {
+                                aux = mensaje + (i+1) + ": ";
                         for (int x=0;x<=aux.length()-1;x++) {
                                         pw.println("\u0009STC\u0009\u0009" + (int)aux.charAt(x));
                                         pw.println("\u0009WRT\u0009\u00090");
@@ -1025,34 +1034,27 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 }
                                 offset+=bytes_componente;
               }
-            }else {
-                //Es o una variable normal o una componente de un vector
-                if(esComponente) {
-                        if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
-                                int offset = (r.valorEnt - 1) * s2.get_tamanyo_componente();
-                                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
-                                if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
-                                        pw.println("\u005ct RD    1");
-                                        }
-                                        else{
-                                                pw.println("\u005ct RD    0");
-                                        }
-                        }else {
-                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                                System.out.println("No se puede acceder al vector si no es un entero");
-                        }
+      }else if(s2.ES_VECTOR() && esComponente){
+//  	      	System.out.println("Es un acceso a una componente vector");
+                if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
 
-                }else {
-                                pw.println("; Leer variable " + s2.getNombre());
-                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
-                        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
+                                pw.println("\u0009STC " + s2.get_tamanyo_componente());
+                                pw.println("\u0009TMS\u0009");
+                                pw.println("\u0009STC " + s2.get_tamanyo_componente());
+                                pw.println("\u0009SBT\u0009");
+
+                    pw.println("\u005ct PLUS");
+                        if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                                 pw.println("\u005ct RD    1");
                                 }
                                 else{
                                         pw.println("\u005ct RD    0");
                                 }
-                        }
+                }else {
+                        //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
+                        System.out.println("No se puede acceder al vector sin un entero");
                 }
+
         }else if(s2.ES_REFERENCIA()) {
              pw.println("; Leer parametro por referencia " + s2.getNombre());
              if(s2.ES_VECTOR() && !esComponente) {
@@ -1061,7 +1063,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
               int offset = 0;
               int bytes_componente = s2.get_tamanyo_componente();
               for(int i = 0; i < s2.getLongitud(); i++) {
-                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir()+offset);
+                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
                         pw.println("\u005ct DRF");
                         if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                                 pw.println("\u005ct RD    1");
@@ -1076,7 +1078,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 if(esComponente) {
                         if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
                                 int offset = (r.valorEnt - 1) * s2.get_tamanyo_componente();
-                                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir()+offset);
+                                pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
                                 pw.println("\u005ct DRF");
                                 if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                                         pw.println("\u005ct RD    1");
@@ -1089,17 +1091,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 System.out.println("No se puede declarar un vector sin una constante entera");
                         }
 
-                }else {
-                                pw.println("; Leer variable " + s2.getNombre());
-                        pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
-                        pw.println("\u005ct DRF");
-                        if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
-                                pw.println("\u005ct RD    1");
-                                }
-                                else{
-                                        pw.println("\u005ct RD    0");
-                                }
-                        }
+                }
+//  	      	else { 
+//		  	  	pw.println("; Leer variable " + s2.getNombre());
+//		      	pw.println("\t SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+//		      	pw.println("\t DRF");
+//		      	if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){ 
+//		    		pw.println("\t RD    1");
+//		  	  	}
+//		  	  	else{
+//		  	  		pw.println("\t RD    0");
+//		  		}
+//	  		}
                 }
   }
       }
@@ -1639,15 +1642,15 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       t = operador_relacional();
       r2 = expresion_simple(vec,invoc_acc,sim);
           boolean ok = true;
-
+                //TODO: hay que hacer lo mismo que enteros pero con caracteres
           String operacion = t.image;
 //	  if(operacion != null) { 
                   switch(operacion) {
                                 case ">":
                                         pw.println("\u0009GT");
                                         //System.out.println("Detectado >");
-                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                System.out.println("El primero de los valores no es entero por lo tanto no se puede >");
+                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
+                                                System.out.println("El primero de los valores no es entero por lo tanto no se puede >" + r1.tipo);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
@@ -1669,7 +1672,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "<":
                                         pw.println("\u0009LT");
                                         //System.out.println("Detectado <");
-                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <");
                                                 ok = false;
                                         }
@@ -1692,7 +1695,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case ">=":
                                         pw.println("\u0009GTE");
                                         //System.out.println("Detectado >=");
-                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >=");
                                                 ok = false;
                                         }
@@ -1715,7 +1718,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "<=":
                                         pw.println("\u0009LTE");
                                         //System.out.println("Detectado <=");
-                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <=");
                                                 ok = false;
                                         }
@@ -1739,7 +1742,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "=":
                                         pw.println("\u0009EQ");
                                         //System.out.println("Detectado =");
-                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
                                                 ok = false;
                                         }
@@ -1762,7 +1765,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "<>":
                                         pw.println("\u0009NEQ");
                                         //System.out.println("Detectado <>");
-                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
+                                        if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
                                                 ok = false;
                                         }
@@ -2152,9 +2155,9 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
          }else {
                 //Caso variable normal
         re = new  RegistroExpr();
-//       	if(s.ES_VALOR()) {
-//				System.out.println("Es un parametro por valoor");
-//       	}
+        if(s.ES_VALOR()) {
+                                System.out.println("Es un parametro por valoor");
+        }
             pw.println("; Acceso a la variable " + s.getNombre());
         pw.println("\u0009SRF\u0009"+  (nivel - s.getNivel()) + "\u0009" + s.getDir());
 
@@ -2165,6 +2168,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         //Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
                         pw.println("\u0009DRF");
             }
+        }else if(invoc_acc) {
+                        if(s.ES_VALOR()) {
+                                pw.println("\u0009DRF");
+                        }
         }
             re.tipo = s.getVariable();
             re.s = s.getTipo();

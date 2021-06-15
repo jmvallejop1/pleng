@@ -1,0 +1,39 @@
+; Programa leer_vectores_basico.
+	ENP  L0
+; Comienzo del programa leer_vectores_basico
+	 JMP	L1
+;Accion leer_entero
+L1:
+; rec. parametro v de tipo ENTERO pasado por REF
+	 SRF   0  3
+	 ASGI
+;Acceso a variable v
+	SRF   0  3
+	DRF
+	STC   3
+; Asignacion.
+	ASG
+; Fin de la accion 
+CSF
+	 JMP	L2
+;Accion escribir_entero
+L2:
+; rec. parametro v2 de tipo ENTERO pasado por VAL
+	 SRF   0  3
+	 ASGI
+; Escritura
+;Acceso a la variable v2
+; Acceso a la variable v2
+	SRF	0	3
+	DRF
+	WRT		1
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable escribir_entero
+	STC   2
+	STC   2
+; Invocando a ESCRIBIR_ENTERO
+	 OSF   8  0 L2
+; Fin del programa leer_vectores_basico
+LVP

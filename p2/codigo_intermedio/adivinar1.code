@@ -1,0 +1,552 @@
+; Programa adivinar.
+	ENP  L0
+; Comienzo del programa adivinar
+	 JMP	L1
+;Accion siono
+L1:
+;Acceso a variable c
+; Direccion de la variable c
+	SRF   0  3
+	STC   " "
+; Asignacion.
+	ASG
+;MQ
+L2:
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	3
+	DRF
+	STC   "S"
+	NEQ
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	3
+	DRF
+	STC   "N"
+	NEQ
+	AND
+	JMF	L3
+; Escritura
+;cadena	"(S/N)?"
+	STC		40
+	WRT		0
+	STC		83
+	WRT		0
+	STC		47
+	WRT		0
+	STC		78
+	WRT		0
+	STC		41
+	WRT		0
+	STC		63
+	WRT		0
+; Lectura
+; Leer variable c
+	 SRF   0  3
+	 RD    0
+; Leer variable ln
+	 SRF   0  4
+	 RD    0
+	JMP	L2
+;FMQ
+L3:
+;Acceso a variable respuesta
+; Direccion de la variable respuesta
+	SRF   1  4
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	3
+	DRF
+; Asignacion.
+	ASG
+; Fin de la accion 
+CSF
+	 JMP	L4
+;Accion pedirletra
+L4:
+;Acceso a variable c
+; Direccion de la variable c
+	SRF   0  3
+	STC   " "
+; Asignacion.
+	ASG
+;MQ
+L5:
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	3
+	DRF
+	STC   "A"
+	LT
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	3
+	DRF
+	STC   "Z"
+	GT
+	OR
+	JMF	L6
+; Escritura
+;cadena	"letra:"
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		97
+	WRT		0
+	STC		58
+	WRT		0
+; Lectura
+; Leer variable c
+	 SRF   0  3
+	 RD    0
+; Leer variable ln
+	 SRF   0  4
+	 RD    0
+	JMP	L5
+;FMQ
+L6:
+;Acceso a variable respuesta
+; Direccion de la variable respuesta
+	SRF   1  4
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	3
+	DRF
+; Asignacion.
+	ASG
+; Fin de la accion 
+CSF
+L0:
+; Escritura
+;cadena	"Piensa en una letra e intentare adivinarla."
+	STC		80
+	WRT		0
+	STC		105
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		115
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		105
+	WRT		0
+	STC		118
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		46
+	WRT		0
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+; Escritura
+;cadena	"Listo?"
+	STC		76
+	WRT		0
+	STC		105
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		111
+	WRT		0
+	STC		63
+	WRT		0
+;Acceso a variable siono
+; Invocando a SIONO
+	 OSF   10  0 L1
+;Acceso a variable min
+; Direccion de la variable min
+	SRF   0  6
+	STC   "A"
+; Asignacion.
+	ASG
+;Acceso a variable max
+; Direccion de la variable max
+	SRF   0  7
+	STC   "Z"
+; Asignacion.
+	ASG
+;Acceso a variable headivinado
+; Direccion de la variable headivinado
+	SRF   0  8
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L7:
+;Acceso a la variable min
+; Acceso a la variable min
+	SRF	0	6
+	DRF
+;Acceso a la variable max
+; Acceso a la variable max
+	SRF	0	7
+	DRF
+	NEQ
+;Acceso a la variable headivinado
+; Acceso a la variable headivinado
+	SRF	0	8
+	DRF
+	NGB
+	AND
+	JMF	L8
+;Acceso a variable letra
+; Direccion de la variable letra
+	SRF   0  5
+;Acceso a la variable min
+; Acceso a la variable min
+	SRF	0	6
+	DRF
+;Acceso a la variable max
+; Acceso a la variable max
+	SRF	0	7
+	DRF
+	PLUS
+	STC   2
+	DIV
+; Asignacion.
+	ASG
+; Escritura
+	STC   "("
+	WRT		0
+;Acceso a la variable min
+; Acceso a la variable min
+	SRF	0	6
+	DRF
+	WRT		0
+	STC   ","
+	WRT		0
+;Acceso a la variable max
+; Acceso a la variable max
+	SRF	0	7
+	DRF
+	WRT		0
+	STC   ")"
+	WRT		0
+;cadena	": has pensado en la letra "
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	STC		104
+	WRT		0
+	STC		97
+	WRT		0
+	STC		115
+	WRT		0
+	STC		32
+	WRT		0
+	STC		112
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		115
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a la variable letra
+; Acceso a la variable letra
+	SRF	0	5
+	DRF
+	WRT		0
+	STC   "?"
+	WRT		0
+;Acceso a variable siono
+; Invocando a SIONO
+	 OSF   10  0 L1
+;SI
+;Acceso a la variable respuesta
+; Acceso a la variable respuesta
+	SRF	0	4
+	DRF
+	STC   "N"
+	EQ
+	JMF L9
+;ENT
+; Escritura
+;cadena	"La letra que has pensado es mayor?"
+	STC		76
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		113
+	WRT		0
+	STC		117
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		104
+	WRT		0
+	STC		97
+	WRT		0
+	STC		115
+	WRT		0
+	STC		32
+	WRT		0
+	STC		112
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		115
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		32
+	WRT		0
+	STC		109
+	WRT		0
+	STC		97
+	WRT		0
+	STC		121
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		63
+	WRT		0
+;Acceso a variable siono
+; Invocando a SIONO
+	 OSF   10  0 L1
+;SI
+;Acceso a la variable respuesta
+; Acceso a la variable respuesta
+	SRF	0	4
+	DRF
+	STC   "S"
+	EQ
+	JMF L10
+;ENT
+;Acceso a variable min
+; Direccion de la variable min
+	SRF   0  6
+;Acceso a la variable letra
+; Acceso a la variable letra
+	SRF	0	5
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+	JMP L11
+L10:
+;SI_NO
+;Acceso a variable max
+; Direccion de la variable max
+	SRF   0  7
+;Acceso a la variable letra
+; Acceso a la variable letra
+	SRF	0	5
+	DRF
+	STC   1
+	SBT
+; Asignacion.
+	ASG
+L11:
+;FSI
+	JMP L12
+L9:
+;SI_NO
+;Acceso a variable headivinado
+; Direccion de la variable headivinado
+	SRF   0  8
+	STC   1
+; Asignacion.
+	ASG
+L12:
+;FSI
+	JMP	L7
+;FMQ
+L8:
+;SI
+;Acceso a la variable headivinado
+; Acceso a la variable headivinado
+	SRF	0	8
+	DRF
+	NGB
+	JMF L13
+;ENT
+; Escritura
+;cadena	"La letra es la "
+	STC		76
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a la variable min
+; Acceso a la variable min
+	SRF	0	6
+	DRF
+	WRT		0
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+	JMP L14
+L13:
+L14:
+;FSI
+; Fin del programa adivinar
+LVP

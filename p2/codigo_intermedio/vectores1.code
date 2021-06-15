@@ -1,0 +1,189 @@
+; Programa muestra_valores.
+	ENP  L0
+; Comienzo del programa muestra_valores
+L0:
+; Escritura
+;cadena	"Introduce 5 valores: "
+	STC		73
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		100
+	WRT		0
+	STC		117
+	WRT		0
+	STC		99
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		53
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  14
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L1:
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	14
+	DRF
+	STC   5
+	LT
+	JMF	L2
+; Lectura
+; Leer variable vector valores
+	 SRF   0  4
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	14
+	DRF
+	STC   1
+	PLUS
+	STC 2
+	TMS	
+	STC 2
+	SBT	
+	 PLUS
+	 RD    1
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  14
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	14
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+	JMP	L1
+;FMQ
+L2:
+; Escritura
+;cadena	"Mostrando los valores: "
+	STC		77
+	WRT		0
+	STC		111
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		97
+	WRT		0
+	STC		110
+	WRT		0
+	STC		100
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		115
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  14
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L3:
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	14
+	DRF
+	STC   5
+	LT
+	JMF	L4
+; Escritura
+;Acceso a la variable valores
+; Acceso al vector valores
+	SRF	0	4
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	14
+	DRF
+	STC   1
+	PLUS
+;Se ha indexado con una variable
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+	WRT		1
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  14
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	14
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+	JMP	L3
+;FMQ
+L4:
+; Fin del programa muestra_valores
+LVP

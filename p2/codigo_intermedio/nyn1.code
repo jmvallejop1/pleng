@@ -1,0 +1,243 @@
+; Programa noventa_y_nueve.
+	ENP  L0
+; Comienzo del programa noventa_y_nueve
+L0:
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  8
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L1:
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   0
+	LTE
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   100
+	GTE
+	OR
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   10
+	DIV
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   10
+	MOD
+	EQ
+	OR
+	JMF	L2
+; Escritura
+;cadena	"n: "
+	STC		110
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+; Lectura
+; Leer variable n
+	 SRF   0  8
+	 RD    1
+	JMP	L1
+;FMQ
+L2:
+; Escritura
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	WRT		1
+;cadena	" se convierte en "
+	STC		32
+	WRT		0
+	STC		115
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		118
+	WRT		0
+	STC		105
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a variable x
+; Direccion de la variable x
+	SRF   0  4
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   10
+	DIV
+; Asignacion.
+	ASG
+;Acceso a variable y
+; Direccion de la variable y
+	SRF   0  6
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   10
+	MOD
+; Asignacion.
+	ASG
+;Acceso a variable m
+; Direccion de la variable m
+	SRF   0  10
+	STC   10
+;Acceso a la variable y
+; Acceso a la variable y
+	SRF	0	6
+	DRF
+	TMS
+;Acceso a la variable x
+; Acceso a la variable x
+	SRF	0	4
+	DRF
+	PLUS
+; Asignacion.
+	ASG
+;SI
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+;Acceso a la variable m
+; Acceso a la variable m
+	SRF	0	10
+	DRF
+	GT
+	JMF L3
+;ENT
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  8
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+;Acceso a la variable m
+; Acceso a la variable m
+	SRF	0	10
+	DRF
+	SBT
+; Asignacion.
+	ASG
+	JMP L4
+L3:
+;SI_NO
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  8
+;Acceso a la variable m
+; Acceso a la variable m
+	SRF	0	10
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	SBT
+; Asignacion.
+	ASG
+L4:
+;FSI
+;Acceso a variable x
+; Direccion de la variable x
+	SRF   0  4
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   10
+	DIV
+; Asignacion.
+	ASG
+;Acceso a variable y
+; Direccion de la variable y
+	SRF   0  6
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	STC   10
+	MOD
+; Asignacion.
+	ASG
+;Acceso a variable m
+; Direccion de la variable m
+	SRF   0  10
+	STC   10
+;Acceso a la variable y
+; Acceso a la variable y
+	SRF	0	6
+	DRF
+	TMS
+;Acceso a la variable x
+; Acceso a la variable x
+	SRF	0	4
+	DRF
+	PLUS
+; Asignacion.
+	ASG
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  8
+;Acceso a la variable m
+; Acceso a la variable m
+	SRF	0	10
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	PLUS
+; Asignacion.
+	ASG
+; Escritura
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	8
+	DRF
+	WRT		1
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+; Fin del programa noventa_y_nueve
+LVP

@@ -1,0 +1,253 @@
+; Programa asignar.
+	ENP  L0
+; Comienzo del programa asignar
+	 JMP	L1
+;Accion cambiar_de_linea
+L1:
+; Escritura
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  4
+	STC   3
+; Asignacion.
+	ASG
+;Acceso a variable r
+; Direccion de la variable r
+	SRF   0  6
+	STC   2
+; Asignacion.
+	ASG
+;Acceso a variable c
+; Direccion de la variable c
+	SRF   0  8
+	STC   3
+	NGI
+; Asignacion.
+	ASG
+;Acceso a variable c
+; Direccion de la variable c
+	SRF   0  8
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	8
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+; Escritura
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	WRT		1
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	8
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   15  0 L1
+; Escritura
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	STC   1
+	PLUS
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	SBT
+	WRT		1
+	STC   7
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	STC   2
+	TMS
+	SBT
+	WRT		1
+;Acceso a la variable c
+; Acceso a la variable c
+	SRF	0	8
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   15  0 L1
+;Acceso a variable n2
+;Inicial vector
+	SRF   0  10
+	STC   1
+	STC	2
+	TMS	
+	STC	2
+	SBT		
+	PLUS		
+	STC   2
+	ASG
+;Acceso a variable n2
+;Inicial vector
+	SRF   0  10
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	STC	2
+	TMS	
+	STC	2
+	SBT		
+	PLUS		
+	STC   5
+	ASG
+;Acceso a variable n2
+;Inicial vector
+	SRF   0  10
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	STC   1
+	PLUS
+	STC	2
+	TMS	
+	STC	2
+	SBT		
+	PLUS		
+	STC   8
+	ASG
+; Escritura
+;Acceso a la variable n2
+; Acceso al vector n2
+	SRF	0	10
+	DRF
+	WRT		1
+;Escritura variablea la variable n2
+	SRF	0	12
+	DRF
+	WRT		1
+;Escritura variablea la variable n2
+	SRF	0	14
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   15  0 L1
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  4
+;Acceso a la variable n2
+; Acceso al vector n2
+	SRF	0	10
+	STC   2
+	STC   1
+	PLUS
+; Acceso a la variable n2[3]
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+; Asignacion.
+	ASG
+; Escritura
+;cadena	"valor de n:"
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		100
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		58
+	WRT		0
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   15  0 L1
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  4
+;Acceso a la variable n2
+; Acceso al vector n2
+	SRF	0	10
+	STC   2
+; Acceso a la variable n2[2]
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+; Asignacion.
+	ASG
+; Escritura
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   15  0 L1
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  4
+;Acceso a la variable n2
+; Acceso al vector n2
+	SRF	0	10
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	STC   1
+	PLUS
+;Se ha indexado con una variable
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+; Asignacion.
+	ASG
+; Escritura
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   15  0 L1
+; Fin del programa asignar
+LVP

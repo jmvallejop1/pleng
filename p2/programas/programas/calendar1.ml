@@ -101,9 +101,9 @@ PRINCIPIO
           
      escribir("CALENDARIO");
      escribir("Introduce un mes en cifras:");
-     leer(mes, ln);
+     leer(mes);
      escribir("Introduce un anio en cifras:");
-     leer(anho, ln);
+     leer(anho);
      primer_dia_anho;
      primer_dia_mes;
      escribir(dia1mes);  

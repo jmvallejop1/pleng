@@ -1,0 +1,320 @@
+; Programa fibbonaci.
+	ENP  L0
+; Comienzo del programa fibbonaci
+	 JMP	L1
+;Accion cambiar_de_linea
+L1:
+; Escritura
+	STC   13
+	WRT		0
+	STC   10
+	WRT		0
+; Fin de la accion 
+CSF
+	 JMP	L3
+;Accion pedir_dato
+L3:
+; Escritura
+;cadena	"Escribe un numero: "
+	STC		69
+	WRT		0
+	STC		115
+	WRT		0
+	STC		99
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		98
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+; Lectura
+; Leer parametro por referenciadato
+	 SRF   1  3
+	 DRF
+	 RD    1
+; Leer parametro por referencia dato
+; Fin de la accion 
+CSF
+	 JMP	L2
+;Accion dato
+L2:
+; rec. parametro dato de tipo ENTERO pasado por REF
+	 SRF   0  3
+	 ASGI
+;Acceso a variable dato
+	SRF   0  3
+	DRF
+	STC   0
+; Asignacion.
+	ASG
+;Acceso a variable correcto
+; Direccion de la variable correcto
+	SRF   0  4
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L4:
+;Acceso a la variable correcto
+; Acceso a la variable correcto
+	SRF	0	4
+	DRF
+	NGB
+	JMF	L5
+;Acceso a variable pedir_dato
+; Invocando a PEDIR_DATO
+	 OSF   4  0 L3
+;Acceso a variable correcto
+; Direccion de la variable correcto
+	SRF   0  4
+;Acceso a la variable dato
+; Acceso a la variable dato
+	SRF	0	3
+	DRF
+	DRF
+	STC   0
+	GT
+; Asignacion.
+	ASG
+;SI
+;Acceso a la variable correcto
+; Acceso a la variable correcto
+	SRF	0	4
+	DRF
+	NGB
+	JMF L6
+;ENT
+; Escritura
+;cadena	"El numero debe ser postivo."
+	STC		69
+	WRT		0
+	STC		108
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		100
+	WRT		0
+	STC		101
+	WRT		0
+	STC		98
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		115
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		118
+	WRT		0
+	STC		111
+	WRT		0
+	STC		46
+	WRT		0
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   7  1 L1
+	JMP L7
+L6:
+L7:
+;FSI
+	JMP	L4
+;FMQ
+L5:
+; Fin de la accion 
+CSF
+	 JMP	L8
+;Accion fib
+L8:
+; rec. parametro r de tipo ENTERO pasado por REF
+	 SRF   0  4
+	 ASGI
+; rec. parametro n de tipo ENTERO pasado por VAL
+	 SRF   0  3
+	 ASGI
+;SI
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	3
+	DRF
+	STC   1
+	GT
+	JMF L9
+;ENT
+;Acceso a variable fib
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	3
+	DRF
+	STC   1
+	SBT
+;Acceso a la variable r1
+; Acceso a la variable r1
+	SRF	0	5
+; Invocando a FIB
+	 OSF   9  1 L8
+;Acceso a variable fib
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	3
+	DRF
+	STC   2
+	SBT
+;Acceso a la variable r2
+; Acceso a la variable r2
+	SRF	0	7
+; Invocando a FIB
+	 OSF   9  1 L8
+;Acceso a variable r
+	SRF   0  4
+	DRF
+;Acceso a la variable r1
+; Acceso a la variable r1
+	SRF	0	5
+	DRF
+;Acceso a la variable r2
+; Acceso a la variable r2
+	SRF	0	7
+	DRF
+	PLUS
+; Asignacion.
+	ASG
+	JMP L10
+L9:
+;SI_NO
+;Acceso a variable r
+	SRF   0  4
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	3
+	DRF
+; Asignacion.
+	ASG
+L10:
+;FSI
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable dato
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+; Invocando a DATO
+	 OSF   8  0 L2
+;Acceso a variable fib
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+; Invocando a FIB
+	 OSF   9  0 L8
+; Escritura
+;cadena	"Fibbonaci("
+	STC		70
+	WRT		0
+	STC		105
+	WRT		0
+	STC		98
+	WRT		0
+	STC		98
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		97
+	WRT		0
+	STC		99
+	WRT		0
+	STC		105
+	WRT		0
+	STC		40
+	WRT		0
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	WRT		1
+;cadena	") es: "
+	STC		41
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a la variable r
+; Acceso a la variable r
+	SRF	0	6
+	DRF
+	WRT		1
+;Acceso a variable cambiar_de_linea
+; Invocando a CAMBIAR_DE_LINEA
+	 OSF   7  0 L1
+; Fin del programa fibbonaci
+LVP

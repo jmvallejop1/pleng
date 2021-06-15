@@ -1,0 +1,343 @@
+; Programa media_vectores.
+	ENP  L0
+; Comienzo del programa media_vectores
+L0:
+; Escritura
+;cadena	"Introduce el numero de elementos: "
+	STC		73
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		100
+	WRT		0
+	STC		117
+	WRT		0
+	STC		99
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		108
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		100
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		111
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+; Lectura
+; Leer variable n
+	 SRF   0  26
+	 RD    1
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  24
+	STC   0
+; Asignacion.
+	ASG
+;Acceso a variable suma
+; Direccion de la variable suma
+	SRF   0  28
+	STC   0
+; Asignacion.
+	ASG
+;MQ
+L1:
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	24
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	26
+	DRF
+	LT
+	JMF	L2
+; Escritura
+;cadena	"Introduce el numero "
+	STC		73
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		100
+	WRT		0
+	STC		117
+	WRT		0
+	STC		99
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		108
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	24
+	DRF
+	STC   1
+	PLUS
+	WRT		1
+;cadena	": "
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+; Lectura
+; Leer variable vector valores
+	 SRF   0  4
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	24
+	DRF
+	STC   1
+	PLUS
+	STC 2
+	TMS	
+	STC 2
+	SBT	
+	 PLUS
+	 RD    1
+;Acceso a variable suma
+; Direccion de la variable suma
+	SRF   0  28
+;Acceso a la variable suma
+; Acceso a la variable suma
+	SRF	0	28
+	DRF
+;Acceso a la variable valores
+; Acceso al vector valores
+	SRF	0	4
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	24
+	DRF
+	STC   1
+	PLUS
+;Se ha indexado con una variable
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+	PLUS
+; Asignacion.
+	ASG
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  24
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	24
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+	JMP	L1
+;FMQ
+L2:
+; Escritura
+;cadena	"El vector es:"
+	STC		69
+	WRT		0
+	STC		108
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		101
+	WRT		0
+	STC		99
+	WRT		0
+	STC		116
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+;Acceso a la variable valores
+; Acceso al vector valores
+	SRF	0	4
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	6
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	8
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	10
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	12
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	14
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	16
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	18
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	20
+	DRF
+	WRT		1
+;Escritura variablea la variable valores
+	SRF	0	22
+	DRF
+	WRT		1
+; Escritura
+;cadena	"suma es:"
+	STC		115
+	WRT		0
+	STC		117
+	WRT		0
+	STC		109
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+;Acceso a la variable suma
+; Acceso a la variable suma
+	SRF	0	28
+	DRF
+	WRT		1
+; Escritura
+;cadena	"La media es: "
+	STC		76
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		100
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+;Acceso a la variable suma
+; Acceso a la variable suma
+	SRF	0	28
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	26
+	DRF
+	DIV
+	WRT		1
+; Fin del programa media_vectores
+LVP

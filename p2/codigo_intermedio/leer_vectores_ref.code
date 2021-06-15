@@ -1,0 +1,172 @@
+; Programa leer_vectores_basico.
+	ENP  L0
+; Comienzo del programa leer_vectores_basico
+L0:
+;Acceso a variable n
+; Direccion de la variable n
+	SRF   0  19
+	STC   1
+; Asignacion.
+	ASG
+; Lectura
+; Leer variable vector e
+	 SRF   0  11
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		49
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		50
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  13
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		51
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  15
+	 RD    1
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  17
+;Acceso a la variable e
+; Acceso al vector e
+	SRF	0	11
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	19
+	DRF
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	19
+	DRF
+	PLUS
+	STC   1
+	PLUS
+;Se ha indexado con una variable
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+; Asignacion.
+	ASG
+; Escritura
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	17
+	DRF
+	WRT		1
+; Fin del programa leer_vectores_basico
+LVP

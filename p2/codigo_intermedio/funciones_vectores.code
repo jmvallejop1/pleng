@@ -1,0 +1,32 @@
+; Programa leer_vectores_basico.
+	ENP  L0
+; Comienzo del programa leer_vectores_basico
+L0:
+;Acceso a variable e
+;Inicial vector
+	SRF   0  4
+	STC   3
+	STC	2
+	TMS	
+	STC	2
+	SBT		
+	PLUS		
+	STC   7
+	ASG
+; Escritura
+;Acceso a la variable e
+; Acceso al vector e
+	SRF	0	4
+	STC   2
+	STC   1
+	PLUS
+; Acceso a la variable e[3]
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+	DRF
+	WRT		1
+; Fin del programa leer_vectores_basico
+LVP
