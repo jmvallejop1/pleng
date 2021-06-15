@@ -82,7 +82,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     //Pasamos como parametro el fichero que queremos compilar
     //Intentamos leer el fichero 
     try {
-          String dir ="C:\u005c\u005cUsers\u005c\u005cJmval\u005c\u005cOneDrive\u005c\u005cEscritorio\u005c\u005cpleng\u005c\u005cp2\u005c\u005cprogramas\u005c\u005cprogramas\u005c\u005c"+args[0] +".ml";
+          //String dir ="C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\programas\\programas\\"+args[0] +".ml";
+          String dir = "/Users/lauraomist/Desktop/pleng/p2/programas/programas/" + args[0] +".ml";
           System.out.println(dir);
               FileInputStream F = new FileInputStream(dir);
               System.setIn(F);
@@ -94,7 +95,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 
          try {
                          //TODO: cambiar esto por el nombre del fichero + code
-                         File cod_inter = new File("C:\u005c\u005cUsers\u005c\u005cJmval\u005c\u005cOneDrive\u005c\u005cEscritorio\u005c\u005cpleng\u005c\u005cp2\u005c\u005ccodigo_intermedio\u005c\u005c"+args[0]+".code");
+                         //File cod_inter = new File("C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\codigo_intermedio\\"+args[0]+".code");
+                         File cod_inter = new File("/Users/lauraomist/Desktop/pleng/p2/codigo_intermedio/"+args[0]+".code");
                  FileWriter fichero_salida = new FileWriter(cod_inter);
                          pw = new PrintWriter(fichero_salida);
                  MiniLengCompiler parser = new MiniLengCompiler(System.in);
@@ -1473,7 +1475,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         //TODO: gestionar excepciones
                         System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
                 }else if(s.ES_VALOR() && r1.esVariable) {
-                    System.out.println("Variable por valor a\u00f1ado DRF");
+                    System.out.println("Variable por valor a\ufffdado DRF");
                         pw.println("\u0009DRF");
                 }
                 i++;

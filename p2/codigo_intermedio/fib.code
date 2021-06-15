@@ -204,6 +204,7 @@ L8:
 	DRF
 	STC   1
 	SBT
+	DRF
 ;Acceso a la variable r1
 ; Acceso a la variable r1
 	SRF	0	5
@@ -216,6 +217,7 @@ L8:
 	DRF
 	STC   2
 	SBT
+	DRF
 ;Acceso a la variable r2
 ; Acceso a la variable r2
 	SRF	0	7
