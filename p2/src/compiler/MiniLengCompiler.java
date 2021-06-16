@@ -202,7 +202,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     throw new Error("Missing return statement in function");
   }
 
-//TODO: cambiar tamaño de la variable del vector por TIPO * longitud
   static final public void identificadores(Simbolo.Tipo_variable tipo) throws ParseException {
   Token id1 = null;
   Token id2 = null;
@@ -214,7 +213,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     try {
       id1 = jj_consume_token(tID);
              r = null;
-              esVector = false;
+             esVector = false;
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
@@ -702,8 +701,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
                 if(simbolo_id == null){
                         //TODO: excepciones no eciste el simbolo
-                }else if(simbolo_id.ES_ACCION()) {
-                        //TODO: expeciones no se puede asignar nada a una accion
                 }else if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
 // 		    System.out.println("Es una variable");
                         if(simbolo_id.ES_VALOR()) {

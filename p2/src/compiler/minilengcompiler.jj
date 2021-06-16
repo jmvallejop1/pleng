@@ -304,7 +304,6 @@ Simbolo.Tipo_variable tipo_variables():
 }
 
 
-//TODO: cambiar tamaño de la variable del vector por TIPO * longitud
 void identificadores(Simbolo.Tipo_variable tipo):
 {
   Token id1 = null;
@@ -321,7 +320,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
   	   id1 = < tID >
   	   {
   	     r = null;
-  	      esVector = false;
+  	     esVector = false;
   	   }
   	   ("[" r = expresion(true,false,null)"]"
   	   {
@@ -735,8 +734,6 @@ void sentencia():
  		simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
  		if(simbolo_id == null){
 			//TODO: excepciones no eciste el simbolo
- 		}else if(simbolo_id.ES_ACCION()) {
- 		  	//TODO: expeciones no se puede asignar nada a una accion
  		}else if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
 // 		    System.out.println("Es una variable");
 		  	if(simbolo_id.ES_VALOR()) {
