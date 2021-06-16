@@ -1,31 +1,169 @@
 ; Programa leer_vectores_basico.
 	ENP  L0
 ; Comienzo del programa leer_vectores_basico
-L0:
-;Acceso a variable e
-;Inicial vector
-	SRF   0  4
 	STC   3
+	 JMP	L1
+;Accion leer_vector
+L1:
+; rec. parametro v2 de tipo VECENT pasado por REF
+	 SRF   0  3
+	 ASGI
+; Lectura
+; Leer variable vector v2
+	 SRF   0  3
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		49
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	DRF
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		50
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  3
+	DRF
 	STC	2
-	TMS	
-	STC	2
-	SBT		
-	PLUS		
-	STC   7
-	ASG
+	PLUS
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		51
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  3
+	DRF
+	STC	4
+	PLUS
+	 RD    1
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable leer_vector
+;Acceso a la variable e
+; Acceso al vector e
+	SRF	0	4
+; Invocando a LEER_VECTOR
+	 OSF   13  0 L1
 ; Escritura
 ;Acceso a la variable e
 ; Acceso al vector e
 	SRF	0	4
-	STC   2
-	STC   1
-	PLUS
-; Acceso a la variable e[3]
-	STC	2
-	TMS
-	STC	2
-	SBT
-	PLUS
+	DRF
+	WRT		1
+;Escritura variablea la variable e
+	SRF	0	6
+	DRF
+	WRT		1
+;Escritura variablea la variable e
+	SRF	0	8
 	DRF
 	WRT		1
 ; Fin del programa leer_vectores_basico

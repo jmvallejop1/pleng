@@ -846,7 +846,10 @@ void lista_asignables():
 			   		pw.println("	WRT		0");
 	  	  }
       	  //Es un vector entero hay que ir componente por componente leyendo
-      	  
+
+      	  if(s1.ES_REFERENCIA()) {
+			pw.println("	DRF");
+      		}
       	  //La primera componente ya se le ha hecho SRF, solo hay que leerla
       	  if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 	    	pw.println("\t RD    1");
@@ -863,7 +866,16 @@ void lista_asignables():
 			   		pw.println("	STC		" + (int)aux.charAt(x));
 			   		pw.println("	WRT		0");
 	  			}
-	  	       	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+	  			//TODO: Mirar esto
+	  	       	
+	  	       	if(s1.ES_REFERENCIA()) {
+	  	       	  	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()));
+					pw.println("	DRF");
+					pw.println("	STC	"+ offset);
+					pw.println("	PLUS");
+	      		}else {
+					pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+	      		}
 	  	       	if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 		    		pw.println("\t RD    1");
 		  	  	}

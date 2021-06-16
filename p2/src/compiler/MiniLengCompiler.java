@@ -840,6 +840,9 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                   }
           //Es un vector entero hay que ir componente por componente leyendo
 
+          if(s1.ES_REFERENCIA()) {
+                        pw.println("\u0009DRF");
+                }
           //La primera componente ya se le ha hecho SRF, solo hay que leerla
           if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                 pw.println("\u005ct RD    1");
@@ -856,7 +859,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009STC\u0009\u0009" + (int)aux.charAt(x));
                                         pw.println("\u0009WRT\u0009\u00090");
                                 }
-                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+                                //TODO: Mirar esto
+
+                        if(s1.ES_REFERENCIA()) {
+                                pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()));
+                                        pw.println("\u0009DRF");
+                                        pw.println("\u0009STC\u0009"+ offset);
+                                        pw.println("\u0009PLUS");
+                        }else {
+                                        pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
+                        }
                         if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                                 pw.println("\u005ct RD    1");
                                 }
