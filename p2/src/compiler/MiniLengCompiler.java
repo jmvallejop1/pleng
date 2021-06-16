@@ -477,17 +477,42 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 //	      	  	System.out.println("Se declara un vector como parametro");
                         //El vector esta bien definido
                         Simbolo.Tipo_variable tipo_aux = null;
+                        int a  =0;
                         if(tipo == Simbolo.Tipo_variable.ENTERO) {
+                                a= 2;
                         tipo_aux = Simbolo.Tipo_variable.VECENT;
                         }else if(tipo == Simbolo.Tipo_variable.CHAR) {
+                                a=1;
                         tipo_aux = Simbolo.Tipo_variable.VECCHAR;
                         }else {
+                                a=1;
                         tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                         }
-                        param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo_aux, clase, r.valorEnt, nivel, dir);
-                        dir +=  1;//param.get_tamanyo();
-//	      	  	System.out.println("He introducido el vector a la lista de params");
-                        simbolo_accion.addParametro(param);
+                        if(clase == Simbolo.Clase_parametro.REF) {
+                                param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo, clase, r.valorEnt, nivel, dir);
+                                dir +=  1;//param.get_tamanyo();
+        //	      	  	System.out.println("He introducido el vector a la lista de params");
+                                simbolo_accion.addParametro(param);
+                        }else {
+                          //TODO: excepciones no se puede pasar un vector entero como parametro por valor
+                          System.out.println("No se pueden pasar vectores por enteros por valor");
+//		      	  //vector pasado por valor
+//		      	   	param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo, clase, r.valorEnt, nivel, dir);
+//		      	  	dir +=  a;
+//		//	      	  	System.out.println("He introducido el vector a la lista de params");
+//					
+//		      	  	simbolo_accion.addParametro(param);
+//		      	  int aux = 2;
+//		      	  for(int i = 1; i < r.valorEnt;i++) {
+//		      	    param = tabla_simbolos.introducir_parametro_vector(id1.image+aux, tipo, clase, r.valorEnt, nivel, dir);
+//		      	  	dir +=  a;
+//		      	  	aux++;
+//					
+//	//	      	  	System.out.println("He introducido el vector a la lista de params");
+//		      	  	simbolo_accion.addParametro(param);
+//		      	  }
+
+                        }
                 }else {
                         //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
                         //System.out.println("Errpr semantico: No se puede declarar un vector sin una constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
@@ -545,9 +570,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         }else {
                         tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                         }
-                        param2 = tabla_simbolos.introducir_parametro_vector(id2.image, tipo_aux, clase, r.valorEnt, nivel, dir);
-                        dir+= 1;param2.get_tamanyo();
-                        simbolo_accion.addParametro(param2);
+
+                        if(clase == Simbolo.Clase_parametro.REF) {
+                                param2 = tabla_simbolos.introducir_parametro_vector(id2.image, tipo_aux, clase, r.valorEnt, nivel, dir);
+                                dir+= 1;param2.get_tamanyo();
+                                simbolo_accion.addParametro(param2);
+                        }else {
+                          //TODO: excepciones no se puede pasar un vector entero como parametro por valor
+                          System.out.println("No se pueden pasar vectores por enteros por valor");
+                        }
+
                 }else {
                         //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
                         //System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. En la linea " + id2.beginLine + " y la columna " + id2.beginColumn);
@@ -676,7 +708,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 // 		    System.out.println("Es una variable");
                         if(simbolo_id.ES_VALOR()) {
                                 //TODO: expeciones no se puede asignar nada a algo por valor
-                                //System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
+                                System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
                                 //TODO: Mirar si esto tiene que ir aqui o en asignacion, y si se tiene que poner el tpId a desconocido para seguir la ejecucuion
                                 tpID = Simbolo.Tipo_variable.DESCONOCIDO;
                         }else if(simbolo_id.ES_REFERENCIA()) {
@@ -784,11 +816,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 //    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
     s1 = tabla_simbolos.buscar_simbolo(t1.image);
     if(s1 == null){
+        //TODO: excepciones
         System.out.println("El simbolo que se esta buscando no esta en la tabla");
         }else if(!s1.ES_PARAMETRO() &&  !s1.ES_VARIABLE()){
+            //TODO: excepciones
                 System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
         }else if(s1.ES_VALOR()){
-            System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
+                //TODO: excepciones
+            System.out.println("Un parametro por valor nos e puede asignar");
         }else if(s1.ES_VECTOR()) {
                 esvector = true;
             pw.println("; Leer variable vector " + s1.getNombre());
@@ -1158,32 +1193,24 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
         else if (r1.tipo == Simbolo.Tipo_variable.ENTERO){
-//	  	if(r1.esVariable) {
-//			pw.println("	DRF");
-//	  	}
                 pw.println("\u0009WRT\u0009\u00091");
         }else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
-//	  	if(r1.esVariable) {
-//			pw.println("	DRF");
-//	  	}
                 pw.println("\u0009WRT\u0009\u00090");
         }else if(r1.sim.ES_VECTOR()) {
                         if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
-//	  		  	if(r1.esVariable) {
-//					pw.println("	DRF");
-//			  	}
                                 pw.println("\u0009WRT\u0009\u00091");
                         }else {
-//	  		  	if(r1.esVariable) {
-//				pw.println("	DRF");
-//		  	}
                                 pw.println("\u0009WRT\u0009\u00090");
                         }
                         int bytes_componente = r1.sim.get_tamanyo_componente();
                         int offset = r1.sim.get_tamanyo_componente();
                         for(int i = 1; i <r1.tam_vec; i++) {
                                 pw.println(";Escritura variablea la variable " + r1.sim.getNombre());
-                        pw.println("\u0009SRF\u0009"+  (nivel - r1.sim.getNivel()) + "\u0009" + (r1.sim.getDir() + offset));
+                        pw.println("\u0009SRF\u0009"+  (nivel - r1.sim.getNivel()) + "\u0009" + (r1.sim.getDir()));
+                        if(r1.sim.ES_REFERENCIA())
+                                pw.println("\u0009DRF");
+                        pw.println("\u0009STC\u0009"+ offset);
+                                pw.println("\u0009PLUS");
                         pw.println("\u0009DRF");
                         if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                         pw.println("\u0009WRT\u0009\u00091");
@@ -1220,14 +1247,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
         else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
-//	  	if(r1.esVariable) {
-//			pw.println("	DRF");
-//	  	}
                 pw.println("\u0009WRT\u0009\u00091");
         }else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
-//	  	if(r1.esVariable) {
-//			pw.println("	DRF");
-//	  	}
                 pw.println("\u0009WRT\u0009\u00090");
         }else if(r2.sim.ES_VECTOR()) {
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
@@ -1239,7 +1260,11 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         int offset = r2.sim.get_tamanyo_componente();
                         for(int i = 1; i <r2.tam_vec; i++) {
                                 pw.println(";Escritura variablea la variable " + r2.sim.getNombre());
-                        pw.println("\u0009SRF\u0009"+  (nivel - r2.sim.getNivel()) + "\u0009" + (r2.sim.getDir() + offset));
+                        pw.println("\u0009SRF\u0009"+  (nivel - r2.sim.getNivel()) + "\u0009" + (r2.sim.getDir()));
+                        if(r2.sim.ES_REFERENCIA())
+                                pw.println("\u0009DRF");
+                        pw.println("\u0009STC\u0009"+ offset);
+                                pw.println("\u0009PLUS");
                         pw.println("\u0009DRF");
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                         pw.println("\u0009WRT\u0009\u00091");
@@ -1462,8 +1487,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     }
   }
 
-//TODO: Hacer un programa para probar esto, devuelve una lista de RegistroExpresiones
-//TODO: igual no hace falta pasar tantos parametros hasta esta funcion
   static final public ArrayList<RegistroExpr> lista_expresiones(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > parametros_necesarios) throws ParseException {
   ArrayList<RegistroExpr > params = new ArrayList<RegistroExpr>();
   RegistroExpr r1 = new RegistroExpr();
