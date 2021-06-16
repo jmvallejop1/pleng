@@ -1,16 +1,30 @@
 ; Programa leer_vectores_basico.
 	ENP  L0
 ; Comienzo del programa leer_vectores_basico
-	STC   3
 	 JMP	L1
-;Accion leer_vector
+;Accion asignar_componente_vector
 L1:
-; rec. parametro v2 de tipo VECENT pasado por REF
+; rec. parametro v3 de tipo ENTERO pasado por REF
 	 SRF   0  3
 	 ASGI
+;Acceso a variable v3
+	SRF   0  3
+	DRF
+	STC   8
+; Asignacion.
+	ASG
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  10
+	STC   2
+; Asignacion.
+	ASG
 ; Lectura
-; Leer variable vector v2
-	 SRF   0  3
+; Leer variable vector e
+	 SRF   0  4
 	STC		86
 	WRT		0
 	STC		97
@@ -51,7 +65,6 @@ L1:
 	WRT		0
 	STC		32
 	WRT		0
-	DRF
 	 RD    1
 	STC		86
 	WRT		0
@@ -93,10 +106,7 @@ L1:
 	WRT		0
 	STC		32
 	WRT		0
-	 SRF   0  3
-	DRF
-	STC	2
-	PLUS
+	 SRF   0  6
 	 RD    1
 	STC		86
 	WRT		0
@@ -138,19 +148,25 @@ L1:
 	WRT		0
 	STC		32
 	WRT		0
-	 SRF   0  3
-	DRF
-	STC	4
-	PLUS
+	 SRF   0  8
 	 RD    1
-; Fin de la accion 
-CSF
-L0:
-;Acceso a variable leer_vector
+;Acceso a variable asignar_componente_vector
 ;Acceso a la variable e
 ; Acceso al vector e
 	SRF	0	4
-; Invocando a LEER_VECTOR
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	10
+	DRF
+	STC   1
+	PLUS
+;Se ha indexado con una variable
+	STC	2
+	TMS
+	STC	2
+	SBT
+	PLUS
+; Invocando a ASIGNAR_COMPONENTE_VECTOR
 	 OSF   13  0 L1
 ; Escritura
 ;Acceso a la variable e

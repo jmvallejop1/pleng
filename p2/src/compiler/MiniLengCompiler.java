@@ -681,6 +681,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 tpID = Simbolo.Tipo_variable.DESCONOCIDO;
                         }else if(simbolo_id.ES_REFERENCIA()) {
                                 //Sie s un parametro por referencia hay que hacer un drf porque con el srf no se obtiene la direccion
+                                System.out.println("Referencia");
                                 pw.println("\u0009SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
                                 pw.println("\u0009DRF");
                         }else if(simbolo_id.ES_VECTOR()) {
@@ -829,7 +830,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       }
     System.out.println("Entro aqui");
     //Obtenemos el simbolo con el nombre del id
-//    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
+    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
     if(s1.ES_VECTOR() && !esComponente) {
           String mensaje = "Valor componente ";
               String aux = "";
@@ -878,7 +879,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 offset+=bytes_componente;
               }
       }else if(s1.ES_VECTOR() && esComponente){
-//  	      	System.out.println("Es un acceso a una componente vector");
+                System.out.println("Es un acceso a una componente vector");
                 if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
 
                                 pw.println("\u0009STC " + s1.get_tamanyo_componente());
@@ -919,6 +920,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             }else {
                 //Es o una variable normal o una componente de un vector
                 if(esComponente) {
+                        System.out.println("Entro aquiiiiiiii");
                         if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
                                 int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
                                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
@@ -1422,26 +1424,28 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         if(params.size() != parametros_necesarios.size()) {
                 //TODO: gestionar excepciones 
                 System.out.println("Error semantico: Los parametros patra invocar a la accion no coinciden "+ params.size() + " , " + parametros_necesarios.size());
-        }else {
-//   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
-                Simbolo s = new Simbolo();
-                RegistroExpr r = new RegistroExpr();
-                int num_params = params.size();
-                //TODO: mirar si hay que hacer alguna comprobacion mas, por ejemplo DESCONOCIDO
-                for( int i = 0; i < num_params; i++) {
-                        s = parametros_necesarios.get(i);
-                        r = params.get(i);
-//			tabla_simbolos.imprimirTabla();
-//			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
-                        if(s.getVariable() != r.tipo) {
-                                //TODO: gestionar excepciones
-                                System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
-                        }else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r.esVariable) {
-                                //TODO: gestionar excepciones
-                                System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
-                        }
-                        }
-                }
+        }
+//   	else {
+////   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
+//   	  	Simbolo s = new Simbolo();
+//   	  	RegistroExpr r = new RegistroExpr();
+//   	  	int num_params = params.size();
+//   	  	//TODO: mirar si hay que hacer alguna comprobacion mas, por ejemplo DESCONOCIDO
+//   	  	for( int i = 0; i < num_params; i++) {
+//			s = parametros_necesarios.get(i);
+//			r = params.get(i);
+////			tabla_simbolos.imprimirTabla();
+////			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
+//			if(s.getVariable() != r.tipo) {
+//				//TODO: gestionar excepciones
+//				System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
+//			}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r.esVariable) {
+//			  	//TODO: gestionar excepciones
+//			  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
+//			}
+//			}
+//   	  	}
+
           break;
         default:
           jj_la1[21] = jj_gen;
@@ -2182,6 +2186,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             }
         }else if(invoc_acc) {
                         if(s.ES_VALOR()) {
+//			  	System.out.println("Eyeyeyyeyyeye");
                                 pw.println("\u0009DRF");
                         }
         }
@@ -2194,7 +2199,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 58:
         jj_consume_token(58);
-        re = expresion(false,invoc_acc,s);
+        re = expresion(false,false,s);
         jj_consume_token(59);
         break;
       default:
@@ -2205,14 +2210,17 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         if(re != null) {
                 if(re.esVariable) {
                     re = new  RegistroExpr();
+                    System.out.println(";Se ha indexado con una variable");
                                 pw.println(";Se ha indexado con una variable");
                                 re.tipo = s.getTipoComponente();
+                                re.esVariable = true;
                                 pw.println("\u0009STC\u0009" + s.get_tamanyo_componente());
                         pw.println("\u0009TMS");
                         pw.println("\u0009STC\u0009" + s.get_tamanyo_componente());
                         pw.println("\u0009SBT");
                                 pw.println("\u0009PLUS");
-                                pw.println("\u0009DRF");
+                                if(!invoc_acc)
+                                        pw.println("\u0009DRF");
                                 {if (true) return re;}
                         }else {
                         //Caso es una constante
@@ -2243,7 +2251,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         //TODO: Mirar si el plus si que tiene que estar a[1] = 2 por ejemplo
                                         pw.println("\u0009PLUS");
                                         //pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.calcularDesplazamientoDireccion(re.valorEnt -1));
-                                        pw.println("\u0009DRF");
+                                                if(!invoc_acc)
+                                                pw.println("\u0009DRF");
 
                                             {if (true) return re;}
                                 }

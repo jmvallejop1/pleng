@@ -714,6 +714,7 @@ void sentencia():
 				tpID = Simbolo.Tipo_variable.DESCONOCIDO;
 		   	}else if(simbolo_id.ES_REFERENCIA()) {
 		   	  	//Sie s un parametro por referencia hay que hacer un drf porque con el srf no se obtiene la direccion
+		   	  	System.out.println("Referencia");
 				pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
 				pw.println("	DRF");
 		   	}else if(simbolo_id.ES_VECTOR()) {
@@ -836,7 +837,7 @@ void lista_asignables():
   {
     System.out.println("Entro aqui");
     //Obtenemos el simbolo con el nombre del id
-//    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
+    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
     if(s1.ES_VECTOR() && !esComponente) {
           String mensaje = "Valor componente ";
 	      String aux = "";
@@ -885,7 +886,7 @@ void lista_asignables():
 		  		offset+=bytes_componente;
 	      }
       }else if(s1.ES_VECTOR() && esComponente){
-//  	      	System.out.println("Es un acceso a una componente vector");
+  	      	System.out.println("Es un acceso a una componente vector");
       	  	if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
 
 				pw.println("	STC " + s1.get_tamanyo_componente());
@@ -926,6 +927,7 @@ void lista_asignables():
   	    }else {
   	      	//Es o una variable normal o una componente de un vector
   	      	if(esComponente) {
+  	      	  	System.out.println("Entro aquiiiiiiii");
   	      	  	if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
 		      	  	int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
 		          	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
@@ -1424,26 +1426,27 @@ void argumentos(Simbolo id, Simbolo.Tipo_variable tpID,ArrayList<Simbolo > param
    	if(params.size() != parametros_necesarios.size()) {
    	  	//TODO: gestionar excepciones 
 		System.out.println("Error semantico: Los parametros patra invocar a la accion no coinciden "+ params.size() + " , " + parametros_necesarios.size());
-   	}else {
-//   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
-   	  	Simbolo s = new Simbolo();
-   	  	RegistroExpr r = new RegistroExpr();
-   	  	int num_params = params.size();
-   	  	//TODO: mirar si hay que hacer alguna comprobacion mas, por ejemplo DESCONOCIDO
-   	  	for( int i = 0; i < num_params; i++) {
-			s = parametros_necesarios.get(i);
-			r = params.get(i);
-//			tabla_simbolos.imprimirTabla();
-//			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
-			if(s.getVariable() != r.tipo) {
-				//TODO: gestionar excepciones
-				System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
-			}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r.esVariable) {
-			  	//TODO: gestionar excepciones
-			  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
-			}
-			}
-   	  	}
+   	}
+//   	else {
+////   	  	System.out.println("Los parametros para invocar a la accion coinciden "+ params.size() + " , " + parametros_necesarios.size());
+//   	  	Simbolo s = new Simbolo();
+//   	  	RegistroExpr r = new RegistroExpr();
+//   	  	int num_params = params.size();
+//   	  	//TODO: mirar si hay que hacer alguna comprobacion mas, por ejemplo DESCONOCIDO
+//   	  	for( int i = 0; i < num_params; i++) {
+//			s = parametros_necesarios.get(i);
+//			r = params.get(i);
+////			tabla_simbolos.imprimirTabla();
+////			System.out.println("Parametro numero " + i + " tipo_necesario: "+ s.getVariable().toString() + " tipo_pasado: " + r.tipo.toString());
+//			if(s.getVariable() != r.tipo) {
+//				//TODO: gestionar excepciones
+//				System.out.println("Error semantico: Los tipos de los argumentos no coinciden");
+//			}else if(s.getParametro() == Simbolo.Clase_parametro.REF && !r.esVariable) {
+//			  	//TODO: gestionar excepciones
+//			  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
+//			}
+//			}
+//   	  	}
    	}
 
   )? ")")?
@@ -2113,6 +2116,7 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
        	    }
        	}else if(invoc_acc) {
 			if(s.ES_VALOR()) {
+//			  	System.out.println("Eyeyeyyeyyeye");
 			  	pw.println("	DRF");
 			}
        	}
@@ -2123,20 +2127,23 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
 	    return re;
 	}
 
-  }("["re = expresion(false,invoc_acc,s)"]")?
+  }("["re = expresion(false,false,s)"]")?
   {
     if(esvector) {
      	if(re != null) {
      	   	if(re.esVariable) {
      	   	    re = new  RegistroExpr();
+     	   	    System.out.println(";Se ha indexado con una variable");
 				pw.println(";Se ha indexado con una variable");
 				re.tipo = s.getTipoComponente();
+				re.esVariable = true;
 				pw.println("	STC	" + s.get_tamanyo_componente());
           		pw.println("	TMS");
           		pw.println("	STC	" + s.get_tamanyo_componente());
           		pw.println("	SBT");
 				pw.println("	PLUS");
-				pw.println("	DRF");
+				if(!invoc_acc)
+					pw.println("	DRF");
 				return re;
  		   	}else {
  		     	//Caso es una constante
@@ -2167,7 +2174,8 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
  		          		//TODO: Mirar si el plus si que tiene que estar a[1] = 2 por ejemplo
  		          		pw.println("	PLUS");
 				       	//pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.calcularDesplazamientoDireccion(re.valorEnt -1));
-				       	pw.println("	DRF");
+						if(!invoc_acc)
+				       		pw.println("	DRF");
 					    
 					    return re;
 		       		}
