@@ -41,7 +41,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         public static RegistroExpr CHAR(String c) {
                 RegistroExpr reg = new RegistroExpr();
                 reg.tipo= Simbolo.Tipo_variable.CHAR;
-                reg.valorChar = c.charAt(0);
+                reg.valorChar = c.charAt(1);
                 return reg;
         }
 
@@ -1333,6 +1333,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     try {
       t = jj_consume_token(tOPAS);
       r1 = expresion(false,false,null);
+        System.out.println("El resultado de la expresion es "+ r1.valorBool);
+
             if(ac && r1.tipo != id.getTipoComponente()) {
                 //TODO: excepcion no coincide tipo, componente del vector
 //	    	System.out.println("Error semantico: Acceso componente true y no coinciden tipos. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
@@ -1556,9 +1558,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         //TODO: gestionar excepciones
                         System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
                 }else if(s.ES_VALOR() && r1.esVariable && !r1.valor_hecho) {
-//		  	System.out.println("Eyeyeyyeyyeye2");
-                    pw.println(";Variable por valor a\u00c3\u00b1ado DRF");
-//TODO: mirar esto
+                    pw.println(";Variable por valor anado DRF");
                         pw.println("\u0009DRF");
                 }
                 i++;
@@ -1740,7 +1740,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
-                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
+                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
                                                         //TODO: excepciones
 //			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >");
                                                         ok = false;
@@ -1752,12 +1752,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
                                                                         result.valorBool = r1.valorChar > r2.valorChar;
                                                                 }else {
                                                                         result.valorBool =      result.valorEnt > r2.valorEnt;
                                                                 }
+                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
                                                                 //TODO: excepciones no coinciden los tipos
                                                                 System.out.println("No coinciden los tipos en mayor");
@@ -1777,7 +1778,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
-                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
+                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
 //			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <");
                                                         ok = false;
                                                 }
@@ -1788,12 +1789,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
                                                                         result.valorBool = r1.valorChar < r2.valorChar;
                                                                 }else {
                                                                         result.valorBool =      result.valorEnt < r2.valorEnt;
                                                                 }
+                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
                                                                 //TODO: excepciones no coinciden los tipos
                                                                 System.out.println("No coinciden los tipos en menor");
@@ -1813,7 +1815,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
-                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
+                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
 //			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >=");
                                                         ok = false;
                                                 }
@@ -1824,12 +1826,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
                                                                         result.valorBool = r1.valorChar >= r2.valorChar;
                                                                 }else {
                                                                         result.valorBool =      result.valorEnt >= r2.valorEnt;
                                                                 }
+                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
                                                                 //TODO: excepciones no coinciden los tipos
                                                                 System.out.println("No coinciden los tipos en mayor igual");
@@ -1849,7 +1852,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
-                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
+                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
 //			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <=");
                                                         ok = false;
                                                 }
@@ -1860,12 +1863,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
                                                                         result.valorBool = r1.valorChar <= r2.valorChar;
                                                                 }else {
                                                                         result.valorBool =      result.valorEnt <= r2.valorEnt;
                                                                 }
+                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
                                                                 //TODO: excepciones no coinciden los tipos
                                                                 System.out.println("No coinciden los tipos en menor igual");
@@ -1877,14 +1881,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         break;
                                 //TODO: mirar el < > y en = si se puede hacer con booleanos, cadenas, caracteres
                                 case "=":
+
                                         pw.println("\u0009EQ");
-                                        //System.out.println("Detectado =");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR && r1.tipo != Simbolo.Tipo_variable.BOOLEANO ) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
-                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR && r1.tipo != Simbolo.Tipo_variable.BOOLEANO) {
+                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR && r2.tipo != Simbolo.Tipo_variable.BOOLEANO) {
 //			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede =");
                                                         ok = false;
                                                 }
@@ -1895,7 +1899,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
                                                                         result.valorBool = r1.valorChar == r2.valorChar;
                                                                 }else if(r1.tipo == Simbolo.Tipo_variable.ENTERO){
@@ -1903,6 +1906,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }else {
                                                                   result.valorBool =    result.valorBool == r2.valorBool;
                                                                 }
+                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
                                                                 //TODO: excepciones no coinciden los tipos
                                                                 System.out.println("No coinciden los tipos en igual");
@@ -1914,32 +1918,37 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         break;
                                 case "<>":
                                         pw.println("\u0009NEQ");
-                                        //System.out.println("Detectado <>");
+//		  			System.out.println("Detectado <>"+r1.tipo+r2.tipo );
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR && r1.tipo != Simbolo.Tipo_variable.BOOLEANO) {
 //		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
-                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR && r1.tipo != Simbolo.Tipo_variable.BOOLEANO) {
+                                                if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR && r2.tipo != Simbolo.Tipo_variable.BOOLEANO) {
 //			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <>");
                                                         ok = false;
                                                 }
                                         }
                                         if(ok) {
+//		  			  	System.out.println("Detectado <>3"+r1.tipo+r2.tipo );
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
                                                   //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
+
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
+
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
+
                                                                         result.valorBool = r1.valorChar != r2.valorChar;
                                                                 }else if(r1.tipo == Simbolo.Tipo_variable.ENTERO){
                                                                         result.valorBool =      result.valorEnt != r2.valorEnt;
                                                                 }else {
                                                                   result.valorBool =    result.valorBool != r2.valorBool;
                                                                 }
+                                                                result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
+//							  	System.out.println("Detectado <>2"+r1.tipo+r2.tipo );
                                                                 //TODO: excepciones no coinciden los tipos
                                                                 System.out.println("No coinciden los tipos en distinto");
                                                         }
