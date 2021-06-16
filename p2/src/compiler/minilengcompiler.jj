@@ -98,8 +98,8 @@ public class MiniLengCompiler
     //Pasamos como parametro el fichero que queremos compilar
     //Intentamos leer el fichero 
     try {
-      	  //String dir ="C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\programas\\programas\\"+args[0] +".ml";
-      	  String dir ="/Users/lauraomist/Desktop/pleng/p2/programas/programas/"+args[0] +".ml";
+      	  String dir ="C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\programas\\programas\\"+args[0] +".ml";
+      	  //String dir ="/Users/lauraomist/Desktop/pleng/p2/programas/programas/"+args[0] +".ml";
       	  System.out.println(dir);
 	      FileInputStream F = new FileInputStream(dir);
 	      System.setIn(F);
@@ -111,8 +111,8 @@ public class MiniLengCompiler
    
 	 try {
 	   		 //TODO: cambiar esto por el nombre del fichero + code
-	   		 //File cod_inter = new File("C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\codigo_intermedio\\"+args[0]+".code");
-	   		 File cod_inter = new File("/Users/lauraomist/Desktop/pleng/p2/codigo_intermedio/"+args[0]+".code");
+			File cod_inter = new File("C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\codigo_intermedio\\"+args[0]+".code");
+	   		 //File cod_inter = new File("/Users/lauraomist/Desktop/pleng/p2/codigo_intermedio/"+args[0]+".code");
     		 FileWriter fichero_salida = new FileWriter(cod_inter);
    			 pw = new PrintWriter(fichero_salida);
 	         MiniLengCompiler parser = new MiniLengCompiler(System.in);
