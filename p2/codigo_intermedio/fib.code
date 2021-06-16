@@ -71,6 +71,7 @@ L2:
 ;Acceso a variable dato
 	SRF   0  3
 	DRF
+;	comprobamos si esta inicializada la variable dato
 	STC   0
 ; Asignacion.
 	ASG
@@ -99,6 +100,7 @@ L4:
 	SRF	0	3
 	DRF
 	DRF
+;	comprobamos si esta inicializada la variable dato
 	STC   0
 	GT
 ; Asignacion.
@@ -202,8 +204,10 @@ L8:
 ; Acceso a la variable n
 	SRF	0	3
 	DRF
+;	comprobamos si esta inicializada la variable n
 	STC   1
 	SBT
+;Variable por valor añado DRF
 	DRF
 ;Acceso a la variable r1
 ; Acceso a la variable r1
@@ -215,8 +219,10 @@ L8:
 ; Acceso a la variable n
 	SRF	0	3
 	DRF
+;	comprobamos si esta inicializada la variable n
 	STC   2
 	SBT
+;Variable por valor añado DRF
 	DRF
 ;Acceso a la variable r2
 ; Acceso a la variable r2
@@ -226,6 +232,7 @@ L8:
 ;Acceso a variable r
 	SRF   0  4
 	DRF
+;	comprobamos si esta inicializada la variable r
 ;Acceso a la variable r1
 ; Acceso a la variable r1
 	SRF	0	5
@@ -243,6 +250,7 @@ L9:
 ;Acceso a variable r
 	SRF   0  4
 	DRF
+;	comprobamos si esta inicializada la variable r
 ;Acceso a la variable n
 ; Acceso a la variable n
 	SRF	0	3
@@ -264,6 +272,7 @@ L0:
 ;Acceso a la variable n
 ; Acceso a la variable n
 	SRF	0	4
+;Variable por valor añado DRF
 	DRF
 ;Acceso a la variable r
 ; Acceso a la variable r
