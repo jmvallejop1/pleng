@@ -1319,7 +1319,8 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
 //				System.out.println("Error semantico: Los vectores NO coinciden en tamanyo. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 			}else {
 				System.out.println("Los vectores SI coinciden en tamanyo");
-				
+
+				//TODO: asignar un vector dentro de una funcion pasando otro vector por referencia
 				int bytes_componente = id.get_tamanyo_componente();
 				int offset = bytes_componente;
 				pw.println("	ASG");
@@ -1402,7 +1403,7 @@ void seleccion():
     pw.println("	JMF " + etiqSINO);
     Token t = getToken(0);
     if(r.tipo == Simbolo.Tipo_variable.BOOLEANO && !r.esVariable){
-      //TODO mirar este if si hay que ejecutarlo
+      //TODO mirar este if si hay que ejecutarlo, se puede mirar de eliminar el codigo muerto pasando un booleano
      	if(r.valorBool) {
      	 	System.out.println("Este codigo siempre se va a ejecutar porque es una constante TRUE");
      	}else {
