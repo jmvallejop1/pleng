@@ -1,32 +1,233 @@
 ; Programa leer_vectores_basico.
 	ENP  L0
 ; Comienzo del programa leer_vectores_basico
-L0:
-;Acceso a variable e
-;Inicial vector
-	SRF   0  4
-	STC   3
-	STC	2
-	TMS	
-	STC	2
-	SBT		
-	PLUS		
-	STC   7
+	 JMP	L1
+;Accion asignar_componente_vector
+L1:
+; rec. parametro v3 de tipo ENTERO pasado por REF
+	 SRF   0  3
+	 ASGI
+;Acceso a variable v3
+	SRF   0  3
+	DRF
+	STC   8
+; Asignacion.
 	ASG
+; Fin de la accion 
+CSF
+	 JMP	L2
+;Accion leer_componente
+L2:
+; rec. parametro v4 de tipo ENTERO pasado por REF
+	 SRF   0  3
+	 ASGI
+; Lectura
+; Leer parametro por referenciav4
+	 SRF   0  3
+	 DRF
+	 RD    1
+; Leer parametro por referencia v4
+; Fin de la accion 
+CSF
+	STC   3
+	 JMP	L3
+;Accion escribir_vec
+L3:
+; rec. parametro v5 de tipo VECENT pasado por REF
+	 SRF   0  3
+	 ASGI
 ; Escritura
+;Acceso a la variable v5
+; Acceso al vector v5
+	SRF	0	3
+	DRF
+	DRF
+	WRT		1
+;Escritura variablea la variable v5
+	SRF	0	3
+	DRF
+	STC	2
+	PLUS
+	DRF
+	WRT		1
+;Escritura variablea la variable v5
+	SRF	0	3
+	DRF
+	STC	4
+	PLUS
+	DRF
+	WRT		1
+; Fin de la accion 
+CSF
+	 JMP	L4
+;Accion escribir_componente
+L4:
+; rec. parametro v6 de tipo ENTERO pasado por REF
+	 SRF   0  3
+	 ASGI
+; Escritura
+;Acceso a la variable v6
+; Acceso a la variable v6
+	SRF	0	3
+	DRF
+	DRF
+	WRT		1
+; Fin de la accion 
+CSF
+L0:
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  10
+	STC   4
+; Asignacion.
+	ASG
+; Lectura
+; Leer variable vector e
+	 SRF   0  4
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		49
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		50
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  6
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		51
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  8
+	 RD    1
+;Acceso a variable escribir_componente
 ;Acceso a la variable e
 ; Acceso al vector e
 	SRF	0	4
-	STC   2
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	10
+	DRF
 	STC   1
-	PLUS
-; Acceso a la variable e[3]
+	STC   3
+	TMS
+	SBT
+;Se ha indexado con una variable
 	STC	2
 	TMS
 	STC	2
 	SBT
 	PLUS
-	DRF
-	WRT		1
+; Invocando a ESCRIBIR_COMPONENTE
+	 OSF   16  0 L4
 ; Fin del programa leer_vectores_basico
 LVP
