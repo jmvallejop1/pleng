@@ -207,8 +207,6 @@ L8:
 ;	comprobamos si esta inicializada la variable n
 	STC   1
 	SBT
-;Variable por valor añado DRF
-	DRF
 ;Acceso a la variable r1
 ; Acceso a la variable r1
 	SRF	0	5
@@ -222,8 +220,6 @@ L8:
 ;	comprobamos si esta inicializada la variable n
 	STC   2
 	SBT
-;Variable por valor añado DRF
-	DRF
 ;Acceso a la variable r2
 ; Acceso a la variable r2
 	SRF	0	7
