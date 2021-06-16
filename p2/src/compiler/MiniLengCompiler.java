@@ -745,7 +745,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }else{
                     accesoComponente = true;
 //	          	System.out.println("Acceso a componente del vector aa");
-                        if(r.valorEnt > simbolo_id.getLongitud()) {
+                        if(r.valorEnt > simbolo_id.getLongitud() || r.valorEnt < 1) {
                                  //TODO: excepciones, la componente solicitada esta fuera de rango
 //	    	  	  	System.out.println("Error semantico: Acceso componente fuera de rango. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
                         }
