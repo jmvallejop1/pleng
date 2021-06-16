@@ -1,5 +1,5 @@
 /**
- * EspecificaciÃ³n JavaCC para la PrÃ¡ctica 2 (Procesadores de Lenguajes)
+ * EspecificaciÃƒÂ³n JavaCC para la PrÃƒÂ¡ctica 2 (Procesadores de Lenguajes)
  * Javier Fabra - jfabra@unizar.es
  * v1.2 - 2021/03/08
  */
@@ -86,7 +86,7 @@ public class MiniLengCompiler
   static int nivel = 0;
   static final int INICIAL = 3;
 
-  //Inicializacion de la direccion para aï¿½adir a la tabla de simbolos
+  //Inicializacion de la direccion para aÃ¯Â¿Â½adir a la tabla de simbolos
   
   public static int dir = INICIAL;
   public static int dir0 = INICIAL;
@@ -99,7 +99,7 @@ public class MiniLengCompiler
     //Intentamos leer el fichero 
     try {
       	  //String dir ="C:\\Users\\Jmval\\OneDrive\\Escritorio\\pleng\\p2\\programas\\programas\\"+args[0] +".ml";
-      	  String dir = "/Users/lauraomist/Desktop/pleng/p2/programas/programas/" + args[0] +".ml";
+      	  String dir ="/Users/lauraomist/Desktop/pleng/p2/programas/programas/"+args[0] +".ml";
       	  System.out.println(dir);
 	      FileInputStream F = new FileInputStream(dir);
 	      System.setIn(F);
@@ -220,7 +220,7 @@ TOKEN : /* VALORES */
 //  System.out.println("he encontrado un vector");
 }
 | < tNUM : (<tCifra>)+ >
-| <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "ï¿½") "\"" >
+| <  tCAR : "\"" (<tLetra> | <tCifra> | <tSigno> | " " | "." | "," | ";" | "*" | ":" | "(" | ")" | "/" | "?"| "Ã¯Â¿Â½") "\"" >
 | <  tCADENA : "\"" (<tLetra> |<tCifra>|<tSigno>| " "|"."|","|";"|"*"|":"|"("|")"|"/"|"?")+  "\"" >
 | <  tCifra : ["0"-"9"] >
 | <  tLetra: ["a"-"z"] >
@@ -357,7 +357,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
 			          }
 	 		          s1 = tabla_simbolos.introducir_variable_vector(id1.image,tipo_aux,r.valorEnt, nivel,dir);
 	 		          
-						//System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+						//System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 						//TODO: cambiar get tamanyo para que devuelva longitud * tipovec
 	 		          dir += s1.get_tamanyo();
 	 		        }
@@ -366,7 +366,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	 		}else {
 //	 			System.out.println("Se ha detectado una variable normal, se procede con normalidad");
 	 		  	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
-				//System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+				//System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 				dir += s1.get_tamanyo();
 	 		} 	
 	  	}catch(SimboloYaDeclaradoException e2) {
@@ -409,7 +409,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
 			            tipo_aux = Simbolo.Tipo_variable.VECBOOL;
 			          }
 	 		          s2 = tabla_simbolos.introducir_variable_vector(id2.image,tipo_aux,r.valorEnt, nivel,dir);
-				//System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+				//System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 	 		          
 						//TODO: cambiar get tamanyo para que devuelva longitud * tipovec
 	 		          dir += s2.get_tamanyo();
@@ -419,7 +419,7 @@ void identificadores(Simbolo.Tipo_variable tipo):
 	 		}else {
 //	 			System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
 	 		  	s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir);
-				//System.out.println("Voy a aumentar el tamaño en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
+				//System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
 				dir += s2.get_tamanyo();
 	 		}
 	 		esVector = false;
@@ -541,7 +541,7 @@ void parametros(Simbolo simbolo_accion):
 			dir+=1;//param.get_tamanyo();
 	    	//Introducimos el parametro a la lista de los parametros del simbolo de la accion he hemos ido propagando
 	    	simbolo_accion.addParametro(param);
-	    	//System.out.println("Aï¿½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
+	    	//System.out.println("AÃ¯Â¿Â½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
 	    }else{
 	      	//Caso vector
 	      	if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
@@ -612,7 +612,7 @@ void parametros(Simbolo simbolo_accion):
 			dir+= 1;//param2.get_tamanyo();
 	    	//Introducimos el parametro a la lista de los parametros del simbolo de la accion he hemos ido propagando
 	    	simbolo_accion.addParametro(param2);
-	    	//System.out.println("Aï¿½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
+	    	//System.out.println("AÃ¯Â¿Â½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
 	    }else{
 	      	//Caso vector
 	      	if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
@@ -745,15 +745,9 @@ void sentencia():
 				tpID = Simbolo.Tipo_variable.DESCONOCIDO;
 		   	}else if(simbolo_id.ES_REFERENCIA()) {
 		   	  	//Sie s un parametro por referencia hay que hacer un drf porque con el srf no se obtiene la direccion
-
 		   	  	System.out.println("Referencia");
 				pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
 				pw.println("	DRF");
-				pw.println(";	comprobamos si esta inicializada la variable " + simbolo_id.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");
 		   	}else if(simbolo_id.ES_VECTOR()) {
 		        pw.println(";Inicial vector");
 		        pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
@@ -761,13 +755,8 @@ void sentencia():
 	        
 		     }else {
 		        //Es una variable normal, solo hay que hacer srf
-		        //Si una variable se lee por pantalla se supone que queda incializada,
-			 	pw.println("; Direccion de la variable " + simbolo_id.getNombre() + " SE INCICIALIZA LA VARIABLE NORMAL");
+			 	pw.println("; Direccion de la variable " + simbolo_id.getNombre());
 			 	pw.println("	SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
-			 	//valor centinela
-			 	pw.println(";Inicializamos con valor centinela la variable " + simbolo_id.getNombre());
-			 	pw.println("	STC   " + "77777");
-			 	pw.println("	ASG");
 			 }
 		}	
 	
@@ -865,11 +854,6 @@ void lista_asignables():
   	  	pw.println("; Leer parametro por referencia" + s1.getNombre());
       	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
       	pw.println("\t DRF");
-      	/*pw.println(";	comprobamos si esta inicializada la variable " + s1.getNombre());
-		pw.println("	DUP");
-		pw.println("	STC 77777");
-		pw.println("	EQ");
-		pw.println("	JMT error_inicializada");*/
       	if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){ 
     		pw.println("\t RD    1");
   	  	}
@@ -966,11 +950,6 @@ void lista_asignables():
   	      for(int i = 0; i < s1.getLongitud(); i++) {
 	  	       	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
 	  	       	pw.println("\t DRF");
-	  	       	/*pw.println(";	comprobamos si esta inicializada la variable " + s1.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");*/
 	  	       	if (s1.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 		    		pw.println("\t RD    1");
 		  	  	}
@@ -1043,12 +1022,6 @@ void lista_asignables():
   	    pw.println("; Leer parametro por referencia " + s2.getNombre());
       	pw.println("\t SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
       	pw.println("\t DRF");
-      	(
-      	/*pw.println(";	comprobamos si esta inicializada la variable " + s2.getNombre());
-		pw.println("	DUP");
-		pw.println("	STC 77777");
-		pw.println("	EQ");
-		pw.println("	JMT error_inicializada");*/
       	if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){ 
     		pw.println("\t RD    1");
   	  	}
@@ -1132,11 +1105,6 @@ void lista_asignables():
   	      for(int i = 0; i < s2.getLongitud(); i++) {
 	  	       	pw.println("\t SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
 	  	       	pw.println("\t DRF");
-	  	       	/*pw.println(";	comprobamos si esta inicializada la variable " + s2.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");*/
 	  	       	if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 		    		pw.println("\t RD    1");
 		  	  	}
@@ -1152,11 +1120,6 @@ void lista_asignables():
 		      	  	int offset = (r.valorEnt - 1) * s2.get_tamanyo_componente();
 		          	pw.println("\t SRF   " + (nivel - s2.getNivel()) + "  " + (s2.getDir()+offset));
 		          	pw.println("\t DRF");
-		          	/*pw.println(";	comprobamos si esta inicializada la variable " + s2.getNombre());
-					pw.println("	DUP");
-					pw.println("	STC 77777");
-					pw.println("	EQ");
-					pw.println("	JMT error_inicializada");*/
 		          	if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){ 
 			    		pw.println("\t RD    1");
 			  	  	}
@@ -1245,11 +1208,6 @@ void lista_escribibles():
        	 		pw.println("	STC	"+ offset);
    	 			pw.println("	PLUS");
        	 		pw.println("	DRF");
-       	 		pw.println(";	comprobamos si esta inicializada la variable " + r1.sim.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");
        	 		if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 		  		  	pw.println("	WRT		1");
 		  		}else {
@@ -1295,11 +1253,6 @@ void lista_escribibles():
        	 		pw.println("	STC	"+ offset);
    	 			pw.println("	PLUS");
        	 		pw.println("	DRF");
-       	 		pw.println(";	comprobamos si esta inicializada la variable " + r2.sim.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");
        	 		if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 		  		  	pw.println("	WRT		1");
 		  		}else {
@@ -1364,7 +1317,7 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
 //	      	System.out.println("Error semantico: No se pueden asignar las cadenas, solo para escritura .En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 	   	}else if(id.ES_VECTOR()) {
 			if(id.getLongitud() != r1.tam_vec) {
-				//TODO: excepciones no coinciden en tama�o no se puede asignar
+				//TODO: excepciones no coinciden en tamaï¿½o no se puede asignar
 //				System.out.println("Error semantico: Los vectores NO coinciden en tamanyo. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
 			}else {
 				System.out.println("Los vectores SI coinciden en tamanyo");
@@ -1378,16 +1331,6 @@ void asignacion(Simbolo id, RegistroExpr r, Simbolo.Tipo_variable tpID,boolean a
 				  	pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + (id.getDir()+offset));
 					pw.println("	SRF   " + (nivel - r1.sim.getNivel()) + "  " + (r1.sim.getDir()+offset));
         			pw.println("	DRF");
-
-
-        			//no estoy seguro de si aqui hace falta hacer la comprobacion
-        			pw.println(";	comprobamos si esta inicializada la variable " + id.getNombre());
-					pw.println("	DUP");
-					pw.println("	STC 77777");
-					pw.println("	EQ");
-					pw.println("	JMT error_inicializada");
-
-				
         			pw.println("	ASG");
         			offset+=bytes_componente;
 				}
@@ -1567,7 +1510,7 @@ ArrayList<RegistroExpr> lista_expresiones(Simbolo id, Simbolo.Tipo_variable tpID
 		  	//TODO: gestionar excepciones
 		  	System.out.println("Error semantico: Se esperaba un parametro por referecncia, no por valor");
 		}else if(s.ES_VALOR() && r1.esVariable) {
-		    System.out.println("Variable por valor a�ado DRF");
+		    System.out.println("Variable por valor añado DRF");
 		  	pw.println("	DRF");
 		}
 		i++;
@@ -2182,7 +2125,7 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
    	 	//Caso variable normal
        	re = new  RegistroExpr();
        	if(s.ES_VALOR()) {
-				System.out.println("Es un parametro por valor");
+				System.out.println("Es un parametro por valoor");
        	}
 	    pw.println("; Acceso a la variable " + s.getNombre());
        	pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.getDir());
@@ -2190,29 +2133,14 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
        	//Estamos en una invocacion de la accion
        	if(!invoc_acc){
        	  	pw.println("	DRF");
-       	  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-			pw.println("	DUP");
-			pw.println("	STC 77777");
-			pw.println("	EQ");
-			pw.println("	JMT error_inicializada");
        	 	if(s.ES_REFERENCIA()){
        	 	  	//Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
        	 	  	pw.println("	DRF");
-       	 	  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");
        	    }
        	}else if(invoc_acc) {
 			if(s.ES_VALOR()) {
 //			  	System.out.println("Eyeyeyyeyyeye");
 			  	pw.println("	DRF");
-			  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");
 			}
        	}
 	    re.tipo = s.getVariable();
@@ -2269,12 +2197,6 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
  		          		//TODO: Mirar si el plus si que tiene que estar a[1] = 2 por ejemplo
  		          		pw.println("	PLUS");
 				       	//pw.println("	SRF	"+  (nivel - s.getNivel()) + "	" + s.calcularDesplazamientoDireccion(re.valorEnt -1));
-				       	pw.println("	DRF");
-				       	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-						pw.println("	DUP");
-						pw.println("	STC 77777");
-						pw.println("	EQ");
-						pw.println("	JMT error_inicializada");
 						if(!invoc_acc)
 				       		pw.println("	DRF");
 					    
@@ -2292,19 +2214,9 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
 		    re.sim = s;
 		    if(!invoc_acc){
 	       	  	pw.println("	DRF");
-	       	  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-				pw.println("	DUP");
-				pw.println("	STC 77777");
-				pw.println("	EQ");
-				pw.println("	JMT error_inicializada");
 	       	 	if(s.ES_REFERENCIA()){
 	       	 	  	//Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
 	       	 	  	pw.println("	DRF");
-	       	 	  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-					pw.println("	DUP");
-					pw.println("	STC 77777");
-					pw.println("	EQ");
-					pw.println("	JMT error_inicializada");
 	       	    }
        		}
 		   
@@ -2345,4 +2257,3 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
      return RegistroExpr.BOOL(false);
   }
 }
-

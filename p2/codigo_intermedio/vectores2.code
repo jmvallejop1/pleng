@@ -77,11 +77,8 @@ L0:
 	 SRF   0  26
 	 RD    1
 ;Acceso a variable suma
-; Direccion de la variable suma SE INCICIALIZA LA VARIABLE NORMAL
+; Direccion de la variable suma
 	SRF   0  28
-;Inicializamos con valor centinela la variable suma
-	STC   77777
-	ASG
 	STC   0
 ; Asignacion.
 	ASG
@@ -91,20 +88,10 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
-;	comprobamos si esta inicializada la variable i
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 ;Acceso a la variable n
 ; Acceso a la variable n
 	SRF	0	26
 	DRF
-;	comprobamos si esta inicializada la variable n
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	LT
 	JMF	L2
 ; Escritura
@@ -153,11 +140,6 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
-;	comprobamos si esta inicializada la variable i
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	STC   1
 	PLUS
 	WRT		1
@@ -173,11 +155,6 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
-;	comprobamos si esta inicializada la variable i
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	STC   1
 	PLUS
 	STC 2
@@ -187,20 +164,12 @@ L1:
 	 PLUS
 	 RD    1
 ;Acceso a variable suma
-; Direccion de la variable suma SE INCICIALIZA LA VARIABLE NORMAL
+; Direccion de la variable suma
 	SRF   0  28
-;Inicializamos con valor centinela la variable suma
-	STC   77777
-	ASG
 ;Acceso a la variable suma
 ; Acceso a la variable suma
 	SRF	0	28
 	DRF
-;	comprobamos si esta inicializada la variable suma
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 ;Acceso a la variable valores
 ; Acceso al vector valores
 	SRF	0	4
@@ -208,11 +177,6 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
-;	comprobamos si esta inicializada la variable i
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	STC   1
 	PLUS
 ;Se ha indexado con una variable
@@ -226,20 +190,12 @@ L1:
 ; Asignacion.
 	ASG
 ;Acceso a variable i
-; Direccion de la variable i SE INCICIALIZA LA VARIABLE NORMAL
+; Direccion de la variable i
 	SRF   0  24
-;Inicializamos con valor centinela la variable i
-	STC   77777
-	ASG
 ;Acceso a la variable i
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
-;	comprobamos si esta inicializada la variable i
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	STC   1
 	PLUS
 ; Asignacion.
@@ -279,92 +235,60 @@ L2:
 ; Acceso al vector valores
 	SRF	0	4
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	6
+	SRF	0	4
+	STC	2
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	8
+	SRF	0	4
+	STC	4
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	10
+	SRF	0	4
+	STC	6
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	12
+	SRF	0	4
+	STC	8
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	14
+	SRF	0	4
+	STC	10
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	16
+	SRF	0	4
+	STC	12
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	18
+	SRF	0	4
+	STC	14
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	20
+	SRF	0	4
+	STC	16
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ;Escritura variablea la variable valores
-	SRF	0	22
+	SRF	0	4
+	STC	18
+	PLUS
 	DRF
-;	comprobamos si esta inicializada la variable valores
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ; Escritura
 ;cadena	"suma es:"
@@ -388,11 +312,6 @@ L2:
 ; Acceso a la variable suma
 	SRF	0	28
 	DRF
-;	comprobamos si esta inicializada la variable suma
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	WRT		1
 ; Escritura
 ;cadena	"La media es: "
@@ -426,20 +345,10 @@ L2:
 ; Acceso a la variable suma
 	SRF	0	28
 	DRF
-;	comprobamos si esta inicializada la variable suma
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 ;Acceso a la variable n
 ; Acceso a la variable n
 	SRF	0	26
 	DRF
-;	comprobamos si esta inicializada la variable n
-	DUP
-	STC 77777
-	EQ
-	JMT error_inicializada
 	DIV
 	WRT		1
 ; Fin del programa media_vectores
