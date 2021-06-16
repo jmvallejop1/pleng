@@ -1,0 +1,17 @@
+; Programa media_vectores.
+	ENP  L0
+; Comienzo del programa media_vectores
+L0:
+;Acceso a variable n
+; Direccion de la variable nSE INCICIALIZA LA VARIABLE NORMAL
+	SRF   0  4
+;Acceso a la variable n
+; Acceso a la variable n
+	SRF	0	4
+	DRF
+	STC   1
+	PLUS
+; Asignacion.
+	ASG
+; Fin del programa media_vectores
+LVP

@@ -13,7 +13,8 @@ principio
      % NOTA: si introducís un n mayor de 10, el programa debe detectar overflow. 
      % Si es 0 o negativo, debe detectar underflow.
 
-     i := 0;
+     %i := 0;
+     
      suma := 0;
 
      mq i < n
