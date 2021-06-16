@@ -91,19 +91,17 @@ public interface MiniLengCompilerConstants {
   /** RegularExpression Id. */
   int tID = 50;
   /** RegularExpression Id. */
-  int tIDv = 51;
+  int tNUM = 51;
   /** RegularExpression Id. */
-  int tNUM = 52;
+  int tCAR = 52;
   /** RegularExpression Id. */
-  int tCAR = 53;
+  int tCADENA = 53;
   /** RegularExpression Id. */
-  int tCADENA = 54;
+  int tCifra = 54;
   /** RegularExpression Id. */
-  int tCifra = 55;
+  int tLetra = 55;
   /** RegularExpression Id. */
-  int tLetra = 56;
-  /** RegularExpression Id. */
-  int tSigno = 57;
+  int tSigno = 56;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -165,7 +163,6 @@ public interface MiniLengCompilerConstants {
     "\"+\"",
     "\"-\"",
     "<tID>",
-    "\"vector\"",
     "<tNUM>",
     "<tCAR>",
     "<tCADENA>",

@@ -125,8 +125,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           Simbolo p = new Simbolo();
           p = tabla_simbolos.introducir_programa(programa.image,dir);
           dir++;
-          //Escribimos en el fichero de codigo intermedio el programa
-//	  System.out.println("Voy a escribir probrama en .code");
 
           pw.println("; Programa " + programa.image + ".");
           //Introducimos la primera intruccion de inicio de programa
@@ -145,7 +143,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         pw.println("LVP");
            pw.close();
     } catch (ParseException e) {
-//    System.out.println("1");
     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la creacion del programa");
     }
   }
@@ -168,7 +165,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_consume_token(tFIN_SENTENCIA);
       }
     } catch (ParseException e) {
-      //TODO: idea->crear una variable booleana que indique que ha ocurrido un error
           SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la declaracion de variables");
     }
   }
@@ -218,10 +214,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
              r = null;
              esVector = false;
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 58:
-        jj_consume_token(58);
+      case 57:
+        jj_consume_token(57);
         r = expresion(true,false,null);
-        jj_consume_token(59);
+        jj_consume_token(58);
                 esVector = true;
         break;
       default:
@@ -231,20 +227,15 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             try {
                         if(esVector) {
                            if(r.esVariable) {
-                             //TODO: excepciones, tiene que ser una constante positiva, no una variable
-//	 		     System.out.println("Error semantico: Se ha detectado una varieable vector y es un identificador no cont entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+                             System.out.println("Error semantico: Definicion de vector sin constante entera - linea "+id1.beginLine + " columna " + id1.beginColumn);
                            }else {
                              //Caso es una constante
                              if(r.tipo != Simbolo.Tipo_variable.ENTERO) {
-//	 		       System.out.println("Error semantico: Se ha detectado una varieable vector y no es constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
-                               //TODO: expeciones tiene que ser una constante entera
+                               System.out.println("Error semantico: Definicion de vector sin constante entera - linea "+id1.beginLine + " columna " + id1.beginColumn);
                              }else {
                                 if(r.valorEnt <= 0) {
-//	 		          System.out.println("Error semantico: Se ha detectado una varieable vector y no es positivo. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
-                                  //TODO: excepciones tiene que ser una constante positiva
+                                  System.out.println("Error semantico: Definicion de vector con constante negativa o 0 - linea "+id1.beginLine + " columna " + id1.beginColumn);
                                 }else {
-//	 		          System.out.println("Se ha detectado una varieable vector llamada: " + id1.image +" y de tam: "+r.valorEnt + " y se puede declarar");
-                                  //Se puede declarar el vector
                                   if(tipo == Simbolo.Tipo_variable.ENTERO) {
                                     tipo_aux = Simbolo.Tipo_variable.VECENT;
                                   }else if(tipo == Simbolo.Tipo_variable.CHAR) {
@@ -253,17 +244,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                     tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                                   }
                                   s1 = tabla_simbolos.introducir_variable_vector(id1.image,tipo_aux,r.valorEnt, nivel,dir);
-
-                                                //System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
-                                                //TODO: cambiar get tamanyo para que devuelva longitud * tipovec
                                   dir += s1.get_tamanyo();
                                 }
                              }
                            }
                         }else {
-//	 			System.out.println("Se ha detectado una variable normal, se procede con normalidad");
                                 s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
-                                //System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
                                 dir += s1.get_tamanyo();
                         }
                 }catch(SimboloYaDeclaradoException e2) {
@@ -272,22 +258,22 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 60:
+        case 59:
           ;
           break;
         default:
           jj_la1[3] = jj_gen;
           break label_2;
         }
-        jj_consume_token(60);
+        jj_consume_token(59);
         id2 = jj_consume_token(tID);
              r = null;
              esVector = false;
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 58:
-          jj_consume_token(58);
+        case 57:
+          jj_consume_token(57);
           r = expresion(true,false,null);
-          jj_consume_token(59);
+          jj_consume_token(58);
              esVector = true;
           break;
         default:
@@ -298,19 +284,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
               if(esVector) {
                            if(r.esVariable) {
                              //TODO: excepciones, tiene que ser una constante positiva, no una variable
-                             System.out.println("Error semantico: Se ha detectado una varieable vector y es un identificador no const entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+                             System.out.println("Error semantico: Definicion de vector sin constante entera - linea "+id2.beginLine + " columna " + id2.beginColumn);
                            }else {
                              //Caso es una constante
                              if(r.tipo != Simbolo.Tipo_variable.ENTERO) {
-                               System.out.println("Error semantico: Se ha detectado una varieable vector y no es constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+                               System.out.println("Error semantico: Definicion de vector sin constante entera - linea "+id2.beginLine + " columna " + id2.beginColumn);
                                //TODO: expeciones tiene que ser una constante entera
                              }else {
                                 if(r.valorEnt <= 0) {
-                                  System.out.println("Error semantico: Se ha detectado una varieable vector y no es positivo. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
-                                  //TODO: excepciones tiene que ser una constante positiva
+                                   System.out.println("Error semantico: Definicion de vector con constante negativa o 0 - linea "+id1.beginLine + " columna " + id1.beginColumn);
                                 }else {
-                                  System.out.println("Se ha detectado una varieable vector y se puede declarar");
-                                  //Se puede declarar el vector
                                   if(tipo == Simbolo.Tipo_variable.ENTERO) {
                                     tipo_aux = Simbolo.Tipo_variable.VECENT;
                                   }else if(tipo == Simbolo.Tipo_variable.CHAR) {
@@ -319,17 +302,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                     tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                                   }
                                   s2 = tabla_simbolos.introducir_variable_vector(id2.image,tipo_aux,r.valorEnt, nivel,dir);
-                                //System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
-
-                                                //TODO: cambiar get tamanyo para que devuelva longitud * tipovec
                                   dir += s2.get_tamanyo();
                                 }
                              }
                            }
                         }else {
-//	 			System.out.println("Se ha detectado una varieable normal, se procede con normalidad");
                                 s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir);
-                                //System.out.println("Voy a aumentar el tamaÃ±o en: " +s1.get_tamanyo()+ " por "+ s1.getNombre());
                                 dir += s2.get_tamanyo();
                         }
                         esVector = false;
@@ -338,6 +316,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
       }
     } catch (ParseException e) {
+    //TODO:Mejorar esto 
     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el identificador");
     }
   }
@@ -370,10 +349,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         dir = sim.getDir();
         pw.println("; Fin de la accion " + s);
         pw.println("CSF");
-            //tabla_simbolos.imprimirTabla();
-            //System.out.println("Voy a eliminar las variables del nivel " + nivel);
             tabla_simbolos.eliminar_variables(nivel);
-            //System.out.println("Voy a eliminar acciones");
             tabla_simbolos.ocultar_parametros(nivel);
             tabla_simbolos.eliminar_acciones(nivel);
             tabla_simbolos.eliminar_parametros_ocultos(nivel+1);
@@ -391,15 +367,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         //Justo despues de registrar la accion en la tabla de simbolos, incrementamos el nivel en uno.
         simbolo_accion = tabla_simbolos.introducir_accion(id_accion.image,nivel,dir,etACC);
 
-        //System.out.println("Voy a aumrntar el nivel " + (nivel +1));
         dir = INICIAL;
             nivel++;
 
         }catch(SimboloYaDeclaradoException e2) {
+                //TODO: aqui ninca llega salta antes la excepcion
                 //System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image() + " En la linea " + id_accion.beginLine + " y la columna " + id_accion.beginColumn);
         }
     parametros_formales(simbolo_accion);
-//    tabla_simbolos.imprimirTabla();
     {if (true) return simbolo_accion;}
     throw new Error("Missing return statement in function");
   }
@@ -407,10 +382,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   static final public void parametros_formales(Simbolo simbolo_accion) throws ParseException {
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 61:
-        jj_consume_token(61);
+      case 60:
+        jj_consume_token(60);
         lista_parametros(simbolo_accion);
-        jj_consume_token(62);
+        jj_consume_token(61);
         break;
       default:
         jj_la1[6] = jj_gen;
@@ -455,10 +430,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       tipo = tipo_variables();
       id1 = jj_consume_token(tID);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 58:
-        jj_consume_token(58);
+      case 57:
+        jj_consume_token(57);
         r = expresion(false, false,null);
-        jj_consume_token(59);
+        jj_consume_token(58);
         break;
       default:
         jj_la1[8] = jj_gen;
@@ -466,34 +441,25 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       }
           try {
             if(r== null) {
-               //System.out.println("Voy a introduxir un parametro" + simbolo_accion.getNombre() +" "+ id1.image);
                 //introducimos el parametro actual en la tabla de simbolos
                 param = tabla_simbolos.introducir_parametro(id1.image,tipo, clase, nivel,dir);
                         dir+=1;//param.get_tamanyo();
                 //Introducimos el parametro a la lista de los parametros del simbolo de la accion he hemos ido propagando
                 simbolo_accion.addParametro(param);
-                //System.out.println("AÃ¯Â¿Â½adido nuevo parametro a la accion:" +simbolo_accion.getListaParametros().toString());
             }else{
                 //Caso vector
                 if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
-//	      	  	System.out.println("Se declara un vector como parametro");
-                        //El vector esta bien definido
                         Simbolo.Tipo_variable tipo_aux = null;
-                        int a  =0;
                         if(tipo == Simbolo.Tipo_variable.ENTERO) {
-                                a= 2;
                         tipo_aux = Simbolo.Tipo_variable.VECENT;
                         }else if(tipo == Simbolo.Tipo_variable.CHAR) {
-                                a=1;
                         tipo_aux = Simbolo.Tipo_variable.VECCHAR;
                         }else {
-                                a=1;
                         tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                         }
                         if(clase == Simbolo.Clase_parametro.REF) {
                                 param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo, clase, r.valorEnt, nivel, dir);
                                 dir +=  1;//param.get_tamanyo();
-        //	      	  	System.out.println("He introducido el vector a la lista de params");
                                 simbolo_accion.addParametro(param);
                         }else {
                           //TODO: excepciones no se puede pasar un vector entero como parametro por valor
@@ -532,20 +498,20 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       label_5:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 60:
+        case 59:
           ;
           break;
         default:
           jj_la1[9] = jj_gen;
           break label_5;
         }
-        jj_consume_token(60);
+        jj_consume_token(59);
         id2 = jj_consume_token(tID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 58:
-          jj_consume_token(58);
+        case 57:
+          jj_consume_token(57);
           r = expresion(false,false,null);
-          jj_consume_token(59);
+          jj_consume_token(58);
           break;
         default:
           jj_la1[10] = jj_gen;
@@ -553,7 +519,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
           try {
             if(r == null) {
-               //System.out.println("Voy a introduxir un parametro" + simbolo_accion.getNombre() +" "+ id1.image);
                 //introducimos el parametro actual en la tabla de simbolos
                 param2 = tabla_simbolos.introducir_parametro(id2.image,tipo, clase, nivel,dir);
                         dir+= 1;//param2.get_tamanyo();
@@ -624,12 +589,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   //Lista necesaria para recuperar los parametros en la invicacion de la accion
   ArrayList<Simbolo> lista_param = new ArrayList<Simbolo>();
     try {
-//  	  System.out.println("Entro a bloque sentencias");
-          //Generamos nueva etiqueta para el comienzo de las acciones de la accion
-
-
           //Es una accion hay una etiqueta para saber donde empiezan las intrucciones de la accion
-
           //Obtenemos los parametros de la accion
           lista_param = s.getListaParametros();
           //Recorremos la lista de forma inversa porque los parametros estan apilados al reves
@@ -652,10 +612,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       jj_consume_token(tPRINCIPIO);
       lista_sentencias();
       jj_consume_token(tFIN);
-
     } catch (ParseException e) {
-//    System.out.println("1");
-
         SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en el bloque de sentencias");
     }
   }
@@ -700,19 +657,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     case tID:
       id = jj_consume_token(tID);
                 pw.println(";Acceso a variable " + id.image);
-//   		System.out.println("SE entra a sentencia "+ id.image);
                 simbolo_id = tabla_simbolos.buscar_simbolo(id.image);
                 if(simbolo_id == null){
                         //TODO: excepciones no eciste el simbolo
                 }else if(simbolo_id.ES_VARIABLE() || simbolo_id.ES_PARAMETRO()) {
-// 		    System.out.println("Es una variable");
                         if(simbolo_id.ES_VALOR()) {
-                                //TODO: expeciones no se puede asignar nada a algo por valor
-                                System.out.println("Error semantico, no se puede asignar un valor a un parametro por valor. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
+                                 System.out.println("Error semantico: No se puede asignar un parametro por valor - linea "+id.beginLine + " columna " + id.beginColumn);
                                 //TODO: Mirar si esto tiene que ir aqui o en asignacion, y si se tiene que poner el tpId a desconocido para seguir la ejecucuion
                                 tpID = Simbolo.Tipo_variable.DESCONOCIDO;
                         }else if(simbolo_id.ES_REFERENCIA()) {
-                                //Sie s un parametro por referencia hay que hacer un drf porque con el srf no se obtiene la direccion
+                                //Si es un parametro por referencia hay que hacer un drf porque con el srf se obtiene la direccion
                                 System.out.println("Referencia");
                                 pw.println("\u0009SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
                                 pw.println("\u0009DRF");
@@ -724,8 +678,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         }else if(simbolo_id.ES_VECTOR()) {
                         pw.println(";Inicial vector");
                         pw.println("\u0009SRF   " + (nivel - simbolo_id.getNivel()) + "  " + simbolo_id.getDir());
-                        System.out.println("VECTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOr");
-
                      }else {
                         //Es una variable normal, solo hay que hacer srf
                                 pw.println("; Direccion de la variable " + simbolo_id.getNombre());
@@ -737,10 +689,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                          }
                 }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 58:
-        jj_consume_token(58);
+      case 57:
+        jj_consume_token(57);
         r = expresion(false,false,simbolo_id);
-        jj_consume_token(59);
+        jj_consume_token(58);
         break;
       default:
         jj_la1[13] = jj_gen;
@@ -756,10 +708,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         accesoComponente = false;
                 }else{
                     accesoComponente = true;
-//	          	System.out.println("Acceso a componente del vector aa");
                         if(r.valorEnt > simbolo_id.getLongitud() || r.valorEnt < 1) {
-                                 //TODO: excepciones, la componente solicitada esta fuera de rango
-//	    	  	  	System.out.println("Error semantico: Acceso componente fuera de rango. En la linea " + id.beginLine + " y la columna " + id.beginColumn);
+                                        System.out.println("Error semantico: Acceso componente fuera de rango - linea "+id.beginLine + " columna " + id.beginColumn);
                         }
                         //Como se empieza por la componente 1 hay que restar lo que ocupe el primer elemanto
                         pw.println("\u0009STC\u0009" + simbolo_id.get_tamanyo_componente());
@@ -776,7 +726,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         asignacion(simbolo_id,r,tpID,accesoComponente);
         break;
       case tFIN_SENTENCIA:
-      case 61:
+      case 60:
         invocacion_accion(simbolo_id,tpID);
         break;
       default:
@@ -802,9 +752,9 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     try {
       jj_consume_token(tLEER);
            pw.println("; Lectura");
-      jj_consume_token(61);
+      jj_consume_token(60);
       lista_asignables();
-      jj_consume_token(62);
+      jj_consume_token(61);
     } catch (ParseException e) {
         SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo al leer");
     }
@@ -828,19 +778,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         //TODO: excepciones
         System.out.println("El simbolo que se esta buscando no esta en la tabla");
         }else if(!s1.ES_PARAMETRO() &&  !s1.ES_VARIABLE()){
-            //TODO: excepciones
-                System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
+            System.out.println("Error semantico: El simbolo no es asignable - linea "+t1.beginLine + " columna " + t1.beginColumn);
         }else if(s1.ES_VALOR()){
-                //TODO: excepciones
-            System.out.println("Un parametro por valor nos e puede asignar");
+          System.out.println("Error semantico: El simbolo no es asignable (PARAMETRO POR VALOR) - linea "+t1.beginLine + " columna " + t1.beginColumn);
         }else if(s1.ES_VECTOR()) {
                 esvector = true;
             pw.println("; Leer variable vector " + s1.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
-                System.out.println("Lectura de un vector");
         }else if(s1.ES_VARIABLE()){
-                //Obtenemos la variable
-                System.out.println("Leer variable");
                 pw.println("; Leer variable " + s1.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
                 if (s1.getVariable() == Simbolo.Tipo_variable.ENTERO){
@@ -861,12 +806,11 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 58:
-        jj_consume_token(58);
+      case 57:
+        jj_consume_token(57);
         r = expresion(false,false,s1);
-        jj_consume_token(59);
+        jj_consume_token(58);
         esComponente = true;
-        System.out.println("EsCOMPOnente");
         break;
       default:
         jj_la1[16] = jj_gen;
@@ -904,7 +848,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009STC\u0009\u0009" + (int)aux.charAt(x));
                                         pw.println("\u0009WRT\u0009\u00090");
                                 }
-                                //TODO: Mirar esto
 
                         if(s1.ES_REFERENCIA()) {
                                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()));
@@ -923,7 +866,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 offset+=bytes_componente;
               }
       }else if(s1.ES_VECTOR() && esComponente){
-                System.out.println("Es un acceso a una componente vector");
                 if(r.tipo == Simbolo.Tipo_variable.ENTERO) {
 
                                 pw.println("\u0009STC " + s1.get_tamanyo_componente());
@@ -939,8 +881,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u005ct RD    0");
                                 }
                 }else {
-                        //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                        System.out.println("No se puede acceder al vector sin un entero");
+                        System.out.println("Error semantico: Vector mal indexado, no es variable entera - linea "+t1.beginLine + " columna " + t1.beginColumn);
                 }
 
         }else if(s1.ES_REFERENCIA()) {
@@ -964,7 +905,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             }else {
                 //Es o una variable normal o una componente de un vector
                 if(esComponente) {
-                        System.out.println("Entro aquiiiiiiii");
                         if(!r.esVariable && r.tipo == Simbolo.Tipo_variable.ENTERO) {
                                 int offset = (r.valorEnt - 1) * s1.get_tamanyo_componente();
                                 pw.println("\u005ct SRF   " + (nivel - s1.getNivel()) + "  " + (s1.getDir()+offset));
@@ -976,35 +916,24 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 pw.println("\u005ct RD    0");
                                         }
                         }else {
-                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                                System.out.println("No se puede declarar un vector sin una constante entera");
+                        System.out.println("Error semantico: Vector mal indexado, no es variable entera - linea "+t1.beginLine + " columna " + t1.beginColumn);
+
                         }
 
                 }
-//  	      	else { 
-//		  	  	pw.println("; Leer variable " + s1.getNombre());
-//		      	pw.println("\t SRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
-//		      	pw.println("\t DRF");
-//		      	if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){ 
-//		    		pw.println("\t RD    1");
-//		  	  	}
-//		  	  	else{
-//		  	  		pw.println("\t RD    0");
-//		  		}
-//	  		}
                 }
   }
       label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 60:
+        case 59:
           ;
           break;
         default:
           jj_la1[17] = jj_gen;
           break label_7;
         }
-        jj_consume_token(60);
+        jj_consume_token(59);
         t2 = jj_consume_token(tID);
     esComponente = false;
     r = null;//Obtenemos el simbolo con el nombre del id
@@ -1013,17 +942,15 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     if(s2 == null){
         System.out.println("El simbolo que se esta buscando no esta en la tabla");
         }else if(!s2.ES_PARAMETRO() &&  !s2.ES_VARIABLE()){
-                System.out.println("El simbolo introducido noe s ni una variable ni un parametro");
+                 System.out.println("Error semantico: El simbolo no es asignable - linea "+t2.beginLine + " columna " + t2.beginColumn);
         }else if(s2.ES_VALOR()){
-            System.out.println("El simbolo es un parametro pero esta pasado por valor nos e puede asignar");
+            System.out.println("Error semantico: El simbolo no es asignable (PARAMETRO POR VALOR) - linea "+t2.beginLine + " columna " + t2.beginColumn);
         }else if(s2.ES_VECTOR()) {
                 esvector = true;
             pw.println("; Leer variable vector " + s2.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
                 System.out.println("Lectura de un vector");
         }else if(s2.ES_VARIABLE()){
-                //Obtenemos la variable
-                System.out.println("s2 es variable");
                 pw.println("; Leer variable " + s2.getNombre());
                 pw.println("\u005ct SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
                 if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){
@@ -1044,10 +971,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 58:
-          jj_consume_token(58);
+        case 57:
+          jj_consume_token(57);
           r = expresion(false,false,s2);
-          jj_consume_token(59);
+          jj_consume_token(58);
                 esComponente = true;
           break;
         default:
@@ -1056,7 +983,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
     System.out.println("Entro aqui");
     //Obtenemos el simbolo con el nombre del id
-//    System.out.println("AccesoComponente en lista asiganbles: " + esComponente);
     if(s2.ES_VECTOR() && !esComponente) {
           String mensaje = "Valor componente ";
               String aux = "";
@@ -1066,7 +992,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009WRT\u0009\u00090");
                   }
           //Es un vector entero hay que ir componente por componente leyendo
-
           //La primera componente ya se le ha hecho SRF, solo hay que leerla
           if (s2.getTipoComponente() == Simbolo.Tipo_variable.ENTERO){
                 pw.println("\u005ct RD    1");
@@ -1109,8 +1034,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u005ct RD    0");
                                 }
                 }else {
-                        //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                        System.out.println("No se puede acceder al vector sin un entero");
+                        System.out.println("Error semantico: Vector mal indexado, no es variable entera - linea "+t2.beginLine + " columna " + t2.beginColumn);
                 }
 
         }else if(s2.ES_REFERENCIA()) {
@@ -1145,22 +1069,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                 pw.println("\u005ct RD    0");
                                         }
                         }else {
-                                //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                                System.out.println("No se puede declarar un vector sin una constante entera");
+                                System.out.println("Error semantico: Vector mal indexado, no es variable entera - linea "+t2.beginLine + " columna " + t2.beginColumn);
                         }
 
                 }
-//  	      	else { 
-//		  	  	pw.println("; Leer variable " + s2.getNombre());
-//		      	pw.println("\t SRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
-//		      	pw.println("\t DRF");
-//		      	if (s2.getVariable() == Simbolo.Tipo_variable.ENTERO){ 
-//		    		pw.println("\t RD    1");
-//		  	  	}
-//		  	  	else{
-//		  	  		pw.println("\t RD    0");
-//		  		}
-//	  		}
                 }
   }
       }
@@ -1173,9 +1085,9 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     try {
       jj_consume_token(tESCRIBIR);
                 pw.println("; Escritura");
-      jj_consume_token(61);
+      jj_consume_token(60);
       lista_escribibles();
-      jj_consume_token(62);
+      jj_consume_token(61);
     } catch (ParseException e) {
         SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo al escribir");
     }
@@ -1189,10 +1101,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         r1 = expresion(false,false,null);
 //    System.out.println("Tipo dentro de escribir " + r1.tipo);
     if(r1.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
-        System.out.println("No se puede escribir un tipo desconocido");
+       //TODO:falta proparagar un token
+       //System.out.println("Error semantico: Tipo de variable no legible - linea "+t2.beginLine + " columna " + t2.beginColumn);
     }
     else if(r1.tipo == Simbolo.Tipo_variable.BOOLEANO) {
-                //TODO mirar escribir verdaddero si es true o falso si es false
+                //TODO:falta proparagar un token
+       //System.out.println("Error semantico: Tipo de variable no legible - linea "+t2.beginLine + " columna " + t2.beginColumn);
     }else if(r1.tipo == Simbolo.Tipo_variable.CADENA){
         //Recorrer la cadena escribiendo letra por letra
 
@@ -1244,14 +1158,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       label_8:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 60:
+        case 59:
           ;
           break;
         default:
           jj_la1[19] = jj_gen;
           break label_8;
         }
-        jj_consume_token(60);
+        jj_consume_token(59);
         r2 = expresion(false,false,null);
 //    System.out.println("Tipo dentro de escribir " + r2.tipo);
     if(r2.tipo ==  Simbolo.Tipo_variable.DESCONOCIDO) {
@@ -1476,8 +1390,8 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   ArrayList<RegistroExpr > params;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 61:
-        jj_consume_token(61);
+      case 60:
+        jj_consume_token(60);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case tNOT:
         case tTRUE:
@@ -1489,7 +1403,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         case tNUM:
         case tCAR:
         case tCADENA:
-        case 61:
+        case 60:
           params = lista_expresiones(id,tpID,parametros_necesarios);
     //TODO: pruebas con distintas funciones
         if(params.size() != parametros_necesarios.size()) {
@@ -1522,7 +1436,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           jj_la1[21] = jj_gen;
           ;
         }
-        jj_consume_token(62);
+        jj_consume_token(61);
         break;
       default:
         jj_la1[22] = jj_gen;
@@ -1567,14 +1481,14 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       label_9:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 60:
+        case 59:
           ;
           break;
         default:
           jj_la1[23] = jj_gen;
           break label_9;
         }
-        jj_consume_token(60);
+        jj_consume_token(59);
         r2 = expresion(false,true,null);
     if(parametros_necesarios != null) {
         if(i >= parametros_necesarios.size()) {
@@ -1701,7 +1615,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     throw new Error("Missing return statement in function");
   }
 
-//TODO: hacer que se pueda hacer mayor menor de caracteres, cadenas, etc??
   static final public RegistroExpr expresion(boolean vec,boolean invoc_acc,Simbolo sim) throws ParseException {
   RegistroExpr r1 = new RegistroExpr();
   RegistroExpr r2 = new  RegistroExpr();
@@ -1728,27 +1641,22 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       t = operador_relacional();
       r2 = expresion_simple(vec,invoc_acc,sim);
           boolean ok = true;
-                //TODO: hay que hacer lo mismo que enteros pero con caracteres
           String operacion = t.image;
                   switch(operacion) {
                                 case ">":
                                         pw.println("\u0009GT");
-                                        //System.out.println("Detectado >");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR) {
-                                                //TODO: excepciones
-                                                //System.out.println("El primero de los valores no es entero por lo tanto no se puede >" + r1.tipo);
+                                                System.out.println("Operando incompatible con > - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
-                                                        //TODO: excepciones
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >");
+                                                        System.out.println("Operando incompatible con > - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
                                         if(ok) {
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
@@ -1760,8 +1668,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }
                                                                 result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
-                                                                //TODO: excepciones no coinciden los tipos
-                                                                System.out.println("No coinciden los tipos en mayor");
+                                                                System.out.println("No coinciden los tipos en " + operacion +" - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }
 
 
@@ -1772,20 +1679,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         break;
                                 case "<":
                                         pw.println("\u0009LT");
-                                        //System.out.println("Detectado <");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <");
+                                                System.out.println("Operando incompatible con < - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
-                                        if(ok){ //El primer parametro es entero o desconocido
+                                        if(ok){
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <");
+                                                        System.out.println("Operando incompatible con < - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
                                         if(ok) {
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
@@ -1797,8 +1702,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }
                                                                 result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
-                                                                //TODO: excepciones no coinciden los tipos
-                                                                System.out.println("No coinciden los tipos en menor");
+                                                                System.out.println("No coinciden los tipos en " + operacion +" - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }
 
 
@@ -1809,20 +1713,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         break;
                                 case ">=":
                                         pw.println("\u0009GTE");
-                                        //System.out.println("Detectado >=");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede >=");
+                                                System.out.println("Operando incompatible con >= - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
-                                        if(ok){ //El primer parametro es entero o desconocido
+                                        if(ok){
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede >=");
+                                                        System.out.println("Operando incompatible con >= - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
                                         if(ok){
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
@@ -1834,8 +1736,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }
                                                                 result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
-                                                                //TODO: excepciones no coinciden los tipos
-                                                                System.out.println("No coinciden los tipos en mayor igual");
+                                                                System.out.println("No coinciden los tipos en " + operacion +" - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }
 
 
@@ -1846,20 +1747,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         break;
                                 case "<=":
                                         pw.println("\u0009LTE");
-                                        //System.out.println("Detectado <=");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <=");
+                                                System.out.println("Operando incompatible con <= - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
-                                        if(ok){ //El primer parametro es entero o desconocido
+                                        if(ok){
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <=");
+                                                        System.out.println("Operando incompatible con <= - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
                                         if(ok) {
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
@@ -1871,31 +1770,28 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }
                                                                 result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
-                                                                //TODO: excepciones no coinciden los tipos
-                                                                System.out.println("No coinciden los tipos en menor igual");
+                                                                System.out.println("No coinciden los tipos en " + operacion +" - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }
                                                 }else {
                                                         result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
                                                 }
                                         }
                                         break;
-                                //TODO: mirar el < > y en = si se puede hacer con booleanos, cadenas, caracteres
                                 case "=":
 
                                         pw.println("\u0009EQ");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO&& r1.tipo != Simbolo.Tipo_variable.CHAR && r1.tipo != Simbolo.Tipo_variable.BOOLEANO ) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede =");
+                                                System.out.println("Operando incompatible con = - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
-                                        if(ok){ //El primer parametro es entero o desconocido
+                                        if(ok){
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR && r2.tipo != Simbolo.Tipo_variable.BOOLEANO) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede =");
+                                                        System.out.println("Operando incompatible con = - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
                                         if(ok) {
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
@@ -1908,8 +1804,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }
                                                                 result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
-                                                                //TODO: excepciones no coinciden los tipos
-                                                                System.out.println("No coinciden los tipos en igual");
+                                                                System.out.println("No coinciden los tipos en " + operacion +" - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }
                                                 }else {
                                                         result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
@@ -1918,28 +1813,22 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         break;
                                 case "<>":
                                         pw.println("\u0009NEQ");
-//		  			System.out.println("Detectado <>"+r1.tipo+r2.tipo );
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r1.tipo != Simbolo.Tipo_variable.CHAR && r1.tipo != Simbolo.Tipo_variable.BOOLEANO) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede <>");
+                                                System.out.println("Operando incompatible con <> - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
-                                        if(ok){ //El primer parametro es entero o desconocido
+                                        if(ok){
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO && r2.tipo != Simbolo.Tipo_variable.CHAR && r2.tipo != Simbolo.Tipo_variable.BOOLEANO) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede <>");
+                                                        System.out.println("Operando incompatible con <> - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
                                         if(ok) {
-//		  			  	System.out.println("Detectado <>3"+r1.tipo+r2.tipo );
                                                 if(r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO &&  r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                  //TODO: hay que hacer las comprobaciones de overflow,underflow etc etc
                                                         if(r1.tipo == r2.tipo) {
-
                                                                 if(r1.esVariable || r2.esVariable)
                                                                         result.esVariable = true;
-
                                                                 if(r1.tipo ==Simbolo.Tipo_variable.CHAR) {
-
                                                                         result.valorBool = r1.valorChar != r2.valorChar;
                                                                 }else if(r1.tipo == Simbolo.Tipo_variable.ENTERO){
                                                                         result.valorBool =      result.valorEnt != r2.valorEnt;
@@ -1948,9 +1837,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 }
                                                                 result.tipo =  Simbolo.Tipo_variable.BOOLEANO;
                                                         }else {
-//							  	System.out.println("Detectado <>2"+r1.tipo+r2.tipo );
-                                                                //TODO: excepciones no coinciden los tipos
-                                                                System.out.println("No coinciden los tipos en distinto");
+                                                                System.out.println("No coinciden los tipos en " + operacion +" - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }
                                                 }else {
                                                         result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
@@ -1970,8 +1857,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   Token t = new Token();
   RegistroExpr result = new RegistroExpr();
     r1 = termino(vec,invoc_acc,sim);
-          //System.out.println("primero");
-      result = r1;
+     result = r1;
     label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1993,12 +1879,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009PLUS");
                                         //System.out.println("Detectado +");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede sumar");
+                                                System.out.println("Operando incompatible con SUMA - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede sumar");
+                                                        System.out.println("Operando incompatible con SUMA - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2018,12 +1904,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009SBT");
                                         //System.out.println("Detectado -");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede restar");
+                                                System.out.println("Operando incompatible con RESTA - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede restar");
+                                                        System.out.println("Operando incompatible con RESTA - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2042,14 +1928,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "or":
                                         pw.println("\u0009OR");
                                         if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                //TODO: excepciones
-//		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer or");
+                                                System.out.println("Operando incompatible con OR - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es booleano o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.BOOLEANO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                        //Todo: exccepciones
-//			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer or");
+                                                        System.out.println("Operando incompatible con OR - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2078,8 +1962,6 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   Token t = new Token();
   RegistroExpr result = new RegistroExpr();
     r1 = factor(vec,invoc_acc,sim);
-    //System.out.println("primero");
-    //Si solo es un valor devolvemos ese valor solo
     result = r1;
     ant = r1;
     label_12:
@@ -2098,20 +1980,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       t = operador_multiplicativo();
       r2 = factor(vec,invoc_acc,sim);
           boolean ok = true;
-          //System.out.println("segundo");
           String operacion = t.image;
                   //Hay que hacer lowercase porque aunque el analizador sea case insensitive, el switch reconoce la diferencia entre mayusculas y minusculas
                   switch(operacion.toLowerCase()) {
                                 case "*":
                                         pw.println("\u0009TMS");
-                                        //System.out.println("Detectado *");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede multiplicar");
+                                                System.out.println("Operando incompatible con MUL - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede multiplicar");
+                                                        System.out.println("Operando incompatible con MUL - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2130,12 +2010,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009MOD");
                                         //System.out.println("Detectado mod");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede hacer mod");
+                                                System.out.println("Operando incompatible con MOD - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-//			  			  	System.out.println("El segundo de los valores no es entero por lo tanto no se puede hacer mod");
+                                                        System.out.println("Operando incompatible con MOD - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2146,22 +2026,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                         if(r1.esVariable || r2.esVariable)
                                                                 result.esVariable = true;
                                                     if(!r2.esVariable) {
-//		  				      	System.out.println("Voy a mod de constante: " + result.valorEnt + " y " + r2.valorEnt);
                                                         if(r2.valorEnt == 0) {
-                                                                //TODO: Gestionar excepciones de modulo 0
-                                                                System.out.println("Error semantico: Es modulo 0. En la linea " + t.beginLine + " y la columna " + t.beginColumn);
+                                                                System.out.println("Detectado MOD por 0 - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         }else {
                                                                 result.valorEnt =       result.valorEnt % r2.valorEnt;
                                                         }
                                                         }
-                                                                //Esto creo que sobra
-                                                                else {
-                                                                //TODO: Mirar que hay que hacer aqui
-//		  					    System.out.println("regexpr "+r2.esVariable);
-//		  					  	result.tipo =  Simbolo.Tipo_variable.ENTERO;
-//		  						result.valorEnt =	result.valorEnt % r2.valorEnt;
-                                                        }
-
                                                 }else {
                                                         result.tipo =  Simbolo.Tipo_variable.DESCONOCIDO;
                                                 }
@@ -2170,14 +2040,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "div":
                                         pw.println("\u0009DIV");
                                         if(r1.tipo != Simbolo.Tipo_variable.ENTERO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                //TODO: excepciones
-//		  			  	System.out.println("El primero de los valores no es entero por lo tanto no se puede dividir");
+                                                System.out.println("Operando incompatible con DIV - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.ENTERO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                        //TODO: excepciones
-//							System.out.println("El segundo de los valores no es entero por lo tanto no se puede dividir");
+                                                        System.out.println("Operando incompatible con DIV - linea "+t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2189,8 +2057,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                                                 if(r2.valorEnt != 0)
                                                                         result.valorEnt =       result.valorEnt / r2.valorEnt;
                                                                 else
-                                                                        //TODO: gestionar excepciones division por 0
-                                                                        System.out.println("No se puede dividir por 0");
+                                                                        System.out.println("Disivision por 0 - linea "+t.beginLine + " columna " + t.beginColumn);
 
                                                         }
                                                         result.tipo =  Simbolo.Tipo_variable.ENTERO;
@@ -2202,14 +2069,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 case "and":
                                         pw.println("\u0009AND");
                                         if(r1.tipo != Simbolo.Tipo_variable.BOOLEANO && r1.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                          //TODO: excepciones
-//		  			  	System.out.println("El primero de los valores no es booleano por lo tanto no se puede hacer and");
+                                                System.out.println("Operando incompatible con AND - linea "+t.beginLine + " columna " + t.beginColumn);
                                                 ok = false;
                                         }
                                         if(ok){ //El primer parametro es entero o desconocido
                                                 if(r2.tipo != Simbolo.Tipo_variable.BOOLEANO && r2.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
-                                                        //TODO: excepciones
-//			  			  	System.out.println("El segundo de los valores no es booleano por lo tanto no se puede hacer and");
+                                                        System.out.println("Operando incompatible con AND - linea "+ t.beginLine + " columna " + t.beginColumn);
                                                         ok = false;
                                                 }
                                         }
@@ -2282,18 +2147,18 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       {if (true) return re;}
     }
       break;
-    case 61:
-      jj_consume_token(61);
+    case 60:
+      jj_consume_token(60);
       re = expresion(vec, invoc_acc,sim);
-      jj_consume_token(62);
+      jj_consume_token(61);
     //Si solo hay parentesis hay que devolver lo que hay dentro de los parentesis
     {if (true) return re;}
       break;
     case tENTACAR:
       t = jj_consume_token(tENTACAR);
-      jj_consume_token(61);
+      jj_consume_token(60);
       re = expresion(vec,invoc_acc,sim);
-      jj_consume_token(62);
+      jj_consume_token(61);
         if(re.tipo != Simbolo.Tipo_variable.ENTERO && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
     }else if( re.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
@@ -2308,9 +2173,9 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       break;
     case tCARAENT:
       jj_consume_token(tCARAENT);
-      jj_consume_token(61);
+      jj_consume_token(60);
       re = expresion(vec,invoc_acc,sim);
-      jj_consume_token(62);
+      jj_consume_token(61);
     if(re.tipo != Simbolo.Tipo_variable.CHAR && re.tipo != Simbolo.Tipo_variable.DESCONOCIDO) {
 //		System.out.println("El valora pasado a entacar con es ni entero ni deconocido");
     }else if( re.tipo == Simbolo.Tipo_variable.DESCONOCIDO) {
@@ -2330,10 +2195,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
      s = tabla_simbolos.buscar_simbolo(t.image);
      pw.println(";Acceso a la variable " + t.image);
      if(s == null) {
-        //System.out.println("Error semantico: No he encontrado simbolo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
+                System.out.println("Error semantico: No he encontrado simbolo. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
         //TODO: no existe el simbolo hay que lanzar una exepcion
      }  else if(s.ES_ACCION()) {
-//        System.out.println("Error semantico: He encontrado una accion. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
+        System.out.println("Error semantico: He encontrado una accion. En la linea "+ t.beginLine + " y la columna " + t.beginColumn);
         //TODO: no existe el simbolo hay que lanzar una exepcion
      } else if(s.ES_VECTOR()) {
         System.out.println("He encontrado un vector "+ t.image);
@@ -2387,10 +2252,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
             {if (true) return re;}
         }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 58:
-        jj_consume_token(58);
+      case 57:
+        jj_consume_token(57);
         re = expresion(false,false,s);
-        jj_consume_token(59);
+        jj_consume_token(58);
         break;
       default:
         jj_la1[30] = jj_gen;
@@ -2537,7 +2402,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6880000,0x0,0x0,0x6880000,0x0,0x0,0x0,0x0,0x200000,0xf0010000,0x0,0x0,0x8004000,0x8000,0x0,0x0,0x8000,0x8004000,0x0,0xf0010000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x38,0x38,0x4000000,0x10000000,0x4000000,0x1,0x20000000,0x80,0x4000000,0x10000000,0x4000000,0x6,0x40000,0x4000000,0x20002080,0x40000,0x4000000,0x10000000,0x4000000,0x10000000,0x0,0x20760000,0x20000000,0x10000000,0xc000,0x30000,0x1f40,0x1f40,0x30000,0xc000,0x4000000,0x20760000,};
+      jj_la1_1 = new int[] {0x38,0x38,0x2000000,0x8000000,0x2000000,0x1,0x10000000,0x80,0x2000000,0x8000000,0x2000000,0x6,0x40000,0x2000000,0x10002080,0x40000,0x2000000,0x8000000,0x2000000,0x8000000,0x0,0x103e0000,0x10000000,0x8000000,0xc000,0x30000,0x1f40,0x1f40,0x30000,0xc000,0x2000000,0x103e0000,};
    }
 
   /** Constructor with InputStream. */
@@ -2675,7 +2540,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[63];
+    boolean[] la1tokens = new boolean[62];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -2692,7 +2557,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
       }
     }
-    for (int i = 0; i < 63; i++) {
+    for (int i = 0; i < 62; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
