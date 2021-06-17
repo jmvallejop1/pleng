@@ -16,7 +16,8 @@ accion leer_compo(ref entero ax);
 principio
 	leer(ax);
 fin
-Principio 
+Principio
+
 	%%leer(e);
 	leer(e2);
 	leer_vector(e,e2);
@@ -29,65 +30,65 @@ Principio
 	%%Leer y escribir vectores enteros funiona
 	leer(e);
 	escribir(e);%%
-	%%Asignaciones con constantes funciona
+	%Asignaciones con constantes funciona
 	e[1]:=5;
 	e[2]:=6;
 	e[3]:=7;
-	escribir(e);%%
+	escribir(e);
 
-	%%Asignaciones con solo variables funciona
+	%Asignaciones con solo variables funciona
 	i := 1;
 	e[i] := 5;
 	i := i + 1;
 	e[i] := 3;
 	i := i+ 1;
 	e[i] := 8;
-	escribir(e);%%
+	escribir(e);
 	
-	%%Asignaciones con expresiones dentyro funcions
+	%Asignaciones con expresiones dentyro funcions
 	i:=1;
 	e[i] := 5;
 	e[i+1] := 3;
 	e[i+2] := 8;
-	escribir(e);%%
+	escribir(e);
 	
-	%% Lectura de componente a componente funciona
+	%Lectura de componente a componente funciona
 	leer(e[1]);
 	leer(e[2]);
 	leer(e[3]);
-	escribir(e);%%
+	escribir(e);
 
-	%% Lectura de vector con variable simple funciona
+	%Lectura de vector con variable simple funciona
 	i := 1;
 	leer(e[i]);
 	i := i + 1;
 	leer(e[i]);
 	i := i+ 1;
 	leer(e[i]);
-	escribir(e); %%
+	escribir(e);
 
-	%%Asignacion basica funciona
+	%Asignacion basica funciona
 	leer(e);
 	i := e[3];
-	escribir(i);%%
+	escribir(i);
 
-	%%Assignacion de una componente de vector indexada con variable funciona	
+	%Assignacion de una componente de vector indexada con variable funciona	
 	n:= 2;
 	leer(e);
 	i := e[n];
-	escribir(i);%%
+	escribir(i);
 
-	%%Assignacion de una componente de vector indexada con expresion funciona	
+	%Assignacion de una componente de vector indexada con expresion funciona	
 	n:= 2;
 	leer(e);
 	i := e[n+1];
-	escribir(i);%%
+	escribir(i);
 
-	%%Assignacion de una componente de vector indexada con expresion compleja funciona	
+	%Assignacion de una componente de vector indexada con expresion compleja funciona	
 	n:= 1;
 	leer(e);
 	i := e[n+n+1];
-	escribir(i);%%
+	escribir(i);
 	
 
 

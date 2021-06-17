@@ -1208,8 +1208,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 pw.println("\u0009ASG");
                                 for(int i = 1; i < r1.tam_vec; i++) {
                                         pw.println(";Asignacion componente "+ (i+1));
-                                        pw.println("\u0009SRF   " + (nivel - id.getNivel()) + "  " + (id.getDir()+offset));
-                                        pw.println("\u0009SRF   " + (nivel - r1.sim.getNivel()) + "  " + (r1.sim.getDir()+offset));
+                                        pw.println("\u0009SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
+                                        if(id.ES_REFERENCIA())
+                                                pw.println("\u0009DRF");
+                                        pw.println("\u0009STC\u0009" + offset);
+                                        pw.println("\u0009PLUS");
+                                        pw.println("\u0009SRF   " + (nivel - r1.sim.getNivel()) + "  " + r1.sim.getDir());
+                                        if(r1.sim.ES_REFERENCIA())
+                                                pw.println("\u0009DRF");
+                                        pw.println("\u0009STC\u0009" + offset);
+                                        pw.println("\u0009PLUS");
                                 pw.println("\u0009DRF");
 
 

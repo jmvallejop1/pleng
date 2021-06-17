@@ -1201,8 +1201,16 @@ void asignacion(Simbolo id, RegistroExpr r, Token id_t,boolean ac):
 				pw.println("	ASG");
 				for(int i = 1; i < r1.tam_vec; i++) {
 				  	pw.println(";Asignacion componente "+ (i+1));
-				  	pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + (id.getDir()+offset));
-					pw.println("	SRF   " + (nivel - r1.sim.getNivel()) + "  " + (r1.sim.getDir()+offset));
+				  	pw.println("	SRF   " + (nivel - id.getNivel()) + "  " + id.getDir());
+				  	if(id.ES_REFERENCIA())
+				  		pw.println("	DRF");
+				  	pw.println("	STC	" + offset);
+				  	pw.println("	PLUS");
+					pw.println("	SRF   " + (nivel - r1.sim.getNivel()) + "  " + r1.sim.getDir());
+					if(r1.sim.ES_REFERENCIA())
+				  		pw.println("	DRF");
+				  	pw.println("	STC	" + offset);
+				  	pw.println("	PLUS");
         			pw.println("	DRF");
 
 					
