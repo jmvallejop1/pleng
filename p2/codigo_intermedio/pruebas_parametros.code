@@ -10,6 +10,7 @@ L1:
 ;Acceso a variable v
 	SRF   0  3
 	DRF
+;	comprobamos si esta inicializada la variable v
 	STC   3
 ; Asignacion.
 	ASG
@@ -29,11 +30,70 @@ L2:
 	WRT		1
 ; Fin de la accion 
 CSF
+	 JMP	L3
+;Accion leer_caracter
+L3:
+; rec. parametro v3 de tipo CHAR pasado por REF
+	 SRF   0  3
+	 ASGI
+;Acceso a variable v3
+	SRF   0  3
+	DRF
+;	comprobamos si esta inicializada la variable v3
+	STC   "x"
+; Asignacion.
+	ASG
+; Fin de la accion 
+CSF
+	 JMP	L4
+;Accion escribir_caracter
+L4:
+; rec. parametro v4 de tipo CHAR pasado por VAL
+	 SRF   0  3
+	 ASGI
+; Escritura
+;Acceso a la variable v4
+; Acceso a la variable v4
+	SRF	0	3
+	DRF
+	WRT		0
+; Fin de la accion 
+CSF
 L0:
-;Acceso a variable escribir_entero
-	STC   2
-	STC   2
-; Invocando a ESCRIBIR_ENTERO
-	 OSF   8  0 L2
+;Acceso a variable leer_entero
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	4
+; Invocando a LEER_ENTERO
+	 OSF   9  0 L1
+; Escritura
+;cadena	"Valor de i:"
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		100
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		58
+	WRT		0
+;Acceso a la variable i
+; Acceso a la variable i
+	SRF	0	4
+	DRF
+	WRT		1
 ; Fin del programa leer_vectores_basico
 LVP

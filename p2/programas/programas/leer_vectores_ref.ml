@@ -3,9 +3,29 @@ programa leer_vectores_basico;
 booleano b[3];
 caracter c[4];
 entero   e[3];
+entero   e2[3];
 entero i,n;
 
+accion leer_vector(ref entero a[3];ref entero a2[3]);
+principio
+	leer(a[1]);
+	leer(a2[3]);
+fin
+
+accion leer_compo(ref entero ax);
+principio
+	leer(ax);
+fin
 Principio 
+	%%leer(e);
+	leer(e2);
+	leer_vector(e,e2);
+	escribir(e,e2);%%
+		
+	%%leer(e);
+	leer_compo(e[2]);
+	escribir(e);%%
+
 	%%Leer y escribir vectores enteros funiona
 	leer(e);
 	escribir(e);%%

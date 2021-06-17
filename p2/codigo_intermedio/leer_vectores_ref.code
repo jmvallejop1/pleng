@@ -1,13 +1,55 @@
 ; Programa leer_vectores_basico.
 	ENP  L0
 ; Comienzo del programa leer_vectores_basico
-L0:
-;Acceso a variable n
-; Direccion de la variable n
-	SRF   0  19
+	STC   3
+	STC   3
+	 JMP	L1
+;Accion leer_vector
+L1:
+; rec. parametro a2 de tipo VECENT pasado por REF
+	 SRF   0  4
+	 ASGI
+; rec. parametro a de tipo VECENT pasado por REF
+	 SRF   0  3
+	 ASGI
+; Lectura
+; Leer variable vector a
+	 SRF   0  3
+	DRF
 	STC   1
-; Asignacion.
-	ASG
+	STC 2
+	TMS	
+	STC 2
+	SBT	
+	 PLUS
+	 RD    1
+; Lectura
+; Leer variable vector a2
+	 SRF   0  4
+	DRF
+	STC   3
+	STC 2
+	TMS	
+	STC 2
+	SBT	
+	 PLUS
+	 RD    1
+; Fin de la accion 
+CSF
+	 JMP	L2
+;Accion leer_compo
+L2:
+; rec. parametro ax de tipo ENTERO pasado por REF
+	 SRF   0  3
+	 ASGI
+; Lectura
+; Leer parametro por referenciaax
+	 SRF   0  3
+	 DRF
+	 RD    1
+; Fin de la accion 
+CSF
+L0:
 ; Lectura
 ; Leer variable vector e
 	 SRF   0  11
@@ -136,37 +178,187 @@ L0:
 	WRT		0
 	 SRF   0  15
 	 RD    1
-;Acceso a variable i
-; Direccion de la variable i
-	SRF   0  17
+; Lectura
+; Leer variable vector e2
+	 SRF   0  17
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		49
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		50
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  19
+	 RD    1
+	STC		86
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		99
+	WRT		0
+	STC		111
+	WRT		0
+	STC		109
+	WRT		0
+	STC		112
+	WRT		0
+	STC		111
+	WRT		0
+	STC		110
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		51
+	WRT		0
+	STC		58
+	WRT		0
+	STC		32
+	WRT		0
+	 SRF   0  21
+	 RD    1
+;Acceso a variable leer_vector
 ;Acceso a la variable e
 ; Acceso al vector e
 	SRF	0	11
-;Acceso a la variable n
-; Acceso a la variable n
-	SRF	0	19
-	DRF
-;Acceso a la variable n
-; Acceso a la variable n
-	SRF	0	19
-	DRF
-	PLUS
-	STC   1
-	PLUS
-;Se ha indexado con una variable
-	STC	2
-	TMS
-	STC	2
-	SBT
-	PLUS
-	DRF
-; Asignacion.
-	ASG
+;Acceso a la variable e2
+; Acceso al vector e2
+	SRF	0	17
+; Invocando a LEER_VECTOR
+	 OSF   26  0 L1
 ; Escritura
-;Acceso a la variable i
-; Acceso a la variable i
+;Acceso a la variable e
+; Acceso al vector e
+	SRF	0	11
+	DRF
+;	comprobamos si esta inicializada la variable e
+	WRT		1
+;Escritura variablea la variable e
+	SRF	0	11
+;	comprobamos si esta inicializada la variable e
+	STC	2
+	PLUS
+	DRF
+;	comprobamos si esta inicializada la variable e
+	WRT		1
+;Escritura variablea la variable e
+	SRF	0	11
+;	comprobamos si esta inicializada la variable e
+	STC	4
+	PLUS
+	DRF
+;	comprobamos si esta inicializada la variable e
+	WRT		1
+;Acceso a la variable e2
+; Acceso al vector e2
 	SRF	0	17
 	DRF
+;	comprobamos si esta inicializada la variable e2
+	WRT		1
+;Escritura variablea la variable e2
+	SRF	0	17
+;	comprobamos si esta inicializada la variable e2
+	STC	2
+	PLUS
+	DRF
+;	comprobamos si esta inicializada la variable e2
+	WRT		1
+;Escritura variablea la variable e2
+	SRF	0	17
+;	comprobamos si esta inicializada la variable e2
+	STC	4
+	PLUS
+	DRF
+;	comprobamos si esta inicializada la variable e2
 	WRT		1
 ; Fin del programa leer_vectores_basico
 LVP
