@@ -11,9 +11,17 @@ L1:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1900
 	SBT
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable cuatro
 ; Direccion de la variable cuatro
@@ -22,6 +30,10 @@ L1:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   4
 	MOD
 	STC   0
@@ -30,12 +42,20 @@ L1:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   100
 	MOD
 	STC   0
 	NEQ
 	AND
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable cien
 ; Direccion de la variable cien
@@ -44,11 +64,19 @@ L1:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   400
 	MOD
 	STC   0
 	EQ
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable bisiestos_validos
 ; Direccion de la variable bisiestos_validos
@@ -57,12 +85,24 @@ L1:
 ; Acceso a la variable cuatro
 	SRF	0	7
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable cien
 ; Acceso a la variable cien
 	SRF	0	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	OR
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable bisiestos
 ; Direccion de la variable bisiestos
@@ -71,15 +111,27 @@ L1:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   4
 	DIV
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;SI
 ;Acceso a la variable bisiestos_validos
 ; Acceso a la variable bisiestos_validos
 	SRF	0	5
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	JMF L2
 ;ENT
 ;Acceso a variable dia1anho
@@ -89,16 +141,28 @@ L1:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	SBT
 ;Acceso a la variable bisiestos
 ; Acceso a la variable bisiestos
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L3
 L2:
@@ -110,14 +174,26 @@ L2:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable bisiestos
 ; Acceso a la variable bisiestos
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 L3:
 ;FSI
@@ -133,9 +209,17 @@ L4:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1900
 	SBT
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable cien
 ; Direccion de la variable cien
@@ -144,6 +228,10 @@ L4:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   4
 	MOD
 	STC   0
@@ -152,12 +240,20 @@ L4:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   100
 	MOD
 	STC   0
 	NEQ
 	AND
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable cuatro
 ; Direccion de la variable cuatro
@@ -166,11 +262,19 @@ L4:
 ; Acceso a la variable anho
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   400
 	MOD
 	STC   0
 	EQ
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable bisiestos_validos
 ; Direccion de la variable bisiestos_validos
@@ -179,18 +283,34 @@ L4:
 ; Acceso a la variable cien
 	SRF	0	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable cuatro
 ; Acceso a la variable cuatro
 	SRF	0	5
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	OR
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;SI
 ;Acceso a la variable bisiestos_validos
 ; Acceso a la variable bisiestos_validos
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	JMF L5
 ;ENT
 ;Acceso a variable anhade
@@ -198,6 +318,10 @@ L4:
 	SRF   1  12
 	STC   1
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L6
 L5:
@@ -207,6 +331,10 @@ L5:
 	SRF   1  12
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 L6:
 ;FSI
@@ -215,6 +343,10 @@ L6:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	EQ
 	JMF L7
@@ -226,7 +358,15 @@ L6:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L8
 L7:
@@ -236,6 +376,10 @@ L7:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   2
 	EQ
 	JMF L9
@@ -247,11 +391,19 @@ L7:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   31
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L10
 L9:
@@ -261,6 +413,10 @@ L9:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   3
 	EQ
 	JMF L11
@@ -272,16 +428,28 @@ L9:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   59
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L12
 L11:
@@ -291,6 +459,10 @@ L11:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   4
 	EQ
 	JMF L13
@@ -302,16 +474,28 @@ L11:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   90
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L14
 L13:
@@ -321,6 +505,10 @@ L13:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   5
 	EQ
 	JMF L15
@@ -332,16 +520,28 @@ L13:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   120
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L16
 L15:
@@ -351,6 +551,10 @@ L15:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   6
 	EQ
 	JMF L17
@@ -362,16 +566,28 @@ L15:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   151
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L18
 L17:
@@ -381,6 +597,10 @@ L17:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   7
 	EQ
 	JMF L19
@@ -392,16 +612,28 @@ L17:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   181
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L20
 L19:
@@ -411,6 +643,10 @@ L19:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   8
 	EQ
 	JMF L21
@@ -422,16 +658,28 @@ L19:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   212
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L22
 L21:
@@ -441,6 +689,10 @@ L21:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   9
 	EQ
 	JMF L23
@@ -452,16 +704,28 @@ L21:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   243
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L24
 L23:
@@ -471,6 +735,10 @@ L23:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   10
 	EQ
 	JMF L25
@@ -482,16 +750,28 @@ L23:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   273
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L26
 L25:
@@ -501,6 +781,10 @@ L25:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   11
 	EQ
 	JMF L27
@@ -512,16 +796,28 @@ L25:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   304
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L28
 L27:
@@ -531,6 +827,10 @@ L27:
 ; Acceso a la variable mes
 	SRF	1	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   12
 	EQ
 	JMF L29
@@ -542,16 +842,28 @@ L27:
 ; Acceso a la variable dia1anho
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   334
 	PLUS
 ;Acceso a la variable anhade
 ; Acceso a la variable anhade
 	SRF	1	12
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 	STC   7
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L30
 L29:
@@ -637,6 +949,24 @@ L8:
 ; Fin de la accion 
 CSF
 L0:
+	SRF   0  14
+	STC 77777
+ 	ASG
+	SRF   0  8
+	STC 77777
+ 	ASG
+	SRF   0  10
+	STC 77777
+ 	ASG
+	SRF   0  12
+	STC 77777
+ 	ASG
+	SRF   0  4
+	STC 77777
+ 	ASG
+	SRF   0  6
+	STC 77777
+ 	ASG
 ; Escritura
 ;cadena	"CALENDARIO"
 	STC		67
@@ -792,6 +1122,111 @@ L0:
 ; Acceso a la variable dia1mes
 	SRF	0	10
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ; Fin del programa calendario
+	JMP fin
+no_ini:
+	STC		69
+	WRT		0
+	STC		114
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		114
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		98
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		105
+	WRT		0
+	STC		99
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		105
+	WRT		0
+	STC		122
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		97
+	WRT		0
+fin:
 LVP

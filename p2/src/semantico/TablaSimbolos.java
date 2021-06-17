@@ -12,15 +12,18 @@ package semantico;
 
 import semantico.Simbolo.*;
 
+
 //import lib.aviso.Aviso;
 
 import java.util.Random;
 
 import compiler.Token;
 import compiler.MiniLengCompiler;
+import java.io.PrintWriter;
 
 import java.util.LinkedList;
 import java.util.Iterator;
+
 
 public class TablaSimbolos {
 	// TODO: Elegir tamano de la tabla y ponerlo en decisiones de diseno
@@ -344,4 +347,42 @@ public class TablaSimbolos {
 
 		System.out.println("+" + new String(new char[59]).replace("\0", "-") + "+");
 	}
+	
+	public void iniciar_variables(PrintWriter pw) {
+		for (int i = 0; i < tabla_hash.length; i++) {
+			if (!tabla_hash[i].isEmpty()) {
+				Simbolo s = tabla_hash[i].getFirst();
+				if(s.ES_VECTOR()) {
+					System.out.println("Es vec..........................."+ s.getLongitud());
+					for(int j = 0; j < s.getLongitud() ; j++){
+						System.out.println(j);
+	 		            pw.println("\tSRF   " + s.getNivel()  + "  " + s.calcularDesplazamientoDireccion(j));
+	 		  			pw.println("	STC 77777");
+	 		  			pw.println(" 	ASG");
+	 		          }
+				}else if(s.ES_VARIABLE()){
+					pw.println("\tSRF   " + s.getNivel() + "  " + s.getDir());
+ 		  			pw.println("	STC 77777");
+ 		  			pw.println(" 	ASG");
+				}
+				if (tabla_hash[i].size() > 1) {
+					for (Simbolo resto : tabla_hash[i].subList(1, tabla_hash[i].size())) {
+						if(resto.ES_VECTOR()) {
+							for(int j = 0; j < resto.getLongitud() ; j++){
+			 		            pw.println("\tSRF   " + s.getNivel()  + "  " + resto.calcularDesplazamientoDireccion(j));
+			 		  			pw.println("	STC 77777");
+			 		  			pw.println(" 	ASG");
+			 		          }
+						}else if (resto.ES_VARIABLE()){
+							pw.println("\tSRF   " + s.getNivel()  + "  " + resto.getDir());
+		 		  			pw.println("	STC 77777");
+		 		  			pw.println(" 	ASG");
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
 }

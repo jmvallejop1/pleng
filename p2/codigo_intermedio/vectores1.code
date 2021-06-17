@@ -2,6 +2,24 @@
 	ENP  L0
 ; Comienzo del programa muestra_valores
 L0:
+	SRF   0  4
+	STC 77777
+ 	ASG
+	SRF   0  6
+	STC 77777
+ 	ASG
+	SRF   0  8
+	STC 77777
+ 	ASG
+	SRF   0  10
+	STC 77777
+ 	ASG
+	SRF   0  12
+	STC 77777
+ 	ASG
+	SRF   0  14
+	STC 77777
+ 	ASG
 ; Escritura
 ;cadena	"Introduce 5 valores: "
 	STC		73
@@ -51,6 +69,10 @@ L0:
 	SRF   0  14
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;MQ
 L1:
@@ -58,6 +80,10 @@ L1:
 ; Acceso a la variable i
 	SRF	0	14
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   5
 	LT
 	JMF	L2
@@ -68,6 +94,10 @@ L1:
 ; Acceso a la variable i
 	SRF	0	14
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 	STC 2
@@ -83,9 +113,17 @@ L1:
 ; Acceso a la variable i
 	SRF	0	14
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP	L1
 ;FMQ
@@ -143,6 +181,10 @@ L2:
 	SRF   0  14
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;MQ
 L3:
@@ -150,6 +192,10 @@ L3:
 ; Acceso a la variable i
 	SRF	0	14
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   5
 	LT
 	JMF	L4
@@ -161,6 +207,10 @@ L3:
 ; Acceso a la variable i
 	SRF	0	14
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 ;Se ha indexado con una variable
@@ -178,12 +228,121 @@ L3:
 ; Acceso a la variable i
 	SRF	0	14
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP	L3
 ;FMQ
 L4:
 ; Fin del programa muestra_valores
+	JMP fin
+no_ini:
+	STC		69
+	WRT		0
+	STC		114
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		114
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		98
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		105
+	WRT		0
+	STC		99
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		105
+	WRT		0
+	STC		122
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		97
+	WRT		0
+fin:
 LVP

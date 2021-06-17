@@ -246,12 +246,23 @@ void programa():
 	 }
 	 declaracion_acciones()
 	 {
+	   
 	   pw.println(et_p + ":");
+	   tabla_simbolos.iniciar_variables(pw);
 	 }
 	 bloque_sentencias(p, et_p)
 	 {
 		pw.println("; Fin del programa " + programa.image);
-      	pw.println("LVP");
+		
+		pw.println("	JMP fin");
+      	pw.println("no_ini:");
+      	String s = "Error en runtime la variable no esta inicializada";
+		for (int x=0;x<=s.length()-1;x++) { 
+			   		pw.println("	STC		" + (int)s.charAt(x));
+			   		pw.println("	WRT		0");
+	  	}
+	  	pw.println("fin:");
+	  	pw.println("LVP");
 	 }
 	 {
 	   pw.close();
@@ -339,16 +350,26 @@ void identificadores(Simbolo.Tipo_variable tipo):
 			            tipo_aux = Simbolo.Tipo_variable.VECBOOL;
 			          }
 	 		          s1 = tabla_simbolos.introducir_variable_vector(id1.image,tipo_aux,r.valorEnt, nivel,dir);
+//	 		          for(int i = 0; i < s1.getLongitud() ; i++){
+//	 		            pw.println("\tSRF   " + (nivel - s1.getNivel()) + "  " + s1.calcularDesplazamientoDireccion(i));
+//	 		  			pw.println("	STC 77777");
+//	 		  			pw.println(" 	ASG");
+//	 		          }
 	 		          dir += s1.get_tamanyo();
 	 		        }
 	 		     }
 	 		   }
 	 		}else {
+	 		  	
 	 		  	s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
+	 		  	//Valor centinela
+//	 		  	pw.println("\tSRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+//	 		  	pw.println("	STC 77777");
+//	 		  	pw.println(" 	ASG");
 				dir += s1.get_tamanyo();
 	 		} 	
 	  	}catch(SimboloYaDeclaradoException e2) {
-//	  	  	System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+	  	  	System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	  	}
 	  }
 	("," (id2 = < tID >
@@ -384,17 +405,25 @@ void identificadores(Simbolo.Tipo_variable tipo):
 			            tipo_aux = Simbolo.Tipo_variable.VECBOOL;
 			          }
 	 		          s2 = tabla_simbolos.introducir_variable_vector(id2.image,tipo_aux,r.valorEnt, nivel,dir);
+//	 		          for(int i = 0; i < s2.getLongitud() ; i++){
+//	 		            pw.println("\tSRF   " + (nivel - s2.getNivel()) + "  " + s2.calcularDesplazamientoDireccion(i));
+//	 		  			pw.println("	STC 77777");
+//	 		  			pw.println(" 	ASG");
+//	 		          }
 	 		          dir += s2.get_tamanyo();
 	 		        }
 	 		     }
 	 		   }
 	 		}else {
 	 		  	s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir);
+//	 		  	pw.println("\tSRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+//	 		  	pw.println("	STC 77777");
+//	 		  	pw.println(" 	ASG");
 				dir += s2.get_tamanyo();
 	 		}
 	 		esVector = false;
 	  	}catch(SimboloYaDeclaradoException e2) {
-	  	  	System.out.println("Error  semantico");
+	  	  	System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
 	  	}
 	  }
   	)*
@@ -453,7 +482,7 @@ Simbolo cabecera_accion(String etACC):
 	   
 	}catch(SimboloYaDeclaradoException e2) {
 	  	//TODO: aqui ninca llega salta antes la excepcion
-	  	//System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image() + " En la linea " + id_accion.beginLine + " y la columna " + id_accion.beginColumn);
+	  	System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image + " - linea " + id_accion.beginLine + " - columna " + id_accion.beginColumn);
 	}
   }
   //le pasamos a los parametros formales el simbolo de la accion a la que pertenecen para asi poder relacionarlos.
@@ -468,7 +497,7 @@ void parametros_formales(Simbolo simbolo_accion):
 }
 { try {
   	//Seguimos pasando el simbolo de la accion para poder asiciarla con los parametros
-	("("(lista_parametros(simbolo_accion))")")?
+	("("(lista_parametros(simbolo_accion))?")")?
   } catch (ParseException e) {   
     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en los parametros formales");
   }
@@ -526,27 +555,11 @@ void parametros(Simbolo simbolo_accion):
 		      	  	simbolo_accion.addParametro(param);
 		      	}else {
 		      	  //TODO: excepciones no se puede pasar un vector entero como parametro por valor
-		      	  System.out.println("No se pueden pasar vectores por enteros por valor");
-//		      	  //vector pasado por valor
-//		      	   	param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo, clase, r.valorEnt, nivel, dir);
-//		      	  	dir +=  a;
-//		//	      	  	System.out.println("He introducido el vector a la lista de params");
-//					
-//		      	  	simbolo_accion.addParametro(param);
-//		      	  int aux = 2;
-//		      	  for(int i = 1; i < r.valorEnt;i++) {
-//		      	    param = tabla_simbolos.introducir_parametro_vector(id1.image+aux, tipo, clase, r.valorEnt, nivel, dir);
-//		      	  	dir +=  a;
-//		      	  	aux++;
-//					
-//	//	      	  	System.out.println("He introducido el vector a la lista de params");
-//		      	  	simbolo_accion.addParametro(param);
-//		      	  }
-
+		      	  		      	  System.out.println("Error semantico: No se pueden pasar vectores por enteros por valor - linea " + id1.beginLine + " columna " + id1.beginColumn);
 		      	}	
 	      	}else {
 	      	  	//TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-	      	  	//System.out.println("Errpr semantico: No se puede declarar un vector sin una constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+	      	  	System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. - linea " + id1.beginLine + " columna " + id1.beginColumn);
 	      	}
 	      	
 	      	 
@@ -591,12 +604,12 @@ void parametros(Simbolo simbolo_accion):
 	      	  		simbolo_accion.addParametro(param2);
 		      	}else {
 		      	  //TODO: excepciones no se puede pasar un vector entero como parametro por valor
-		      	  System.out.println("No se pueden pasar vectores por enteros por valor");
+		      	  System.out.println("Error semantico: No se pueden pasar vectores por enteros por valor - linea " + id2.beginLine + " columna " + id2.beginColumn);
 		     	}
 	      	  	
 	      	}else {
 	      	  	//TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-	      	  	//System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. En la linea " + id2.beginLine + " y la columna " + id2.beginColumn);
+	      	  	System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. - linea " + id2.beginLine + " columna " + id2.beginColumn);
 	      	}
 	      	
 	      	 
@@ -1047,6 +1060,10 @@ void lista_escribibles(Token t):
 	}else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
 	 	pw.println("	WRT		0");
 	}else if(r1.sim.ES_VECTOR()) {
+	  		pw.println("	DUP");
+	  	  	pw.println("	STC 77777");
+	  	  	pw.println("	EQ");
+	  	  	pw.println("	JMT no_ini"); 
 	  		if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 	  		  	pw.println("	WRT		1");
 	  		}else {
@@ -1060,20 +1077,16 @@ void lista_escribibles(Token t):
        	 		if(r1.sim.ES_REFERENCIA())
        	 			pw.println("	DRF");
 					pw.println(";	comprobamos si esta inicializada la variable " + r1.sim.getNombre());
-//					pw.println("	DUP");
-//					pw.println("	STC 77777");
-//					pw.println("	EQ");
-//					pw.println("	JMT error_inicializada");
 
        	 			
        	 		pw.println("	STC	"+ offset);
    	 			pw.println("	PLUS");
        	 		pw.println("	DRF");
        	 		pw.println(";	comprobamos si esta inicializada la variable " + r1.sim.getNombre());
-//				pw.println("	DUP");
-//				pw.println("	STC 77777");
-//				pw.println("	EQ");
-//				pw.println("	JMT error_inicializada");
+				pw.println("	DUP");
+		  	  	pw.println("	STC 77777");
+		  	  	pw.println("	EQ");
+		  	  	pw.println("	JMT no_ini"); 
        	 		if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 		  		  	pw.println("	WRT		1");
 		  		}else {
@@ -1099,8 +1112,16 @@ void lista_escribibles(Token t):
 	  	}
 	}
 	else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
+//  		pw.println("	DUP");
+//  	  	pw.println("	STC 77777");
+//  	  	pw.println("	EQ");
+//  	  	pw.println("	JMT no_ini"); 
 	 	pw.println("	WRT		1");
 	}else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
+//  		pw.println("	DUP");
+//  	  	pw.println("	STC 77777");
+//  	  	pw.println("	EQ");
+//  	  	pw.println("	JMT no_ini"); 
 	 	pw.println("	WRT		0");
 	}else if(r2.sim.ES_VECTOR()) {
 	  		if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
@@ -1126,10 +1147,10 @@ void lista_escribibles(Token t):
    	 			pw.println("	PLUS");
        	 		pw.println("	DRF");
        	 		pw.println(";	comprobamos si esta inicializada la variable " + r2.sim.getNombre());
-//				pw.println("	DUP");
-//				pw.println("	STC 77777");
-//				pw.println("	EQ");
-//				pw.println("	JMT error_inicializada");
+				pw.println("	DUP");
+	  	  		pw.println("	STC 77777");
+	  	  		pw.println("	EQ");
+	  	  		pw.println("	JMT no_ini"); 
        	 		if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
 		  		  	pw.println("	WRT		1");
 		  		}else {
@@ -1182,6 +1203,10 @@ void asignacion(Simbolo id, RegistroExpr r, Token id_t,boolean ac):
 	  	  	if(r1.esVariable) {
 	  	  	  pw.println("	DRF");
 	  	  	}
+	  	  	pw.println("	DUP");
+	  	  	pw.println("	STC 77777");
+	  	  	pw.println("	EQ");
+	  	  	pw.println("	JMT no_ini"); 
 	  	  	//TODO: falta si es variable DRF sino na
 	  	  	pw.println("	ASG");
 	    	ac = false;
@@ -1198,6 +1223,10 @@ void asignacion(Simbolo id, RegistroExpr r, Token id_t,boolean ac):
 				//TODO: asignar un vector dentro de una funcion pasando otro vector por referencia
 				int bytes_componente = id.get_tamanyo_componente();
 				int offset = bytes_componente;
+				pw.println("	DUP");
+		  	  	pw.println("	STC 77777");
+		  	  	pw.println("	EQ");
+		  	  	pw.println("	JMT no_ini");
 				pw.println("	ASG");
 				for(int i = 1; i < r1.tam_vec; i++) {
 				  	pw.println(";Asignacion componente "+ (i+1));
@@ -1212,6 +1241,10 @@ void asignacion(Simbolo id, RegistroExpr r, Token id_t,boolean ac):
 				  	pw.println("	STC	" + offset);
 				  	pw.println("	PLUS");
         			pw.println("	DRF");
+        			pw.println("	DUP");
+			  	  	pw.println("	STC 77777");
+			  	  	pw.println("	EQ");
+			  	  	pw.println("	JMT no_ini");
 
 					
 					//no estoy seguro de si aqui hace falta hacer la comprobacion
@@ -1234,6 +1267,10 @@ void asignacion(Simbolo id, RegistroExpr r, Token id_t,boolean ac):
 //		   	  	System.out.println("Entro aqui");
 //		   	  	pw.println("	DRF");
 //		   	}
+			pw.println("	DUP");
+	  	  	pw.println("	STC 77777");
+	  	  	pw.println("	EQ");
+	  	  	pw.println("	JMT no_ini"); 
 		    pw.println("	ASG");
 	  }
 	
@@ -1359,7 +1396,6 @@ ArrayList<RegistroExpr> lista_expresiones(Simbolo id, Token id_t,ArrayList<Simbo
   int i = 0;
   Simbolo s = new Simbolo();
   //System.out.println("Llego a lista expresiones y el numero de parametros es:" + parametros_necesarios.size());
-  
 }
 { try {
   r1 = expresion(false,true,null)
@@ -2075,6 +2111,10 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
 //				pw.println("	EQ");
 //				pw.println("	JMT error_inicializada");
        	    }
+       	    pw.println("	DUP");
+	  	  	pw.println("	STC 77777");
+	  	  	pw.println("	EQ");
+	  	  	pw.println("	JMT no_ini"); 
        	}else if(invoc_acc) {
        	    
 			if(s.ES_VALOR()) {
@@ -2160,22 +2200,11 @@ RegistroExpr factor(boolean vec, boolean invoc_acc,Simbolo sim):
 		    re.sim = s;
 		    if(!invoc_acc){
 	       	  	pw.println("	DRF");
-	       	  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-//				pw.println("	DUP");
-//				pw.println("	STC 77777");
-//				pw.println("	EQ");
-//				pw.println("	JMT error_inicializada");
 	       	 	if(s.ES_REFERENCIA()){
 	       	 	  	//Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
 	       	 	  	pw.println("	DRF");
-	       	 	  	pw.println(";	comprobamos si esta inicializada la variable " + s.getNombre());
-//					pw.println("	DUP");
-//					pw.println("	STC 77777");
-//					pw.println("	EQ");
-//					pw.println("	JMT error_inicializada");
 	       	    }
-       		}
-		   
+       		}  
 		    return re;
      	}
     }else {

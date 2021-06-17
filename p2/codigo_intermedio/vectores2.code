@@ -2,6 +2,45 @@
 	ENP  L0
 ; Comienzo del programa media_vectores
 L0:
+	SRF   0  26
+	STC 77777
+ 	ASG
+	SRF   0  4
+	STC 77777
+ 	ASG
+	SRF   0  6
+	STC 77777
+ 	ASG
+	SRF   0  8
+	STC 77777
+ 	ASG
+	SRF   0  10
+	STC 77777
+ 	ASG
+	SRF   0  12
+	STC 77777
+ 	ASG
+	SRF   0  14
+	STC 77777
+ 	ASG
+	SRF   0  16
+	STC 77777
+ 	ASG
+	SRF   0  18
+	STC 77777
+ 	ASG
+	SRF   0  20
+	STC 77777
+ 	ASG
+	SRF   0  22
+	STC 77777
+ 	ASG
+	SRF   0  24
+	STC 77777
+ 	ASG
+	SRF   0  28
+	STC 77777
+ 	ASG
 ; Escritura
 ;cadena	"Introduce el numero de elementos: "
 	STC		73
@@ -76,11 +115,25 @@ L0:
 ; Leer variable n
 	 SRF   0  26
 	 RD    1
+;Acceso a variable i
+; Direccion de la variable i
+	SRF   0  24
+	STC   0
+; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
+	ASG
 ;Acceso a variable suma
 ; Direccion de la variable suma
 	SRF   0  28
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;MQ
 L1:
@@ -88,10 +141,18 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable n
 ; Acceso a la variable n
 	SRF	0	26
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	LT
 	JMF	L2
 ; Escritura
@@ -140,6 +201,10 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 	WRT		1
@@ -155,6 +220,10 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 	STC 2
@@ -170,6 +239,10 @@ L1:
 ; Acceso a la variable suma
 	SRF	0	28
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable valores
 ; Acceso al vector valores
 	SRF	0	4
@@ -177,6 +250,10 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 ;Se ha indexado con una variable
@@ -188,6 +265,10 @@ L1:
 	DRF
 	PLUS
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable i
 ; Direccion de la variable i
@@ -196,9 +277,17 @@ L1:
 ; Acceso a la variable i
 	SRF	0	24
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	PLUS
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP	L1
 ;FMQ
@@ -235,7 +324,6 @@ L2:
 ; Acceso al vector valores
 	SRF	0	4
 	DRF
-;	comprobamos si esta inicializada la variable valores
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -244,6 +332,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -252,6 +344,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -260,6 +356,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -268,6 +368,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -276,6 +380,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -284,6 +392,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -292,6 +404,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -300,6 +416,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Escritura variablea la variable valores
 	SRF	0	4
@@ -308,6 +428,10 @@ L2:
 	PLUS
 	DRF
 ;	comprobamos si esta inicializada la variable valores
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ; Escritura
 ;cadena	"suma es:"
@@ -331,6 +455,10 @@ L2:
 ; Acceso a la variable suma
 	SRF	0	28
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ; Escritura
 ;cadena	"La media es: "
@@ -364,11 +492,120 @@ L2:
 ; Acceso a la variable suma
 	SRF	0	28
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable n
 ; Acceso a la variable n
 	SRF	0	26
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	DIV
 	WRT		1
 ; Fin del programa media_vectores
+	JMP fin
+no_ini:
+	STC		69
+	WRT		0
+	STC		114
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		114
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		98
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		105
+	WRT		0
+	STC		99
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		105
+	WRT		0
+	STC		122
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		97
+	WRT		0
+fin:
 LVP

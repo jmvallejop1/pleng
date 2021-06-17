@@ -9,6 +9,10 @@ L1:
 	SRF   1  6
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;MQ
 L2:
@@ -16,6 +20,10 @@ L2:
 ; Acceso a la variable d
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   0
 	LTE
 	JMF	L3
@@ -68,6 +76,10 @@ L2:
 ; Acceso a la variable d
 	SRF	1	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   0
 	LTE
 	JMF L4
@@ -152,12 +164,24 @@ L6:
 ; Acceso a la variable a
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable b
 ; Acceso a la variable b
 	SRF	1	10
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;MQ
 L7:
@@ -165,6 +189,10 @@ L7:
 ; Acceso a la variable r
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   0
 	NEQ
 	JMF	L8
@@ -175,7 +203,15 @@ L7:
 ; Acceso a la variable b
 	SRF	1	10
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable b
 ; Direccion de la variable b
@@ -184,7 +220,15 @@ L7:
 ; Acceso a la variable r
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable r
 ; Direccion de la variable r
@@ -193,12 +237,24 @@ L7:
 ; Acceso a la variable a
 	SRF	1	8
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable b
 ; Acceso a la variable b
 	SRF	1	10
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	MOD
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP	L7
 ;FMQ
@@ -210,11 +266,31 @@ L8:
 ; Acceso a la variable b
 	SRF	1	10
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ; Fin de la accion 
 CSF
 L0:
+	SRF   0  10
+	STC 77777
+ 	ASG
+	SRF   0  4
+	STC 77777
+ 	ASG
+	SRF   0  8
+	STC 77777
+ 	ASG
+	SRF   0  6
+	STC 77777
+ 	ASG
 ;Acceso a variable dato
 ; Invocando a DATO
 	 OSF   11  0 L1
@@ -225,7 +301,15 @@ L0:
 ; Acceso a la variable d
 	SRF	0	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable dato
 ; Invocando a DATO
@@ -237,7 +321,15 @@ L0:
 ; Acceso a la variable d
 	SRF	0	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable mcd
 ; Invocando a MCD
@@ -270,6 +362,10 @@ L0:
 ; Acceso a la variable m
 	SRF	0	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ; Escritura
 	STC   13
@@ -277,4 +373,105 @@ L0:
 	STC   10
 	WRT		0
 ; Fin del programa maximo_comun_divisor
+	JMP fin
+no_ini:
+	STC		69
+	WRT		0
+	STC		114
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		114
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		98
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		105
+	WRT		0
+	STC		99
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		105
+	WRT		0
+	STC		122
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		97
+	WRT		0
+fin:
 LVP

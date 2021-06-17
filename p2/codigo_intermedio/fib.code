@@ -73,12 +73,20 @@ L2:
 ;	comprobamos si esta inicializada la variable dato
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;Acceso a variable correcto
 ; Direccion de la variable correcto
 	SRF   0  4
 	STC   0
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;MQ
 L4:
@@ -86,6 +94,10 @@ L4:
 ; Acceso a la variable correcto
 	SRF	0	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	NGB
 	JMF	L5
 ;Acceso a variable pedir_dato
@@ -100,15 +112,27 @@ L4:
 	DRF
 	DRF
 ;	comprobamos si esta inicializada la variable dato
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   0
 	GT
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 ;SI
 ;Acceso a la variable correcto
 ; Acceso a la variable correcto
 	SRF	0	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	NGB
 	JMF L6
 ;ENT
@@ -194,6 +218,10 @@ L8:
 ; Acceso a la variable n
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	STC   1
 	GT
 	JMF L9
@@ -232,12 +260,24 @@ L8:
 ; Acceso a la variable r1
 	SRF	0	5
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ;Acceso a la variable r2
 ; Acceso a la variable r2
 	SRF	0	7
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	PLUS
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 	JMP L10
 L9:
@@ -250,13 +290,27 @@ L9:
 ; Acceso a la variable n
 	SRF	0	3
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 ; Asignacion.
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	ASG
 L10:
 ;FSI
 ; Fin de la accion 
 CSF
 L0:
+	SRF   1  4
+	STC 77777
+ 	ASG
+	SRF   1  6
+	STC 77777
+ 	ASG
 ;Acceso a variable dato
 ;Acceso a la variable n
 ; Acceso a la variable n
@@ -300,6 +354,10 @@ L0:
 ; Acceso a la variable n
 	SRF	0	4
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;cadena	") es: "
 	STC		41
@@ -318,9 +376,114 @@ L0:
 ; Acceso a la variable r
 	SRF	0	6
 	DRF
+	DUP
+	STC 77777
+	EQ
+	JMT no_ini
 	WRT		1
 ;Acceso a variable cambiar_de_linea
 ; Invocando a CAMBIAR_DE_LINEA
 	 OSF   7  0 L1
 ; Fin del programa fibbonaci
+	JMP fin
+no_ini:
+	STC		69
+	WRT		0
+	STC		114
+	WRT		0
+	STC		114
+	WRT		0
+	STC		111
+	WRT		0
+	STC		114
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		110
+	WRT		0
+	STC		32
+	WRT		0
+	STC		114
+	WRT		0
+	STC		117
+	WRT		0
+	STC		110
+	WRT		0
+	STC		116
+	WRT		0
+	STC		105
+	WRT		0
+	STC		109
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		108
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		118
+	WRT		0
+	STC		97
+	WRT		0
+	STC		114
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		98
+	WRT		0
+	STC		108
+	WRT		0
+	STC		101
+	WRT		0
+	STC		32
+	WRT		0
+	STC		110
+	WRT		0
+	STC		111
+	WRT		0
+	STC		32
+	WRT		0
+	STC		101
+	WRT		0
+	STC		115
+	WRT		0
+	STC		116
+	WRT		0
+	STC		97
+	WRT		0
+	STC		32
+	WRT		0
+	STC		105
+	WRT		0
+	STC		110
+	WRT		0
+	STC		105
+	WRT		0
+	STC		99
+	WRT		0
+	STC		105
+	WRT		0
+	STC		97
+	WRT		0
+	STC		108
+	WRT		0
+	STC		105
+	WRT		0
+	STC		122
+	WRT		0
+	STC		97
+	WRT		0
+	STC		100
+	WRT		0
+	STC		97
+	WRT		0
+fin:
 LVP

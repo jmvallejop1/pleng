@@ -133,9 +133,19 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
            pw.println("; Comienzo del programa " + programa.image);
       declaracion_acciones();
            pw.println(et_p + ":");
+           tabla_simbolos.iniciar_variables(pw);
       bloque_sentencias(p, et_p);
                 pw.println("; Fin del programa " + programa.image);
-        pw.println("LVP");
+
+                pw.println("\u0009JMP fin");
+        pw.println("no_ini:");
+        String s = "Error en runtime la variable no esta inicializada";
+                for (int x=0;x<=s.length()-1;x++) {
+                                        pw.println("\u0009STC\u0009\u0009" + (int)s.charAt(x));
+                                        pw.println("\u0009WRT\u0009\u00090");
+                }
+                pw.println("fin:");
+                pw.println("LVP");
            pw.close();
     } catch (ParseException e) {
     SyntaxErrorManager.printSyntaxError(e.currentToken.next,e.expectedTokenSequences,e.tokenImage, "fallo en la creacion del programa");
@@ -239,16 +249,26 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                     tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                                   }
                                   s1 = tabla_simbolos.introducir_variable_vector(id1.image,tipo_aux,r.valorEnt, nivel,dir);
+//	 		          for(int i = 0; i < s1.getLongitud() ; i++){
+//	 		            pw.println("\tSRF   " + (nivel - s1.getNivel()) + "  " + s1.calcularDesplazamientoDireccion(i));
+//	 		  			pw.println("	STC 77777");
+//	 		  			pw.println(" 	ASG");
+//	 		          }
                                   dir += s1.get_tamanyo();
                                 }
                              }
                            }
                         }else {
+
                                 s1 = tabla_simbolos.introducir_variable(id1.image,tipo,nivel,dir);
+                                //Valor centinela
+//	 		  	pw.println("\tSRF   " + (nivel - s1.getNivel()) + "  " + s1.getDir());
+//	 		  	pw.println("	STC 77777");
+//	 		  	pw.println(" 	ASG");
                                 dir += s1.get_tamanyo();
                         }
                 }catch(SimboloYaDeclaradoException e2) {
-//	  	  	System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+                        System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
                 }
       label_2:
       while (true) {
@@ -297,17 +317,25 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                     tipo_aux = Simbolo.Tipo_variable.VECBOOL;
                                   }
                                   s2 = tabla_simbolos.introducir_variable_vector(id2.image,tipo_aux,r.valorEnt, nivel,dir);
+//	 		          for(int i = 0; i < s2.getLongitud() ; i++){
+//	 		            pw.println("\tSRF   " + (nivel - s2.getNivel()) + "  " + s2.calcularDesplazamientoDireccion(i));
+//	 		  			pw.println("	STC 77777");
+//	 		  			pw.println(" 	ASG");
+//	 		          }
                                   dir += s2.get_tamanyo();
                                 }
                              }
                            }
                         }else {
                                 s2 = tabla_simbolos.introducir_variable(id2.image,tipo,nivel,dir);
+//	 		  	pw.println("\tSRF   " + (nivel - s2.getNivel()) + "  " + s2.getDir());
+//	 		  	pw.println("	STC 77777");
+//	 		  	pw.println(" 	ASG");
                                 dir += s2.get_tamanyo();
                         }
                         esVector = false;
                 }catch(SimboloYaDeclaradoException e2) {
-                        System.out.println("Error  semantico");
+                        System.out.println("Error  semantico: identificador duplicado: " + id1.image + ". En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
                 }
       }
     } catch (ParseException e) {
@@ -367,7 +395,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 
         }catch(SimboloYaDeclaradoException e2) {
                 //TODO: aqui ninca llega salta antes la excepcion
-                //System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image() + " En la linea " + id_accion.beginLine + " y la columna " + id_accion.beginColumn);
+                System.out.println("Error  semantico: Identificador duplicado: " + id_accion.image + " - linea " + id_accion.beginLine + " - columna " + id_accion.beginColumn);
         }
     parametros_formales(simbolo_accion);
     {if (true) return simbolo_accion;}
@@ -379,11 +407,19 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 60:
         jj_consume_token(60);
-        lista_parametros(simbolo_accion);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case tVAL:
+        case tREF:
+          lista_parametros(simbolo_accion);
+          break;
+        default:
+          jj_la1[6] = jj_gen;
+          ;
+        }
         jj_consume_token(61);
         break;
       default:
-        jj_la1[6] = jj_gen;
+        jj_la1[7] = jj_gen;
         ;
       }
     } catch (ParseException e) {
@@ -401,7 +437,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[7] = jj_gen;
+          jj_la1[8] = jj_gen;
           break label_4;
         }
         jj_consume_token(tFIN_SENTENCIA);
@@ -431,7 +467,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_consume_token(58);
         break;
       default:
-        jj_la1[8] = jj_gen;
+        jj_la1[9] = jj_gen;
         ;
       }
           try {
@@ -460,27 +496,11 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 simbolo_accion.addParametro(param);
                         }else {
                           //TODO: excepciones no se puede pasar un vector entero como parametro por valor
-                          System.out.println("No se pueden pasar vectores por enteros por valor");
-//		      	  //vector pasado por valor
-//		      	   	param = tabla_simbolos.introducir_parametro_vector(id1.image, tipo, clase, r.valorEnt, nivel, dir);
-//		      	  	dir +=  a;
-//		//	      	  	System.out.println("He introducido el vector a la lista de params");
-//					
-//		      	  	simbolo_accion.addParametro(param);
-//		      	  int aux = 2;
-//		      	  for(int i = 1; i < r.valorEnt;i++) {
-//		      	    param = tabla_simbolos.introducir_parametro_vector(id1.image+aux, tipo, clase, r.valorEnt, nivel, dir);
-//		      	  	dir +=  a;
-//		      	  	aux++;
-//					
-//	//	      	  	System.out.println("He introducido el vector a la lista de params");
-//		      	  	simbolo_accion.addParametro(param);
-//		      	  }
-
+                                                  System.out.println("Error semantico: No se pueden pasar vectores por enteros por valor - linea " + id1.beginLine + " columna " + id1.beginColumn);
                         }
                 }else {
                         //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                        //System.out.println("Errpr semantico: No se puede declarar un vector sin una constante entera. En la linea " + id1.beginLine + " y la columna " + id1.beginColumn);
+                        System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. - linea " + id1.beginLine + " columna " + id1.beginColumn);
                 }
 
 
@@ -499,7 +519,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[9] = jj_gen;
+          jj_la1[10] = jj_gen;
           break label_5;
         }
         jj_consume_token(59);
@@ -511,7 +531,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           jj_consume_token(58);
           break;
         default:
-          jj_la1[10] = jj_gen;
+          jj_la1[11] = jj_gen;
           ;
         }
           try {
@@ -541,12 +561,12 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 simbolo_accion.addParametro(param2);
                         }else {
                           //TODO: excepciones no se puede pasar un vector entero como parametro por valor
-                          System.out.println("No se pueden pasar vectores por enteros por valor");
+                          System.out.println("Error semantico: No se pueden pasar vectores por enteros por valor - linea " + id2.beginLine + " columna " + id2.beginColumn);
                         }
 
                 }else {
                         //TODO: gestionar excepciones, no se puede declarar un vector sin una constante entera
-                        //System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. En la linea " + id2.beginLine + " y la columna " + id2.beginColumn);
+                        System.out.println("Error semantico: No se puede declarar un vector sin una constante entera. - linea " + id2.beginLine + " columna " + id2.beginColumn);
                 }
 
 
@@ -571,7 +591,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_consume_token(tREF);
         break;
       default:
-        jj_la1[11] = jj_gen;
+        jj_la1[12] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -627,7 +647,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         break label_6;
       }
       sentencia();
@@ -691,7 +711,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_consume_token(58);
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[14] = jj_gen;
         ;
       }
    //Si es el vector entero
@@ -726,7 +746,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         invocacion_accion(simbolo_id,id);
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[15] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -738,7 +758,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       mientras_que();
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[16] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -812,7 +832,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         esComponente = true;
         break;
       default:
-        jj_la1[16] = jj_gen;
+        jj_la1[17] = jj_gen;
         ;
       }
     System.out.println("Entro aqui");
@@ -891,7 +911,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[17] = jj_gen;
+          jj_la1[18] = jj_gen;
           break label_7;
         }
         jj_consume_token(59);
@@ -942,7 +962,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 esComponente = true;
           break;
         default:
-          jj_la1[18] = jj_gen;
+          jj_la1[19] = jj_gen;
           ;
         }
     System.out.println("Entro aqui");
@@ -1052,6 +1072,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }else if (r1.tipo == Simbolo.Tipo_variable.CHAR){
                 pw.println("\u0009WRT\u0009\u00090");
         }else if(r1.sim.ES_VECTOR()) {
+                        pw.println("\u0009DUP");
+                        pw.println("\u0009STC 77777");
+                        pw.println("\u0009EQ");
+                        pw.println("\u0009JMT no_ini");
                         if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                 pw.println("\u0009WRT\u0009\u00091");
                         }else {
@@ -1065,20 +1089,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         if(r1.sim.ES_REFERENCIA())
                                 pw.println("\u0009DRF");
                                         pw.println(";\u0009comprobamos si esta inicializada la variable " + r1.sim.getNombre());
-//					pw.println("	DUP");
-//					pw.println("	STC 77777");
-//					pw.println("	EQ");
-//					pw.println("	JMT error_inicializada");
 
 
                         pw.println("\u0009STC\u0009"+ offset);
                                 pw.println("\u0009PLUS");
                         pw.println("\u0009DRF");
                         pw.println(";\u0009comprobamos si esta inicializada la variable " + r1.sim.getNombre());
-//				pw.println("	DUP");
-//				pw.println("	STC 77777");
-//				pw.println("	EQ");
-//				pw.println("	JMT error_inicializada");
+                                pw.println("\u0009DUP");
+                                pw.println("\u0009STC 77777");
+                                pw.println("\u0009EQ");
+                                pw.println("\u0009JMT no_ini");
                         if(r1.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                         pw.println("\u0009WRT\u0009\u00091");
                                 }else {
@@ -1094,7 +1114,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[19] = jj_gen;
+          jj_la1[20] = jj_gen;
           break label_8;
         }
         jj_consume_token(59);
@@ -1113,8 +1133,16 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                 }
         }
         else if (r2.tipo == Simbolo.Tipo_variable.ENTERO){
+//  		pw.println("	DUP");
+//  	  	pw.println("	STC 77777");
+//  	  	pw.println("	EQ");
+//  	  	pw.println("	JMT no_ini"); 
                 pw.println("\u0009WRT\u0009\u00091");
         }else if (r2.tipo == Simbolo.Tipo_variable.CHAR){
+//  		pw.println("	DUP");
+//  	  	pw.println("	STC 77777");
+//  	  	pw.println("	EQ");
+//  	  	pw.println("	JMT no_ini"); 
                 pw.println("\u0009WRT\u0009\u00090");
         }else if(r2.sim.ES_VECTOR()) {
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
@@ -1140,10 +1168,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 pw.println("\u0009PLUS");
                         pw.println("\u0009DRF");
                         pw.println(";\u0009comprobamos si esta inicializada la variable " + r2.sim.getNombre());
-//				pw.println("	DUP");
-//				pw.println("	STC 77777");
-//				pw.println("	EQ");
-//				pw.println("	JMT error_inicializada");
+                                pw.println("\u0009DUP");
+                                pw.println("\u0009STC 77777");
+                                pw.println("\u0009EQ");
+                                pw.println("\u0009JMT no_ini");
                         if(r2.sim.getTipoComponente() == Simbolo.Tipo_variable.ENTERO) {
                                         pw.println("\u0009WRT\u0009\u00091");
                                 }else {
@@ -1189,6 +1217,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                         if(r1.esVariable) {
                           pw.println("\u0009DRF");
                         }
+                        pw.println("\u0009DUP");
+                        pw.println("\u0009STC 77777");
+                        pw.println("\u0009EQ");
+                        pw.println("\u0009JMT no_ini");
                         //TODO: falta si es variable DRF sino na
                         pw.println("\u0009ASG");
                 ac = false;
@@ -1205,6 +1237,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                 //TODO: asignar un vector dentro de una funcion pasando otro vector por referencia
                                 int bytes_componente = id.get_tamanyo_componente();
                                 int offset = bytes_componente;
+                                pw.println("\u0009DUP");
+                                pw.println("\u0009STC 77777");
+                                pw.println("\u0009EQ");
+                                pw.println("\u0009JMT no_ini");
                                 pw.println("\u0009ASG");
                                 for(int i = 1; i < r1.tam_vec; i++) {
                                         pw.println(";Asignacion componente "+ (i+1));
@@ -1219,6 +1255,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                                         pw.println("\u0009STC\u0009" + offset);
                                         pw.println("\u0009PLUS");
                                 pw.println("\u0009DRF");
+                                pw.println("\u0009DUP");
+                                        pw.println("\u0009STC 77777");
+                                        pw.println("\u0009EQ");
+                                        pw.println("\u0009JMT no_ini");
 
 
                                         //no estoy seguro de si aqui hace falta hacer la comprobacion
@@ -1241,6 +1281,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 //		   	  	System.out.println("Entro aqui");
 //		   	  	pw.println("	DRF");
 //		   	}
+                        pw.println("\u0009DUP");
+                        pw.println("\u0009STC 77777");
+                        pw.println("\u0009EQ");
+                        pw.println("\u0009JMT no_ini");
                     pw.println("\u0009ASG");
           }
       jj_consume_token(tFIN_SENTENCIA);
@@ -1309,7 +1353,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         lista_sentencias();
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[21] = jj_gen;
         ;
       }
       jj_consume_token(tFSI);
@@ -1346,13 +1390,13 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         }
           break;
         default:
-          jj_la1[21] = jj_gen;
+          jj_la1[22] = jj_gen;
           ;
         }
         jj_consume_token(61);
         break;
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[23] = jj_gen;
         ;
       }
     } catch (ParseException e) {
@@ -1395,7 +1439,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
           ;
           break;
         default:
-          jj_la1[23] = jj_gen;
+          jj_la1[24] = jj_gen;
           break label_9;
         }
         jj_consume_token(59);
@@ -1446,7 +1490,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                {if (true) return t;}
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[25] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1473,7 +1517,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
               {if (true) return t;}
         break;
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[26] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1512,7 +1556,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
               {if (true) return t;}
         break;
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[27] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1542,7 +1586,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[27] = jj_gen;
+        jj_la1[28] = jj_gen;
         break label_10;
       }
       t = operador_relacional();
@@ -1774,7 +1818,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[28] = jj_gen;
+        jj_la1[29] = jj_gen;
         break label_11;
       }
       t = operador_aditivo();
@@ -1885,7 +1929,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         ;
         break;
       default:
-        jj_la1[29] = jj_gen;
+        jj_la1[30] = jj_gen;
         break label_12;
       }
       t = operador_multiplicativo();
@@ -2146,6 +2190,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
 //				pw.println("	EQ");
 //				pw.println("	JMT error_inicializada");
             }
+            pw.println("\u0009DUP");
+                        pw.println("\u0009STC 77777");
+                        pw.println("\u0009EQ");
+                        pw.println("\u0009JMT no_ini");
         }else if(invoc_acc) {
 
                         if(s.ES_VALOR()) {
@@ -2173,7 +2221,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
         jj_consume_token(58);
         break;
       default:
-        jj_la1[30] = jj_gen;
+        jj_la1[31] = jj_gen;
         ;
       }
     if(esvector) {
@@ -2238,22 +2286,11 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
                     re.sim = s;
                     if(!invoc_acc){
                         pw.println("\u0009DRF");
-                        pw.println(";\u0009comprobamos si esta inicializada la variable " + s.getNombre());
-//				pw.println("	DUP");
-//				pw.println("	STC 77777");
-//				pw.println("	EQ");
-//				pw.println("	JMT error_inicializada");
                         if(s.ES_REFERENCIA()){
                                 //Si es por referencia hay que hacer otro drf ya que el primero solo obtiene la direccion de la variable
                                 pw.println("\u0009DRF");
-                                pw.println(";\u0009comprobamos si esta inicializada la variable " + s.getNombre());
-//					pw.println("	DUP");
-//					pw.println("	STC 77777");
-//					pw.println("	EQ");
-//					pw.println("	JMT error_inicializada");
                     }
                 }
-
                     {if (true) return re;}
         }
     }else {
@@ -2287,7 +2324,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       t = jj_consume_token(tFALSE);
       break;
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[32] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -2306,7 +2343,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[32];
+  static final private int[] jj_la1 = new int[33];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -2314,10 +2351,10 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6880000,0x0,0x0,0x6880000,0x0,0x0,0x0,0x0,0x200000,0xf0010000,0x0,0x0,0x8004000,0x8000,0x0,0x0,0x8000,0x8004000,0x0,0xf0010000,};
+      jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6880000,0x0,0x0,0x6880000,0x0,0x0,0x0,0x0,0x200000,0xf0010000,0x0,0x0,0x8004000,0x8000,0x0,0x0,0x8000,0x8004000,0x0,0xf0010000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x38,0x38,0x2000000,0x8000000,0x2000000,0x1,0x10000000,0x80,0x2000000,0x8000000,0x2000000,0x6,0x40000,0x2000000,0x10002080,0x40000,0x2000000,0x8000000,0x2000000,0x8000000,0x0,0x103e0000,0x10000000,0x8000000,0xc000,0x30000,0x1f40,0x1f40,0x30000,0xc000,0x2000000,0x103e0000,};
+      jj_la1_1 = new int[] {0x38,0x38,0x2000000,0x8000000,0x2000000,0x1,0x6,0x10000000,0x80,0x2000000,0x8000000,0x2000000,0x6,0x40000,0x2000000,0x10002080,0x40000,0x2000000,0x8000000,0x2000000,0x8000000,0x0,0x103e0000,0x10000000,0x8000000,0xc000,0x30000,0x1f40,0x1f40,0x30000,0xc000,0x2000000,0x103e0000,};
    }
 
   /** Constructor with InputStream. */
@@ -2338,7 +2375,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -2352,7 +2389,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -2369,7 +2406,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -2379,7 +2416,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -2395,7 +2432,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -2404,7 +2441,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -2460,7 +2497,7 @@ public class MiniLengCompiler implements MiniLengCompilerConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 33; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

@@ -13,10 +13,9 @@ principio
      % NOTA: si introducís un n mayor de 10, el programa debe detectar overflow. 
      % Si es 0 o negativo, debe detectar underflow.
 
-     %i := 0;
+     i := 0;
      
      suma := 0;
-
      mq i < n
           escribir("Introduce el numero ", i+1, ": ");
           leer(valores[i+1]); % sí, el acceso con el i+1 está hecho a propósito
